@@ -1,0 +1,31 @@
+create table contribuenti(
+codicefiscale varchar(255) primary key,
+nome varchar(255),
+cognome varchar(255),
+datanascita varchar(255),
+comune varchar(255),
+username varchar(255),
+password varchar(255),
+stato varchar(255)
+)
+
+create table fabbricati(
+id int auto_increment primary key,
+rendita float,
+giornipossesso int,
+percentualeproprietapossesso float,
+comune varchar(255),
+contribuente varchar(255) references contribuenti(codicefiscale),
+annocessione int
+)
+
+create table modelli(
+id int auto_increment primary key,
+tipo varchar(255),
+annofiscale int,
+stato varchar(255),
+redditolavorodipendente varchar(255),
+contribuente varchar(255) references contribuenti(codicefiscale),
+totaleplusminusvalenza float
+)
+

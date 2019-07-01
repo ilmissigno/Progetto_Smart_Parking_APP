@@ -1,0 +1,18 @@
+09-12 16:32:45 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "FORMAZIONI" not found; SQL statement:
+SELECT * FROM FORMAZIONI WHERE CODICECIRCUITO=? [42102-187]
+09-12 16:34:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "FORMAZIONI" not found; SQL statement:
+SELECT * FROM FORMAZIONI WHERE CODICECIRCUITO=? [42102-187]
+09-12 16:40:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "FORMAZIONI" not found; SQL statement:
+SELECT * FROM FORMAZIONI WHERE CODICECIRCUITO=? [42102-187]
+09-12 16:42:25 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "FORMAZIONI" not found; SQL statement:
+SELECT * FROM FORMAZIONI WHERE CODICECIRCUITO=? [42102-187]
+09-12 16:48:35 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "FORMAZIONI" not found; SQL statement:
+SELECT * FROM FORMAZIONI WHERE CODICECIRCUITO=? [42102-187]
+09-12 16:49:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "FORMAZIONI" not found; SQL statement:
+SELECT * FROM FORMAZIONI WHERE CODICECIRCUITO=? [42102-187]
