@@ -1,2 +1,11 @@
 leggimi
 limonaevvvddddddd
+
+
+
+composizioni class diag
+sequenza  contr dao entity?
+corrispondenza gestori class diag
+gestori nel package entity? legami tra gestori e classi?
+
+package diag corrispondenza con prima
