@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText username = (EditText)findViewById(R.id.username);
         final EditText password = (EditText)findViewById(R.id.password);
         Button login_button = (Button)findViewById(R.id.login);
+        Button registrati_button = (Button)findViewById(R.id.registrati);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 t.start();
+            }
+        });
+        registrati_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,RegistrazioneActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         });
     }
