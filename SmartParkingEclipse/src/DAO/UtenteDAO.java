@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class UtenteDAO {
 	
 	
-	//INVECE DI LOGIN CHIAMARLA READ UTENTE
-	public boolean Login(TransactionManager tm, String username, String password) throws SQLException {
+	//Chiamata readUtente al posto di Login
+	public boolean readUtente(TransactionManager tm, String username, String password) throws SQLException {
 		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
@@ -58,12 +58,28 @@ public class UtenteDAO {
 	}
 	
 	
-	public static String createUtente() {
-		return null;
-		
+	public boolean createUtente(TransactionManager tm,String CodiceFiscale, String Cognome, String Nome, String username, String password,
+			String email) throws SQLException{
+		tm.assertInTransaction();
+		try (PreparedStatement pt = tm.getConnection()
+				.prepareStatement("INSERT INTO UTENTI(CF,COGNOME,NOME,USERNAME,PASSWORD,EMAIL) VALUES(?,?,?,?,?,?)")) {
+			pt.setString(1, CodiceFiscale);
+			pt.setString(2, Cognome);
+			pt.setString(3, Nome);
+			pt.setString(4, username);
+			pt.setString(5, password);
+			pt.setString(6, email);
+			try (ResultSet rs = pt.executeQuery()) {
+				if (rs.next() == true) {
+					return true;
+				}
+			}
+
+		}
+		return false;
 	}
 	
-	public static String deleteTicket() {
+	public static String deleteUtente() {
 		return null;
 		
 	}

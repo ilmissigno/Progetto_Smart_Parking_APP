@@ -1,10 +1,11 @@
 package Controller;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 public interface IGestoreSmartParking {
 	void Login(String username, String password, DataOutputStream out);
-	void AcquistaTicket(String targa, String codiceArea, double Durata,DataOutputStream out);
+	void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,DataOutputStream out,DataInputStream in);
 	void VerificaTicket(String targa,DataOutputStream out);
 	void RinnovoTicket(String targa, double Durata, int IDTicket, double costoTicket,DataOutputStream out);
 	void EffettuaMulta();

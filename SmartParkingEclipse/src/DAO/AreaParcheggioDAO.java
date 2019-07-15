@@ -1,5 +1,9 @@
 package DAO;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class AreaParcheggioDAO {
 
 	
@@ -18,9 +22,17 @@ public class AreaParcheggioDAO {
 		
 	}
 	
-	public static String readAreaParcheggio() {
-		return null;
-		
+	public double readAreaParcheggio(TransactionManager tm,String CodiceArea) throws SQLException{
+		tm.assertInTransaction();
+		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT COSTO FROM AREAPARCHEGGIO WHERE CODICEAREA=?")){
+			pt.setString(1, CodiceArea);
+			try(ResultSet rs = pt.executeQuery()){
+				if(rs.next()==true) {
+					return rs.getDouble("COSTO");
+				}
+			}
+		}
+		return -1;
 	}
 	
 }

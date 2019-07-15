@@ -1,7 +1,9 @@
 package Controller;
 
-import java.io.DataOutputStream;
 
 public interface GestoreAccount {
 	boolean Login(String username,String password);
+	boolean RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password, String email);
+	double getConto(String username,String password);
+	boolean AggiornaConto(String username,String password,double CostoTotale);
 }
