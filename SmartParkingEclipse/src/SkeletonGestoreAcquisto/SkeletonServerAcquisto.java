@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import Controller.GestoreAcquistoTicket;
+import Controller.IGestoreSmartParking;
 
-public  abstract class SkeletonServerAcquisto  implements GestoreAcquistoTicket{
+public  abstract class SkeletonServerAcquisto  implements IGestoreSmartParking{
 	ServerSocket server;
 	Socket client;
 	final int porta = 8000;

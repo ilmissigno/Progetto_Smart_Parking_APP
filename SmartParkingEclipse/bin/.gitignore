@@ -1,7 +1,5 @@
 /Controller/
 /ControllerImpl/
-/ControllerImplSkeleton/
-/DAO/
-/Entity/
-/IAutomobilista/
 /SkeletonGestoreAcquisto/
+/Entity/
+/DAO/

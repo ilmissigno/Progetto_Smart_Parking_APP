@@ -7,13 +7,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import Controller.GestoreAcquistoTicket;
+import Controller.IGestoreSmartParking;
 
 public class SkeletonThreadAcquisto extends Thread{
-	GestoreAcquistoTicket iserver;
+	IGestoreSmartParking iserver;
 	Socket client;
 	
-	public SkeletonThreadAcquisto(GestoreAcquistoTicket iserver, Socket client) {
+	public SkeletonThreadAcquisto(IGestoreSmartParking iserver, Socket client) {
 		this.iserver = iserver;
 		this.client = client;
 	}
@@ -34,7 +34,7 @@ public class SkeletonThreadAcquisto extends Thread{
 				case "costoticketsend":{
 					String codicearea = in.readUTF();
 					System.out.println("\nSkeletonThread : codicearea = "+codicearea);
-					iserver.OttieniCostoTicket(codicearea , out);
+					//iserver.OttieniCostoTicket(codicearea , out);
 					break;
 				}
 			}
