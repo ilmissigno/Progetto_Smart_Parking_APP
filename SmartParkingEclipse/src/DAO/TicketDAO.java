@@ -4,9 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Entity.Ticket;
+
 public class TicketDAO {
 	
-	public static boolean createTicket(TransactionManager tm, String Targa, String CodiceArea,
+	public boolean createTicket(TransactionManager tm, String Targa, String CodiceArea,
 			double Durata) throws Exception {
 		String idTicket = null;
 		tm.assertInTransaction();
@@ -31,6 +33,7 @@ public class TicketDAO {
 				try (ResultSet rs = pt.executeQuery()) {
 					if (rs.next() == true) {
 						idTicket = rs.getString("ID");
+						return true;
 					}
 				}
 
@@ -50,24 +53,28 @@ public class TicketDAO {
 	
 	
 	
-	public static int readTicket(TransactionManager tm, int ID) throws SQLException {
+	public Ticket readTicket(TransactionManager tm, String CodiceArea, String Targa) throws SQLException {
 		
-		int Identificativo = 0;
+		Ticket t = new Ticket();
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT ID FROM TICKET WHERE ((ID=?))")) {
+				.prepareStatement("SELECT * FROM TICKET WHERE (CODICEAREA=? AND TARGA=?)")) {
 
-			pt.setInt(1, ID);
+			pt.setString(1, CodiceArea);
+			pt.setString(2, Targa);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					Identificativo = rs.getInt("ID");
+					t.setIDTicket(rs.getInt("ID"));
+					t.setCodiceArea(CodiceArea);
+					t.setTargaAuto(Targa);
+					t.setDurata(rs.getDouble("DURATA"));
+					return t;
 				}
 			}
 
-			System.out.println("ID:" + Identificativo);
 		}
 
-		return Identificativo;
+		return null;
 	}
 		
 

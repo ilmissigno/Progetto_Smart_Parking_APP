@@ -1,4 +1,4 @@
-package SkeletonGestoreAcquisto;
+package SkeletonGestoreSmartParking;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,11 +9,11 @@ import java.net.Socket;
 
 import Controller.IGestoreSmartParking;
 
-public class SkeletonThreadAcquisto extends Thread{
+public class SkeletonThread extends Thread{
 	IGestoreSmartParking iserver;
 	Socket client;
 	
-	public SkeletonThreadAcquisto(IGestoreSmartParking iserver, Socket client) {
+	public SkeletonThread(IGestoreSmartParking iserver, Socket client) {
 		this.iserver = iserver;
 		this.client = client;
 	}
