@@ -2,6 +2,7 @@ package ControllerImpl;
 
 import Controller.GestoreTicket;
 import Entity.AreaParcheggio;
+import Entity.Auto;
 import Entity.Ticket;
 
 public class GestoreTicketImpl implements GestoreTicket{
@@ -16,8 +17,13 @@ public class GestoreTicketImpl implements GestoreTicket{
 	@Override
 	public boolean ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket) {
 		Ticket ticket = new Ticket();
-		if(ticket.AcquistaTicket(Targa,CodiceArea,Durata)) {
-			return true;
+		Auto auto = new Auto();
+		if(auto.checkAuto(Targa)) { //Devo vedere se l'auto e' presente nel DB
+			if(ticket.AcquistaTicket(Targa,CodiceArea,Durata)) {
+				return true;
+			}else {
+				return false;
+			}
 		}else {
 			return false;
 		}

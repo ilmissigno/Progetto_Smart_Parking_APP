@@ -37,52 +37,59 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Username = username.getText().toString();
                 Password = password.getText().toString();
-                final Handler handler = new Handler();
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000); //Devo connettermi al server
-                            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                            out.writeUTF("loginsend");
-                            out.flush();
-                            out.writeUTF(Username);
-                            out.flush();
-                            out.writeUTF(Password);
-                            out.flush();
-                            DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                            final String auth = in.readUTF();
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(auth.equals("ok")){
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                        builder.setCancelable(true);
-                                        builder.setTitle("Login Effettuato");
-                                        builder.setMessage("Benvenuto "+Username+"!");
-                                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("username",Username);
-                                                Intent intent = new Intent(MainActivity.this,AcquistaTicket.class);
-                                                intent.putExtras(bundle);
-                                                MainActivity.this.startActivity(intent);
+                if(Username.isEmpty()||Password.isEmpty()){
+                    Toast.makeText(MainActivity.this,"Inserire tutti i campi",Toast.LENGTH_LONG).show();
+                    return;
+                }else{
+                    final Handler handler = new Handler();
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000); //Devo connettermi al server
+                                final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                                out.writeUTF("loginsend");
+                                out.flush();
+                                out.writeUTF(Username);
+                                out.flush();
+                                out.writeUTF(Password);
+                                out.flush();
+                                DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                                final String auth = in.readUTF();
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                            if (auth.equals("ok")) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                                builder.setCancelable(true);
+                                                builder.setTitle("Login Effettuato");
+                                                builder.setMessage("Benvenuto " + Username + "!");
+                                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("username", Username);
+                                                        bundle.putString("password", Password);
+                                                        SocketHandler socketHandler = new SocketHandler();
+                                                        socketHandler.setSocket(s);
+                                                        Intent intent = new Intent(MainActivity.this, AcquistaTicket.class);
+                                                        intent.putExtras(bundle);
+                                                        MainActivity.this.startActivity(intent);
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
                                             }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
                                     }
-                                }
-                            });
-                            out.close();
-                            s.close();
-                        }catch (IOException e){
-                            e.printStackTrace();
+                                });
+                                out.close();
+                            }catch (IOException e){
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
-                t.start();
+                    });
+                    t.start();
+                }
             }
         });
         registrati_button.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package com.example.smartparkingapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,62 +42,110 @@ public class AcquistaTicket extends AppCompatActivity {
         final Button btnAcquista = (Button)findViewById(R.id.btnAcquista);
         final TextView costoTotale = (TextView)findViewById(R.id.costoTotale);
         btnAcquista.setEnabled(false);
-        btnCalcola.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (targa.getText().toString().isEmpty()||orada.getText().toString().isEmpty()||oraa.getText().toString().isEmpty()||codicearea.getText().toString().isEmpty()) {
-                    Toast.makeText(AcquistaTicket.this,"Inserire tutti i campi",Toast.LENGTH_LONG).show();
-                    return;
-                }else {
-                    CodiceArea = codicearea.getText().toString().trim();
-                    OraDa = Integer.parseInt(orada.getText().toString().trim());
-                    OraA = Integer.parseInt(oraa.getText().toString().trim());
-                    if (OraDa > OraA) {
-                       Toast.makeText(AcquistaTicket.this,"Inserire un orario corretto",Toast.LENGTH_LONG).show();
-                       return;
-                    } else {
-                        final Handler handler = new Handler();
-                        Thread t = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
-                                    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                                    out.writeUTF("costoticketsend");
-                                    out.flush();
-                                    out.writeUTF(CodiceArea);
-                                    out.flush();
-                                    DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                    CostoTicket = in.readDouble();
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //Calcolo l'importo totale facendo la differenza delle ore
-                                            costoTotale.setText(String.valueOf((OraA - OraDa) * CostoTicket));
-                                            btnAcquista.setEnabled(true);
-                                        }
-                                    });
-                                    out.close();
-                                    s.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+            btnCalcola.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (targa.getText().toString().isEmpty()||orada.getText().toString().isEmpty()||oraa.getText().toString().isEmpty()||codicearea.getText().toString().isEmpty()) {
+                        Toast.makeText(AcquistaTicket.this,"Inserire tutti i campi",Toast.LENGTH_LONG).show();
+                        return;
+                    }else {
+                        if (OraDa > OraA) {
+                            Toast.makeText(AcquistaTicket.this,"Inserire un orario corretto",Toast.LENGTH_LONG).show();
+                            return;
+                        } else {
+                            Bundle bundle = getIntent().getExtras();
+                            final String Username = bundle.getString("username");
+                            final String Password = bundle.getString("password");
+                            Targa = targa.getText().toString().trim();
+                            OraDa = Integer.parseInt(orada.getText().toString().trim());
+                            OraA = Integer.parseInt(oraa.getText().toString().trim());
+                            final double Durata = OraA-OraDa;
+                            CodiceArea = codicearea.getText().toString().trim();
+                            final Handler handler = new Handler();
+                            Thread t = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                        SocketHandler socketHandler = new SocketHandler();
+                                        socketHandler.setSocket(s);
+                                        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                                        out.writeUTF("costoticketsend");
+                                        out.flush();
+                                        out.writeUTF(Targa);
+                                        out.flush();
+                                        out.writeUTF(CodiceArea);
+                                        out.flush();
+                                        out.writeDouble(Durata);
+                                        out.flush();
+                                        out.writeUTF(Username);
+                                        out.flush();
+                                        out.writeUTF(Password);
+                                        out.flush();
+                                        DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                                        CostoTicket = in.readDouble();
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                costoTotale.setText(String.valueOf(CostoTicket));
+                                                btnAcquista.setEnabled(true);
+                                            }
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        });
-                        t.start();
+                            });
+                            t.start();
+                        }
                     }
                 }
-            }
-        });
-        btnAcquista.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Targa = targa.getText().toString().trim();
-                OraDa = Integer.parseInt(orada.getText().toString().trim());
-                OraA = Integer.parseInt(oraa.getText().toString().trim());
-                int Durata = OraA-OraDa;
-                double costoTot = Double.parseDouble(costoTotale.getText().toString().trim());
-            }
-        });
+            });
+            btnAcquista.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Handler handler = new Handler();
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                //Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                Socket s = SocketHandler.getSocket();
+                                DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                                out.writeUTF("acquistasend");
+                                out.flush();
+                                DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                                final String confirm = in.readUTF();
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (confirm.equals("ok")) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(AcquistaTicket.this);
+                                            builder.setCancelable(true);
+                                            builder.setTitle("Acquisto effettuato");
+                                            builder.setMessage("Ticket acquistato correttamente");
+                                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    // NUOVA PAGINA DI CONTROLLO DEL TICKET
+                                                }
+                                            });
+                                            AlertDialog dialog = builder.create();
+                                            dialog.show();
+                                        }else{
+                                            Toast.makeText(AcquistaTicket.this,"Impossibile inserire l'acquisto",Toast.LENGTH_LONG).show();
+                                            return;
+                                        }
+                                    }
+                                });
+                                out.close();
+                            }catch(IOException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    t.start();
+                }
+            });
     }
 }

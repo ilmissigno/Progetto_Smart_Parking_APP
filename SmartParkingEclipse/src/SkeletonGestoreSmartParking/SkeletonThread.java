@@ -31,10 +31,25 @@ public class SkeletonThread extends Thread{
 					iserver.Login(username, password , out);
 					break;
 				}
+				case "registrazionesend":{
+					String codicefiscale = in.readUTF();
+					String cognome = in.readUTF();
+					String nome = in.readUTF();
+					String username = in.readUTF();
+					String password = in.readUTF();
+					String email = in.readUTF();
+					System.out.println("\nSkeletonThread : codicefiscale = "+codicefiscale+" cognome="+cognome+
+							" nome="+nome+" username="+username+" password="+password+" email="+email);
+					iserver.RegistraUtente(codicefiscale, cognome, nome, username, password, email, out);
+					break;
+				}
 				case "costoticketsend":{
+					String targa = in.readUTF();
 					String codicearea = in.readUTF();
-					System.out.println("\nSkeletonThread : codicearea = "+codicearea);
-					//iserver.OttieniCostoTicket(codicearea , out);
+					double durata = in.readDouble();
+					String username = in.readUTF();
+					String password = in.readUTF();
+					iserver.AcquistaTicket(targa, codicearea, durata, username, password, out, in);
 					break;
 				}
 			}
