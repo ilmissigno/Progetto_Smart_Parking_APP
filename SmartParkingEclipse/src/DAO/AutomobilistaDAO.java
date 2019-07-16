@@ -35,6 +35,7 @@ public class AutomobilistaDAO {
 		}
 	}
 	
+	
 	public double readContoAutomobilista(TransactionManager tm, String username, String password) throws SQLException {
 		double saldo = 0;
 		

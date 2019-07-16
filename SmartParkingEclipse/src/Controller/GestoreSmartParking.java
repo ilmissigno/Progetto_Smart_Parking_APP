@@ -7,8 +7,10 @@ import java.net.Socket;
 
 import ControllerImpl.DefaultGestoreSmartParkingBuilder;
 import ControllerImpl.GestoreAccountImpl;
+import Entity.Ticket;
+import SkeletonGestoreSmartParking.SkeletonServer;
 
-public class GestoreSmartParking implements IGestoreSmartParking{
+public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmartParking{
 	
 	private static GestoreSmartParking instance;
 	private GestoreAccount account;
@@ -73,7 +75,7 @@ public class GestoreSmartParking implements IGestoreSmartParking{
 				//verifico il conto
 				double conto = account.getConto(username, password);
 				if(conto>=costoTotale) {
-					if(ticket.AcquistaTicket(targa, codiceArea, Durata, costoTotale)) {
+					if(ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale)) {
 						if(account.AggiornaConto(username,password,costoTotale)) {
 							out.writeUTF("ok");
 							out.flush();
@@ -99,15 +101,29 @@ public class GestoreSmartParking implements IGestoreSmartParking{
 	}
 
 	@Override
-	public void VerificaTicket(String targa,DataOutputStream out) {
-		// TODO Auto-generated method stub
-		
+	public void VerificaTicket(String targa, String CodiceArea,DataOutputStream out) {
+		try {
+			Ticket t = new Ticket();
+			t = ticket.VerificaCopertura(CodiceArea, targa);
+			out.writeUTF("ok");
+			out.flush();
+			out.writeUTF(t.getTargaAuto());
+			out.flush();
+			out.writeUTF(t.getCodiceArea());
+			out.flush();
+			out.writeInt(t.getIDTicket());
+			out.flush();
+			out.writeDouble(t.getDurata());
+			out.flush();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void RinnovoTicket(String targa, double Durata, int IDTicket, double costoTicket,DataOutputStream out) {
 		// TODO Auto-generated method stub
-		
+		//AMALFITANO
 	}
 
 	@Override
@@ -129,9 +145,18 @@ public class GestoreSmartParking implements IGestoreSmartParking{
 	}
 
 	@Override
-	public void CaricaConto() {
-		// TODO Auto-generated method stub
-		
+	public void CaricaConto(String username, String password, double Importo, DataOutputStream out) {
+		try {
+			if(account.CaricaConto(username, password, Importo)) {
+				out.writeUTF("ok");
+				out.flush();
+			}else {
+				out.writeUTF("no");
+				out.flush();
+			}
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -64,31 +64,6 @@ public class Utente {
 			tm.rollbackTransaction();
 			return false;
 		}
-	}
-	
-	public double getConto(String username,String password) {
-		AutomobilistaDAO auto = new AutomobilistaDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			return auto.readContoAutomobilista(tm, username, password);
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-			return -1;
-		}
-	}
-	
-	public boolean AggiornaConto(String username,String password,double CostoTotale) {
-		AutomobilistaDAO auto = new AutomobilistaDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			return auto.updateContoAutomobilista(tm, username, password, CostoTotale);
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-			return false;
-		}
-	}
-	
+	}	
 }
 

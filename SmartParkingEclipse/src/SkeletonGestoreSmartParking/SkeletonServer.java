@@ -1,4 +1,4 @@
-package SkeletonGestoreAcquisto;
+package SkeletonGestoreSmartParking;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,7 +6,7 @@ import java.net.Socket;
 
 import Controller.IGestoreSmartParking;
 
-public  abstract class SkeletonServerAcquisto  implements IGestoreSmartParking{
+public  abstract class SkeletonServer  implements IGestoreSmartParking{
 	ServerSocket server;
 	Socket client;
 	final int porta = 8000;
@@ -16,7 +16,7 @@ public  abstract class SkeletonServerAcquisto  implements IGestoreSmartParking{
 			server = new ServerSocket(porta);
 			while(true) {
 				client = server.accept();
-				Thread t = new SkeletonThreadAcquisto(this,client);
+				Thread t = new SkeletonThread(this,client);
 				t.start();
 			}
 		}catch(IOException e) {
