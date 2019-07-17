@@ -1,5 +1,7 @@
 package ControllerImpl;
 
+import java.io.DataOutputStream;
+
 import Controller.GestoreTicket;
 import Entity.AreaParcheggio;
 import Entity.Auto;
@@ -15,11 +17,11 @@ public class GestoreTicketImpl implements GestoreTicket{
 	}
 
 	@Override
-	public boolean ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket) {
+	public boolean ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket,DataOutputStream out) {
 		Ticket ticket = new Ticket();
 		Auto auto = new Auto();
 		if(auto.checkAuto(Targa)) { //Devo vedere se l'auto e' presente nel DB
-			if(ticket.AcquistaTicket(Targa,CodiceArea,Durata)) {
+			if(ticket.AcquistaTicket(Targa,CodiceArea,Durata,out)) {
 				return true;
 			}else {
 				return false;

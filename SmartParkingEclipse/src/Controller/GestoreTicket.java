@@ -1,10 +1,12 @@
 package Controller;
 
+import java.io.DataOutputStream;
+
 import Entity.Ticket;
 
 public interface GestoreTicket {
 	double OttieniCostoTicket(String CodiceArea);
-	boolean ConfermaTicket(String Targa,String CodiceArea,double Durata,double CostoTicket);
+	boolean ConfermaTicket(String Targa,String CodiceArea,double Durata,double CostoTicket,DataOutputStream out);
 	boolean RinnovoTicket(String Targa,int Durata,int IDTicket,double CostoTicket);
 	Ticket VerificaCopertura(String CodiceArea, String Targa);
 }
