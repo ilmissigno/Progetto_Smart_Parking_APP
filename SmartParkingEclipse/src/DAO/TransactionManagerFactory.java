@@ -3,9 +3,9 @@ package DAO;
 
 public class TransactionManagerFactory {
 	//cambiare gli ingressi del db
-	private static String databasePath = "jdbc:h2:~/testESAME";
-	private static String databaseUsername = "sa";
-	private static String databasePassword = "";
+	private static String databasePath = "jdbc:mysql://localhost:3306/dbsmartparking?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	private static String databaseUsername = "root";
+	private static String databasePassword = "1234";
 	private static boolean initialized = false;
 
 	public static void initializeTransactionManager(String databasePath, String databaseUsername,

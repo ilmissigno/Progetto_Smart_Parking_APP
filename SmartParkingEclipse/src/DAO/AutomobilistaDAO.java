@@ -21,7 +21,7 @@ public class AutomobilistaDAO {
 	public boolean updateContoAutomobilista(TransactionManager tm, String username, String password, double CostoTotale) throws SQLException {
 		tm.assertInTransaction();
 		try(PreparedStatement pt = tm.getConnection()
-				.prepareStatement("UPDATE AUTOMOBILISTA SET SALDO=SALDO-? WHERE USERNAME=? AND PASSWORD=?")){
+				.prepareStatement("UPDATE AUTOMOBILISTI SET SALDO=SALDO-? WHERE USERNAME=? AND PASSWORD=?")){
 			pt.setDouble(1, CostoTotale);
 			pt.setString(2, username);
 			pt.setString(3, password);
