@@ -13,7 +13,7 @@ public class TransactionManager {
 	private final String DATABASE_PASSWORD;
 	private Connection connection;
 	private boolean inTransaction;
-	static final String JDBC_DRIVER = "org.h2.Driver";
+	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
 	protected TransactionManager(String databasePath, String databaseUsername, String databasePassword) {
 		this.DATABASE_PATH = databasePath;
