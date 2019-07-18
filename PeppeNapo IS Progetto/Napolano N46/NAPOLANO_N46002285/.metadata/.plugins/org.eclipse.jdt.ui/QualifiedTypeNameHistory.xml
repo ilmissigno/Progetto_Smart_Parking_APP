@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="Control.AuthenticationManager"/>
+<fullyQualifiedTypeName name="Control.BraniManager"/>
+<fullyQualifiedTypeName name="java.sql.SQLException"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="Entity.Valutazione"/>
+<fullyQualifiedTypeName name="java.sql.DriverManager"/>
+<fullyQualifiedTypeName name="Entity.PlayList"/>
+<fullyQualifiedTypeName name="Entity.UtenteDAO"/>
+<fullyQualifiedTypeName name="org.junit.BeforeClass"/>
+<fullyQualifiedTypeName name="org.junit.Test"/>
+<fullyQualifiedTypeName name="java.lang.Class"/>
+<fullyQualifiedTypeName name="org.junit.runners.Suite"/>
+<fullyQualifiedTypeName name="org.junit.runners.Suite.SuiteClasses"/>
+</qualifiedTypeNameHistroy>

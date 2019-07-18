@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                                                         bundle.putString("password", Password);
                                                         SocketHandler socketHandler = new SocketHandler();
                                                         socketHandler.setSocket(s);
-                                                        Intent intent = new Intent(MainActivity.this, AcquistaTicket.class);
+                                                        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
                                                         intent.putExtras(bundle);
                                                         MainActivity.this.startActivity(intent);
                                                     }

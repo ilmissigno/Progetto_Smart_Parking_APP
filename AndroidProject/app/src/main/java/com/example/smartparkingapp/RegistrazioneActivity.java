@@ -56,7 +56,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                         Toast.makeText(RegistrazioneActivity.this,"Il Codice Fiscale deve essere di 16 Caratteri!",Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        if (Cognome.matches("[a-zA-Z]+") || Nome.matches("[a-zA-Z]+")) {
+                        if (!Cognome.matches("[a-zA-Z]+") || !Nome.matches("[a-zA-Z]+")) {
                             Toast.makeText(RegistrazioneActivity.this,"Il Nome e Cognome non devono contenere numeri!",Toast.LENGTH_LONG).show();
                             return;
                         } else {
