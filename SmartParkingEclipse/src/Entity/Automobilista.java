@@ -1,6 +1,10 @@
 package Entity;
 
+import java.sql.SQLException;
+
+import DAO.AutoDAO;
 import DAO.AutomobilistaDAO;
+import DAO.CorrispondenzaDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
 
@@ -82,5 +86,55 @@ public class Automobilista extends Utente {
 		}
 	}
 
+public boolean AggiungiAuto(String Targa,String CFProprietario,String username,String password) throws SQLException {
+		boolean autopresente=false;
+		AutoDAO aut = new AutoDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			if(aut.readAuto(tm,Targa)) {
+				//ok significa che l'auto è già inserita, ora devo associarla all'utente
+				autopresente=true;
+			}
+				
+			
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+			return false;
+		}
+		
+		if(!autopresente) {
+			//Creo l'auto
+			try {
+				tm.beginTransaction();
+				if(aut.createAuto( tm, Targa, CFProprietario,username, password))
+					autopresente= true;
+		}
+		
+			catch(Exception e) {
+			tm.rollbackTransaction();
+			return false;
+		}
+		
+				
+		}
+		
+		CorrispondenzaDAO ListaAuto=new CorrispondenzaDAO();
+		try {
+			tm.beginTransaction();
+			if(ListaAuto.readCorrispondenza( tm, Targa, CFProprietario,username, password))
+				autopresente= true;
+	}
 	
+		catch(Exception e) {
+		tm.rollbackTransaction();
+		return false;
+	}
+		
+		return false;
+				
+		}
 }
+
+	
+

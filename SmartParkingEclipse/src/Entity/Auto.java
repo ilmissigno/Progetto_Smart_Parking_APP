@@ -3,6 +3,7 @@ package Entity;
 import DAO.AutoDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
+import DAO.UtenteDAO;
 
 public class Auto {
 	
@@ -41,4 +42,8 @@ public class Auto {
 		}
 	}
 	
-}
+	
+	}
+	
+	
+

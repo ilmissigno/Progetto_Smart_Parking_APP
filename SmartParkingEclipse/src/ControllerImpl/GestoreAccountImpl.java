@@ -59,6 +59,7 @@ public class GestoreAccountImpl implements GestoreAccount {
 		}
 	}
 	
+	public void AggiungiAuto(String username,String password) {
+	}
+	}
 	
-	
-}

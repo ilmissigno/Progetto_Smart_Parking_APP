@@ -6,10 +6,27 @@ import java.sql.SQLException;
 
 public class AutoDAO {
 
-	public static String createAuto() {
-		return null;
-		
+	public static boolean createAuto(TransactionManager tm, String Targa,String CFProprietario,String username, String password ) throws SQLException{
+		//da implementare
+		tm.assertInTransaction();
+		try (PreparedStatement pt = tm.getConnection()
+				.prepareStatement("INSERT INTO auto(Targa,CFProprietario) VALUES(?,?)")) {
+			pt.setString(1, Targa);
+			pt.setString(2, CFProprietario);
+			try (ResultSet rs = pt.executeQuery()) {
+				if (rs.next() == true) {
+					return true;
+				}
+				return false;
+			}
+		}
 	}
+			
+
+		
+		
+	
+	
 	
 	public static String deleteAuto() {
 		return null;

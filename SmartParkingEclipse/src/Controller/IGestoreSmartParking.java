@@ -13,4 +13,5 @@ public interface IGestoreSmartParking {
 	void RicercaMulta();
 	void CaricaConto(String username, String password, double Importo, DataOutputStream out);
 	void RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password, String email,DataOutputStream out);
+	void AggiungiAuto(String username,String password);
 }
