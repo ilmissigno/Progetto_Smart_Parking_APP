@@ -70,39 +70,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		 * di acquisto avviato
 		 */
 		//Funzionalità orario ecc...
-		Date date = new Date(); 
-		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String DataString=formatter.format(date).toString();
-		//Le cifre sono intese da sinistra verso destra
-	char Data1=DataString.charAt(9);
-	char Data2=DataString.charAt(10);
-	String data=new StringBuilder().append(Data1).append(Data2).toString();
-	int  DataInt=Integer.parseInt(data);
-	char Cifra1= DataString.charAt(12);
-	char Cifra2=DataString.charAt(13);
-	String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
-	int  OrarioInt=Integer.parseInt(orario);
-	Durata=(int)Durata;
-		int OraScadenzaTicket=(int)Durata+OrarioInt;
-		if(OraScadenzaTicket>24) {
-			//passo al giorno successivo
-			DataInt=DataInt+1;
-		}
-		 String OraScadenza=Integer.toString(OraScadenzaTicket);
-		 Cifra1=OraScadenza.charAt(1);
-		 Cifra2=OraScadenza.charAt(2);
-		 String DataScadenza=Integer.toString(DataInt);
-		 Data1=DataScadenza.charAt(1);
-		 Data2=DataScadenza.charAt(2);
-		 StringBuilder Scadenza=new StringBuilder();
-		 Scadenza.append(DataString);
-		 Scadenza.setCharAt(9, Data1);
-		 Scadenza.setCharAt(10, Data2);
-		 Scadenza.setCharAt(12, Cifra1);
-		 Scadenza.setCharAt(13, Cifra2);
-		 String ScadenzaTicket=Scadenza.toString();
-		 System.out.println(ScadenzaTicket);
+		
 		 
 		
 			
@@ -113,6 +81,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		try {
 			out.writeDouble(costoTotale);
 			out.flush();
+			//qua ci posso mettere altro out?? con la data finale?
 			//Qui leggo il comando
 			String cmd = in.readUTF();
 			if(cmd.equals("acquistasend")) {
