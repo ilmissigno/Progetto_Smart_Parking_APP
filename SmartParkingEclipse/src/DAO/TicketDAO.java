@@ -8,17 +8,18 @@ import Entity.Ticket;
 
 public class TicketDAO {
 	
-	public boolean createTicket(TransactionManager tm, String Targa, String CodiceArea,
-			double Durata) throws Exception {
+	public boolean createTicket(TransactionManager tm, double Durata, String Data, String Targa,String CF,String CodiceArea) throws Exception {
 		String idTicket = null;
 		tm.assertInTransaction();
 
 		try (PreparedStatement ps = tm.getConnection()
-				.prepareStatement("INSERT INTO TICKET(TARGA,DURATA,COSTO) VALUES(?,?,?)")) {
+				.prepareStatement("INSERT INTO TICKET(IDTicket,Durata,Data,Targa,CF,CodiceArea) VALUES(NULL,?,?,?,?,?)")) {
 
-			ps.setString(1, Targa);
-			ps.setString(2, CodiceArea);
-			ps.setDouble(3, Durata);
+			ps.setDouble(1, Durata);
+			ps.setString(2, Data);
+			ps.setString(3, Targa);
+			ps.setString(4, CF);
+			ps.setString(5, CodiceArea);
 
 			ps.executeUpdate();
 			tm.commitTransaction();
@@ -26,18 +27,18 @@ public class TicketDAO {
 			tm.beginTransaction();
 			tm.assertInTransaction();
 			try (PreparedStatement pt = tm.getConnection()
-					.prepareStatement("SELECT ID FROM TICKET WHERE ((TARGA=?)AND(CODICEAREA=?))")) {
+					.prepareStatement("SELECT IDTicket FROM TICKET WHERE ((TARGA=?)AND(CODICEAREA=?))")) {
 
 				pt.setString(1, Targa);
 				pt.setString(2, CodiceArea);
 				try (ResultSet rs = pt.executeQuery()) {
 					if (rs.next() == true) {
-						idTicket = rs.getString("ID");
+						idTicket = rs.getString("IDTicket");
 						return true;
 					}
 				}
 
-				System.out.println("idTicket:" + idTicket);
+				//System.out.println("idTicket:" + idTicket);
 			}
 			tm.commitTransaction();
 			

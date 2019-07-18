@@ -1,2 +1,6 @@
+/.DS_Store
+/Controller/
+/ControllerImpl/
 /DAO/
 /Entity/
+/SkeletonGestoreSmartParking/

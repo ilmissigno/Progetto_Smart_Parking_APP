@@ -5,15 +5,18 @@ import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+
 import javax.swing.Timer;
 import java.util.concurrent.TimeUnit;
-
+import java.util.Date;
 import DAO.TicketDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
+import DAO.AutomobilistaDAO;
 
 public class Ticket {
-	
+	//Il ticket non deve settarlo l'utente, va in automatico da DB
 	private int IDTicket;
 	private double Durata;
 	private String TargaAuto;
@@ -28,7 +31,7 @@ public class Ticket {
 	}
 
 	public void setIDTicket(int iDTicket) {
-		IDTicket = iDTicket;
+		//IDTicket = iDTicket;
 	}
 
 	public double getDurata() {
@@ -55,12 +58,19 @@ public class Ticket {
 		CodiceArea = codiceArea;
 	}
 	
-	public boolean AcquistaTicket(String Targa, String CodiceArea, double Durata,DataOutputStream out) {
+	public boolean AcquistaTicket(String Targa, String CodiceArea, double Durata,String username,String password,DataOutputStream out) {
+		//setto automaticamente la data di acquisto e l'ora di acquisto
+		Date date = new Date(); 
+		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	//	System.out.println(formatter.format(date));
 		TicketDAO ticket = new TicketDAO();
+		AutomobilistaDAO aut=new AutomobilistaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(ticket.createTicket(tm, Targa, CodiceArea, Durata)) {
+			String CF=aut.readCFAutomobilista(tm, username, password);
+			if(ticket.createTicket(tm, Durata,formatter.format(date).toString(), Targa,CF,CodiceArea)) {
 				
 				/*
 				 * ATTIVAZIONE TIMER DI NOTIFICA

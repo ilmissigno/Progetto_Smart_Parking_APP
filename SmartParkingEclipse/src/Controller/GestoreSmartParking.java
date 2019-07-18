@@ -75,7 +75,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 				//verifico il conto
 				double conto = account.getConto(username, password);
 				if(conto>=costoTotale) {
-					if(ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale,out)) {
+					if(ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password,out)) {
 						if(account.AggiornaConto(username,password,costoTotale)) {
 							out.writeUTF("ok");
 							out.flush();

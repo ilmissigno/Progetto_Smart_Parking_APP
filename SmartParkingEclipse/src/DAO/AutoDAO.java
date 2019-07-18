@@ -23,7 +23,7 @@ public class AutoDAO {
 	
 	public boolean readAuto(TransactionManager tm,String Targa) throws SQLException{
 		tm.assertInTransaction();
-		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT * FROM AUTO WHERE TARGA=?")){
+		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT * FROM auto WHERE Targa=?")){
 			pt.setString(1, Targa);
 			try(ResultSet rs = pt.executeQuery()){
 				if(rs.next()==true) {
