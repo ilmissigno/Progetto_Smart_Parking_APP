@@ -19,7 +19,7 @@ public class SkeletonThread extends Thread{
 		this.iserver = iserver;
 		this.client = client;
 	}
-	
+	//
 	public void run() {
 		try {
 			DataInputStream in = new DataInputStream(new BufferedInputStream(client.getInputStream()));
