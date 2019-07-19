@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class AutoDAO {
 
-	public static boolean createAuto(TransactionManager tm, String Targa,String CFProprietario,String username, String password ) throws SQLException{
+	public static boolean createAuto(TransactionManager tm, String Targa,String CFProprietario,String username ) throws SQLException{
 		//da implementare
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
@@ -38,7 +38,7 @@ public class AutoDAO {
 		
 	}
 	
-	public boolean readAuto(TransactionManager tm,String Targa) throws SQLException{
+	public static boolean readAuto(TransactionManager tm,String Targa) throws SQLException{
 		tm.assertInTransaction();
 		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT * FROM auto WHERE Targa=?")){
 			pt.setString(1, Targa);

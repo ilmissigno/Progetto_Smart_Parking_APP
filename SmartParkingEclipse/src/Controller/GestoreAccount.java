@@ -1,5 +1,9 @@
 package Controller;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import Entity.Corrispondenza;
 
 public interface GestoreAccount {
 	boolean Login(String username,String password);
@@ -7,5 +11,6 @@ public interface GestoreAccount {
 	double getConto(String username,String password);
 	boolean AggiornaConto(String username,String password,double CostoTotale);
 	boolean CaricaConto(String username, String password, double Importo);
-	void AggiungiAuto(String username,String password);
+	boolean AggiungiAuto(String Targa,String CFProprietario, String username);
+	ArrayList<Corrispondenza> OttieniLista(String username) throws SQLException;
 }

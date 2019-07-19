@@ -85,56 +85,48 @@ public class Automobilista extends Utente {
 			return false;
 		}
 	}
-
-public boolean AggiungiAuto(String Targa,String CFProprietario,String username,String password) throws SQLException {
-		boolean autopresente=false;
-		AutoDAO aut = new AutoDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			if(aut.readAuto(tm,Targa)) {
-				//ok significa che l'auto è già inserita, ora devo associarla all'utente
-				autopresente=true;
-			}
-				
+	
+	
+	@SuppressWarnings("finally")
+	public boolean AggiungiAuto(String Targa,String CFProprietario,String username){
+	//boolean autopresente=false;
+	//boolean autoassociata=false;
+	AutoDAO aut = new AutoDAO();
+	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+	try {
+		tm.beginTransaction();
+		if(aut.readAuto(tm,Targa)) {
+			//ok significa che l'auto è già inserita,
+			return false;
+		}
 			
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-			return false;
-		}
+		else{
+		//Altrimenti Creo l'auto
 		
-		if(!autopresente) {
-			//Creo l'auto
-			try {
-				tm.beginTransaction();
-				if(aut.createAuto( tm, Targa, CFProprietario,username, password))
-					autopresente= true;
-		}
-		
-			catch(Exception e) {
-			tm.rollbackTransaction();
-			return false;
-		}
-		
-				
-		}
-		
-		CorrispondenzaDAO ListaAuto=new CorrispondenzaDAO();
-		try {
 			tm.beginTransaction();
-			if(ListaAuto.readCorrispondenza( tm, Targa, CFProprietario,username, password))
-				autopresente= true;
-	}
+			if(aut.createAuto( tm, Targa, CFProprietario,username))
+				return true;
+	
+		}
+		}
 	
 		catch(Exception e) {
 		tm.rollbackTransaction();
 		return false;
 	}
-		
-		return false;
-				
+		finally {
+			return true;
 		}
+	}
 }
+		
+	
+	
+	
+
+	
+	
+	
 
 	
 

@@ -3,12 +3,16 @@ package Controller;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import ControllerImpl.DefaultGestoreSmartParkingBuilder;
 import ControllerImpl.GestoreAccountImpl;
+import Entity.Corrispondenza;
 import Entity.Ticket;
 import SkeletonGestoreSmartParking.SkeletonServer;
 
@@ -188,8 +192,45 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 	}
 	
-	public void AggiungiAuto(String username,String password) {
+	public void AggiungiAuto(String Targa, String CFProprietario, String username, DataOutputStream out){
+		if(account.AggiungiAuto(Targa,CFProprietario,username)) {
+			try {
+				out.writeUTF("AutoAggiunta");
+				out.flush();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}else {
+			return;
+		}
+			
+		}
+
+	
+	public void  OttieniListaAuto(String username, DataOutputStream out, ObjectOutputStream objOut  ) throws SQLException {
+		ArrayList<Corrispondenza> listaAuto;
+		try {
+			listaAuto = new ArrayList<Corrispondenza>();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		listaAuto=account.OttieniLista(username);
+		try {
+			out.writeUTF("auto_ok");
+			out.flush();
+			objOut.writeObject(listaAuto);
+			objOut.flush();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
+		
+	
+		
 	}
+	
+	
 
 

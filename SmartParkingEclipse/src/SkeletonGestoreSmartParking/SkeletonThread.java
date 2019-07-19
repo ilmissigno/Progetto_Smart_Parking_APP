@@ -5,7 +5,9 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 
 import Controller.IGestoreSmartParking;
 
@@ -22,6 +24,7 @@ public class SkeletonThread extends Thread{
 		try {
 			DataInputStream in = new DataInputStream(new BufferedInputStream(client.getInputStream()));
 			DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));
+			ObjectOutputStream ObjOut=new ObjectOutputStream(client.getOutputStream());
 			String cmd = in.readUTF();
 			switch(cmd) {
 				case "loginsend":{
@@ -52,8 +55,27 @@ public class SkeletonThread extends Thread{
 					iserver.AcquistaTicket(targa, codicearea, durata, username, password, out, in);
 					break;
 				}
+				
+				case "addautosend":{
+					String targa = in.readUTF();
+					String CFProprietario=in.readUTF();
+					String username = in.readUTF();
+					
+					iserver.AggiungiAuto(targa,CFProprietario, username, out);
+					break;
+				}
+				
+				case "caricaautosend":{
+					String username = in.readUTF();
+					
+					iserver.OttieniListaAuto(username, out, ObjOut);
+					break;
+				}
 			}
 		}catch(IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

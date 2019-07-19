@@ -2,9 +2,15 @@ package ControllerImpl;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import Controller.GestoreAccount;
+import DAO.CorrispondenzaDAO;
+import DAO.TransactionManager;
+import DAO.TransactionManagerFactory;
 import Entity.Automobilista;
+import Entity.Corrispondenza;
 import Entity.Utente;
 
 public class GestoreAccountImpl implements GestoreAccount {
@@ -59,7 +65,33 @@ public class GestoreAccountImpl implements GestoreAccount {
 		}
 	}
 	
-	public void AggiungiAuto(String username,String password) {
+	public boolean AggiungiAuto(String Targa,String CFProprietario,String username)  {
+		Automobilista a = new Automobilista();
+		Corrispondenza ListaAuto=new Corrispondenza(username,Targa);
+		if(a.AggiungiAuto(Targa, CFProprietario, username)) {
+			//Significa che ho aggiunto l'auto
+			if(ListaAuto.InserisciCorrispondenza( Targa,username)) {
+				return true;
+			}
+			else { return false;
+				
+			}
+		}
+		return false;
+			
+			
+		
+	}
+	
+	public ArrayList<Corrispondenza> OttieniLista(String username) throws SQLException {
+		Corrispondenza c= new Corrispondenza();
+		return c.GetList(username);
+		
+		
 	}
 	}
 	
+	
+	
+	
+
