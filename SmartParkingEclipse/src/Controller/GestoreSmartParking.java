@@ -51,7 +51,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		// TODO Auto-generated method stub
 		if(account.Login(username,password)) {
 			try {
-				out.writeUTF("ok");
+				out.writeBoolean(true);;
 				out.flush();
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -73,7 +73,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
 		 * di acquisto avviato
 		 */
-		//Funzionalità orario ecc...
+		//Funzionalitï¿½ orario ecc...
 		
 		 
 		
@@ -195,7 +195,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	public void AggiungiAuto(String Targa, String CFProprietario, String username, DataOutputStream out){
 		if(account.AggiungiAuto(Targa,CFProprietario,username)) {
 			try {
-				out.writeUTF("AutoAggiunta");
+				out.writeBoolean(true);
 				out.flush();
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -217,7 +217,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 		listaAuto=account.OttieniLista(username);
 		try {
-			out.writeUTF("auto_ok");
+			out.writeBoolean(true);
 			out.flush();
 			objOut.writeObject(listaAuto);
 			objOut.flush();

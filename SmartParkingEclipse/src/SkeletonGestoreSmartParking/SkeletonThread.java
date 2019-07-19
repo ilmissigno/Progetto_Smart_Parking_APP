@@ -60,7 +60,7 @@ public class SkeletonThread extends Thread{
 					String targa = in.readUTF();
 					String CFProprietario=in.readUTF();
 					String username = in.readUTF();
-					
+					System.out.println("\nSkeletonThread : username = "+username+" targa = "+targa+" CF= "+CFProprietario);
 					iserver.AggiungiAuto(targa,CFProprietario, username, out);
 					break;
 				}

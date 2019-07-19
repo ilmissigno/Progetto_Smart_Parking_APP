@@ -4,7 +4,9 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,8 +47,11 @@ public class AcquistaTicket extends AppCompatActivity {
         Button btnCalcola = (Button)findViewById(R.id.btnCalcolaCostoOra);
         final Button btnAcquista = (Button)findViewById(R.id.btnAcquista);
         final TextView costoTotale = (TextView)findViewById(R.id.costoTotale);
-        GetListaAuto(listaauto);
-        GetOrario(orada);
+        Bundle bundle = getIntent().getExtras();
+        final String Username = bundle.getString("username");
+        final String Password = bundle.getString("password");
+        GetListaAuto(listaauto,Username);
+        //GetOrario(orada);
         btnAcquista.setEnabled(false);
             btnCalcola.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,9 +60,6 @@ public class AcquistaTicket extends AppCompatActivity {
                         Toast.makeText(AcquistaTicket.this,"Inserire tutti i campi",Toast.LENGTH_LONG).show();
                         return;
                     }else {
-                            Bundle bundle = getIntent().getExtras();
-                            final String Username = bundle.getString("username");
-                            final String Password = bundle.getString("password");
                             final String Targa = listaauto.getSelectedItem().toString();
                             OraDa = orada.getText().toString();
                             OraA = Integer.parseInt(oraa.getText().toString().trim());
@@ -126,6 +128,7 @@ public class AcquistaTicket extends AppCompatActivity {
                                             builder.setTitle("Acquisto effettuato");
                                             builder.setMessage("Ticket acquistato correttamente");
                                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     // NUOVA PAGINA DI CONTROLLO DEL TICKET
@@ -164,16 +167,23 @@ public class AcquistaTicket extends AppCompatActivity {
             });
     }
 
-    private void GetListaAuto(Spinner listaauto){
+    private void GetListaAuto(Spinner listaauto,String user){
         try{
-            Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
-            SocketHandler socketHandler = new SocketHandler();
-            socketHandler.setSocket(s);
-            ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-            ArrayList<String> auto = (ArrayList<String>)in.readObject();
-            //Set auto to Spinner
-            listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this,R.layout.support_simple_spinner_dropdown_item,auto));
-        }catch(IOException | ClassNotFoundException e){
+            Socket s = SocketHandler.getSocket();
+            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+            out.writeUTF("caricaautosend");
+            out.flush();
+            out.writeUTF(user);
+            out.flush();
+            DataInputStream in1 = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+            boolean ok = in1.readBoolean();
+            if(ok){
+                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+                ArrayList<String> auto = (ArrayList<String>)in.readObject();
+                //Set auto to Spinner
+                listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this,R.layout.support_simple_spinner_dropdown_item,auto));
+            }
+           }catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
     }

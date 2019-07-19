@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
                                 out.writeUTF(Password);
                                 out.flush();
                                 DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                final String auth = in.readUTF();
+                                final boolean auth = in.readBoolean();
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                            if (auth.equals("ok")) {
+                                            if (auth) {
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                                 builder.setCancelable(true);
                                                 builder.setTitle("Login Effettuato");
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                                 out.close();
+                                s.close();
                             }catch (IOException e){
                                 e.printStackTrace();
                             }

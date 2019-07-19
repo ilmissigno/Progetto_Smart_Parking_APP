@@ -10,13 +10,13 @@ public class AutoDAO {
 		//da implementare
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("INSERT INTO auto(Targa,CFProprietario) VALUES(?,?)")) {
+				.prepareStatement("INSERT INTO auto(Targa,CFProprietario,Attivo) VALUES('?','?','?')")) {
 			pt.setString(1, Targa);
 			pt.setString(2, CFProprietario);
-			try (ResultSet rs = pt.executeQuery()) {
-				if (rs.next() == true) {
-					return true;
-				}
+			pt.setBoolean(3, false);
+			if(pt.executeUpdate()==1) {
+				return true;
+			}else {
 				return false;
 			}
 		}

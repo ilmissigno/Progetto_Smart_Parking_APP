@@ -58,12 +58,14 @@ public class AggiungiAuto extends AppCompatActivity {
                                     out.flush();
                                     out.writeUTF(CF);
                                     out.flush();
+                                    out.writeUTF(username);
+                                    out.flush();
                                     DataInputStream in = new DataInputStream(new BufferedInputStream(client.getInputStream()));
-                                    final String confirm = in.readUTF();
+                                    final boolean confirm = in.readBoolean();
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if(confirm.equals("ok")){
+                                            if(confirm){
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(AggiungiAuto.this);
                                                 builder.setCancelable(true);
                                                 builder.setTitle("Aggiunta Auto");

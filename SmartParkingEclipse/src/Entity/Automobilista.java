@@ -87,7 +87,6 @@ public class Automobilista extends Utente {
 	}
 	
 	
-	@SuppressWarnings("finally")
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username){
 	//boolean autopresente=false;
 	//boolean autoassociata=false;
@@ -96,27 +95,22 @@ public class Automobilista extends Utente {
 	try {
 		tm.beginTransaction();
 		if(aut.readAuto(tm,Targa)) {
-			//ok significa che l'auto è già inserita,
+			//ok significa che l'auto ï¿½ giï¿½ inserita,
 			return false;
 		}
 			
 		else{
 		//Altrimenti Creo l'auto
-		
-			tm.beginTransaction();
 			if(aut.createAuto( tm, Targa, CFProprietario,username))
 				return true;
 	
 		}
+		return false;
 		}
-	
 		catch(Exception e) {
 		tm.rollbackTransaction();
 		return false;
 	}
-		finally {
-			return true;
-		}
 	}
 }
 		
