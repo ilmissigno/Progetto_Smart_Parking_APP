@@ -67,7 +67,7 @@ public class GestoreAccountImpl implements GestoreAccount {
 	
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username)  {
 		Automobilista a = new Automobilista();
-		Corrispondenza ListaAuto=new Corrispondenza(username,Targa);
+		Corrispondenza ListaAuto=new Corrispondenza();
 		if(a.AggiungiAuto(Targa, CFProprietario, username)) {
 			//Significa che ho aggiunto l'auto
 			if(ListaAuto.InserisciCorrispondenza( Targa,username)) {
@@ -83,7 +83,7 @@ public class GestoreAccountImpl implements GestoreAccount {
 		
 	}
 	
-	public ArrayList<Corrispondenza> OttieniLista(String username) throws SQLException {
+	public ArrayList<String> OttieniLista(String username) throws SQLException {
 		Corrispondenza c= new Corrispondenza();
 		return c.GetList(username);
 		

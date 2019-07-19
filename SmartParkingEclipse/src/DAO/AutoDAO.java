@@ -6,19 +6,21 @@ import java.sql.SQLException;
 
 public class AutoDAO {
 
-	public static boolean createAuto(TransactionManager tm, String Targa,String CFProprietario,String username ) throws SQLException{
+	public boolean createAuto(TransactionManager tm, String Targa,String CFProprietario,String username ) throws SQLException{
 		//da implementare
+		String query = "INSERT INTO AUTO(TARGA,CFPROPRIETARIO) VALUES(?,?)";
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("INSERT INTO auto(Targa,CFProprietario,Attivo) VALUES('?','?','?')")) {
+				.prepareStatement(query)) {
 			pt.setString(1, Targa);
 			pt.setString(2, CFProprietario);
-			pt.setBoolean(3, false);
 			if(pt.executeUpdate()==1) {
 				return true;
 			}else {
 				return false;
 			}
+		}catch(SQLException e) {
+			throw e;
 		}
 	}
 			
@@ -38,7 +40,7 @@ public class AutoDAO {
 		
 	}
 	
-	public static boolean readAuto(TransactionManager tm,String Targa) throws SQLException{
+	public boolean readAuto(TransactionManager tm,String Targa) throws SQLException{
 		tm.assertInTransaction();
 		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT * FROM auto WHERE Targa=?")){
 			pt.setString(1, Targa);

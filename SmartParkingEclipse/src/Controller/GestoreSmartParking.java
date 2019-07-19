@@ -208,9 +208,9 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 
 	
 	public void  OttieniListaAuto(String username, DataOutputStream out, ObjectOutputStream objOut  ) throws SQLException {
-		ArrayList<Corrispondenza> listaAuto;
+		ArrayList<String> listaAuto;
 		try {
-			listaAuto = new ArrayList<Corrispondenza>();
+			listaAuto = new ArrayList<String>();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -219,8 +219,12 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		try {
 			out.writeBoolean(true);
 			out.flush();
-			objOut.writeObject(listaAuto);
-			objOut.flush();
+			out.writeInt(listaAuto.size());
+			out.flush();
+			for(int i=0;i<listaAuto.size();i++) {
+				out.writeUTF(listaAuto.get(i));
+				out.flush();
+			}
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

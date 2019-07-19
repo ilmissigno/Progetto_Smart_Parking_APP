@@ -12,5 +12,5 @@ public interface GestoreAccount {
 	boolean AggiornaConto(String username,String password,double CostoTotale);
 	boolean CaricaConto(String username, String password, double Importo);
 	boolean AggiungiAuto(String Targa,String CFProprietario, String username);
-	ArrayList<Corrispondenza> OttieniLista(String username) throws SQLException;
+	ArrayList<String> OttieniLista(String username) throws SQLException;
 }

@@ -21,9 +21,14 @@ public class TicketDAO {
 			ps.setString(4, CF);
 			ps.setString(5, CodiceArea);
 
-			ps.executeUpdate();
-			tm.commitTransaction();
-
+			if(ps.executeUpdate()==1) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+			
+/*
 			tm.beginTransaction();
 			tm.assertInTransaction();
 			try (PreparedStatement pt = tm.getConnection()
@@ -49,7 +54,7 @@ public class TicketDAO {
 		}
 		
 			return true;
-
+*/
 		} 
 	
 	

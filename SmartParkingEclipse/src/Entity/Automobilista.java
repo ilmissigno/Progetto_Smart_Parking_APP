@@ -94,18 +94,22 @@ public class Automobilista extends Utente {
 	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 	try {
 		tm.beginTransaction();
+		/*
 		if(aut.readAuto(tm,Targa)) {
 			//ok significa che l'auto � gi� inserita,
 			return false;
-		}
+		}*/
 			
-		else{
+		//else{
 		//Altrimenti Creo l'auto
-			if(aut.createAuto( tm, Targa, CFProprietario,username))
+			if(aut.createAuto( tm, Targa, CFProprietario,username)) {
+				tm.commitTransaction();
 				return true;
+			}else {
+				return false;
+			}
 	
-		}
-		return false;
+		//}
 		}
 		catch(Exception e) {
 		tm.rollbackTransaction();

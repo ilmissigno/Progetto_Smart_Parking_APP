@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000); //Devo connettermi al server
+                                s.setKeepAlive(true);
                                 final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                                 out.writeUTF("loginsend");
                                 out.flush();
@@ -82,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                     }
                                 });
-                                out.close();
-                                s.close();
                             }catch (IOException e){
                                 e.printStackTrace();
                             }

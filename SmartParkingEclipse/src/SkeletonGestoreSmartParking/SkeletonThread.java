@@ -67,7 +67,7 @@ public class SkeletonThread extends Thread{
 				
 				case "caricaautosend":{
 					String username = in.readUTF();
-					
+					System.out.println("\nSkeletonThread : username = "+username);
 					iserver.OttieniListaAuto(username, out, ObjOut);
 					break;
 				}

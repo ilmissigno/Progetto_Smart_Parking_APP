@@ -27,6 +27,7 @@ import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AcquistaTicket extends AppCompatActivity {
 
@@ -167,25 +168,34 @@ public class AcquistaTicket extends AppCompatActivity {
             });
     }
 
-    private void GetListaAuto(Spinner listaauto,String user){
-        try{
-            Socket s = SocketHandler.getSocket();
-            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-            out.writeUTF("caricaautosend");
-            out.flush();
-            out.writeUTF(user);
-            out.flush();
-            DataInputStream in1 = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-            boolean ok = in1.readBoolean();
-            if(ok){
-                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-                ArrayList<String> auto = (ArrayList<String>)in.readObject();
-                //Set auto to Spinner
-                listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this,R.layout.support_simple_spinner_dropdown_item,auto));
+    private void GetListaAuto(final Spinner listaauto,final String user){
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                    out.writeUTF("caricaautosend");
+                    out.flush();
+                    out.writeUTF(user);
+                    out.flush();
+                    DataInputStream in1 = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                    ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+                    boolean ok = in1.readBoolean();
+                    if(ok){
+                        int listaAutosize = in1.readInt();
+                        ArrayList<String> auto = new ArrayList<String>();
+                        for(int i=0;i<listaAutosize;i++)
+                            auto.add(in1.readUTF());
+                        //Set auto to Spinner
+                        listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this,R.layout.support_simple_spinner_dropdown_item,auto));
+                    }
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
             }
-           }catch(IOException | ClassNotFoundException e){
-            e.printStackTrace();
-        }
+        });
+        t.start();
     }
 
     private void GetOrario(TextView orada){
