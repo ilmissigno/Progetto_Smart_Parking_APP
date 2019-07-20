@@ -62,9 +62,18 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	}
 
 	@Override
-	
-	public void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,DataOutputStream out,DataInputStream in) {
+	public void GetCostoTicket(String codiceArea, double Durata, DataOutputStream out) {
 		double costoSingolo = ticket.OttieniCostoTicket(codiceArea);
+		double costoTotale = Durata*costoSingolo;
+		try {
+			out.writeDouble(costoTotale);
+			out.flush();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,double costoTotale,DataOutputStream out) {
 		//Qui devo mandare alla boundary il costo totale del ticket
 		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
 		//Non lo so, oppure dovrei solo leggere con lo stream?
@@ -73,43 +82,32 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		 * di acquisto avviato
 		 */
 		//Funzionalit� orario ecc...
-		
-		 
-		
-			
-			//giorno successivo
+
+
+
+
+		//giorno successivo
 		//orarioattuale+durata%24 resto mod 24
 		//}
-		double costoTotale = Durata*costoSingolo;
+		//verifico il conto
 		try {
-			out.writeDouble(costoTotale);
-			out.flush();
-			//qua ci posso mettere altro out?? con la data finale?
-			//Qui leggo il comando
-			String cmd = in.readUTF();
-			if(cmd.equals("acquistasend")) {
-				//verifico il conto
-				double conto = account.getConto(username, password);
-				if(conto>=costoTotale) {
-					if(ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password,out)) {
-						if(account.AggiornaConto(username,password,costoTotale)) {
-							out.writeUTF("ok");
-							out.flush();
-						}else {
-							out.writeUTF("no");
-							out.flush();
-						}
+			double conto = account.getConto(username, password);
+			if(conto>=costoTotale) {
+				if(ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password,out)) {
+					if(account.AggiornaConto(username,password,costoTotale)) {
+						out.writeBoolean(true);
+						out.flush();
 					}else {
-						out.writeUTF("no");
+						out.writeBoolean(false);
 						out.flush();
 					}
 				}else {
-					out.writeUTF("no");
+					out.writeBoolean(false);
 					out.flush();
 				}
 			}else {
-				//Errore
-				return;
+				out.writeBoolean(false);
+				out.flush();
 			}
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -119,17 +117,16 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	@Override
 	public void VerificaTicket(String targa, String CodiceArea,DataOutputStream out) {
 		try {
-			Ticket t = new Ticket();
-			t = ticket.VerificaCopertura(CodiceArea, targa);
+			int t = ticket.VerificaCopertura(CodiceArea, targa);
 			out.writeUTF("ok");
 			out.flush();
-			out.writeUTF(t.getTargaAuto());
+			out.writeUTF(targa);
 			out.flush();
-			out.writeUTF(t.getCodiceArea());
+			out.writeUTF(CodiceArea);
 			out.flush();
-			out.writeInt(t.getIDTicket());
+			out.writeInt(t);
 			out.flush();
-			out.writeDouble(t.getDurata());
+			out.writeDouble(0);
 			out.flush();
 		}catch(IOException e) {
 			e.printStackTrace();

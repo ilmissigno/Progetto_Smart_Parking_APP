@@ -47,4 +47,14 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView welcometext = findViewById(R.id.textViewBenvenuto);
+        String username = getIntent().getExtras().getString("username");
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        welcometext.setText("Benvenuto "+username+"! Sono le "+simpleDateFormat.format(date));
+    }
 }

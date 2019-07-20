@@ -48,15 +48,21 @@ public class SkeletonThread extends Thread{
 					break;
 				}
 				case "costoticketsend":{
-					String targa = in.readUTF();
 					String codicearea = in.readUTF();
 					double durata = in.readDouble();
-					String username = in.readUTF();
-					String password = in.readUTF();
-					iserver.AcquistaTicket(targa, codicearea, durata, username, password, out, in);
+					iserver.GetCostoTicket(codicearea, durata, out);
 					break;
 				}
-				
+				case "acquistasend":{
+					String targa = in.readUTF();
+					String codicearea = in.readUTF();
+					double Durata = in.readDouble();
+					double CostoTotale = in.readDouble();
+					String username = in.readUTF();
+					String password = in.readUTF();
+					iserver.AcquistaTicket(targa, codicearea, Durata, username, password, CostoTotale, out);
+					break;
+				}
 				case "addautosend":{
 					String targa = in.readUTF();
 					String CFProprietario=in.readUTF();

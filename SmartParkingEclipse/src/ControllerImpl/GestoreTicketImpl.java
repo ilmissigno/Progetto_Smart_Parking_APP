@@ -33,7 +33,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 	}
 
 	@Override
-	public Ticket VerificaCopertura(String CodiceArea, String targa) {
+	public int VerificaCopertura(String CodiceArea, String targa) {
 		Ticket t = new Ticket();
 		return t.OttieniTicket(CodiceArea,targa);
 	}

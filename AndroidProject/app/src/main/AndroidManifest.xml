@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AggiungiAuto"></activity>
+        <activity android:name=".TicketInfoActivity"></activity>
+        <activity android:name=".AggiungiAuto" />
         <activity android:name=".HomePageActivity" />
         <activity android:name=".RegistrazioneActivity" />
         <activity android:name=".AcquistaTicket" />
@@ -24,7 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".NotifyScheduler"
+
+        <service
+            android:name=".NotifyScheduler"
             android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 

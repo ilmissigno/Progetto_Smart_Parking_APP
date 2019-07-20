@@ -7,7 +7,8 @@ import java.sql.SQLException;
 
 public interface IGestoreSmartParking {
 	void Login(String username, String password, DataOutputStream out);
-	void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,DataOutputStream out,DataInputStream in);
+	void GetCostoTicket(String codiceArea, double Durata, DataOutputStream out);
+	void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,double costoTotale,DataOutputStream out);
 	void VerificaTicket(String targa,String CodiceArea,DataOutputStream out);
 	void RinnovoTicket(String targa, double Durata, int IDTicket, double costoTicket,DataOutputStream out);
 	void EffettuaMulta();

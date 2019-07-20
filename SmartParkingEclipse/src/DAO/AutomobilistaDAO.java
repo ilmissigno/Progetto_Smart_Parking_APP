@@ -45,7 +45,7 @@ public class AutomobilistaDAO {
 			pt.setString(2, password);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					saldo = rs.getDouble("Saldo");
+					saldo = rs.getDouble("Credito");
 				}
 			}
 

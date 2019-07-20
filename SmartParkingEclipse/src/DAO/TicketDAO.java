@@ -8,18 +8,16 @@ import Entity.Ticket;
 
 public class TicketDAO {
 	
-	public boolean createTicket(TransactionManager tm, double Durata, String Data, String Targa,String CF,String CodiceArea) throws Exception {
-		String idTicket = null;
+	public boolean createTicket(TransactionManager tm, String DataScadenza, String Targa,String username,String CodiceArea) throws Exception {
 		tm.assertInTransaction();
 
 		try (PreparedStatement ps = tm.getConnection()
-				.prepareStatement("INSERT INTO TICKET(IDTicket,Durata,Data,Targa,CF,CodiceArea) VALUES(NULL,?,?,?,?,?)")) {
+				.prepareStatement("INSERT INTO TICKET(IDTicket,datainizio,datafine,Targa,username,CodiceArea) VALUES(NULL,NULL,?,?,?,?)")) {
 
-			ps.setDouble(1, Durata);
-			ps.setString(2, Data);
-			ps.setString(3, Targa);
-			ps.setString(4, CF);
-			ps.setString(5, CodiceArea);
+			ps.setString(1, DataScadenza);
+			ps.setString(2, Targa);
+			ps.setString(3, username);
+			ps.setInt(4, Integer.parseInt(CodiceArea));
 
 			if(ps.executeUpdate()==1) {
 				return true;
@@ -59,28 +57,23 @@ public class TicketDAO {
 	
 	
 	
-	public Ticket readTicket(TransactionManager tm, String CodiceArea, String Targa) throws SQLException {
+	public int readTicket(TransactionManager tm, String CodiceArea, String Targa) throws SQLException {
 		
-		Ticket t = new Ticket();
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT * FROM TICKET WHERE (CODICEAREA=? AND TARGA=?)")) {
+				.prepareStatement("SELECT * FROM ticket WHERE (CodiceArea=? AND Targa=?)")) {
 
 			pt.setString(1, CodiceArea);
 			pt.setString(2, Targa);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					t.setIDTicket(rs.getInt("ID"));
-					t.setCodiceArea(CodiceArea);
-					t.setTargaAuto(Targa);
-					t.setDurata(rs.getDouble("DURATA"));
-					return t;
+					return rs.getInt("IDTicket");
 				}
 			}
 
 		}
 
-		return null;
+		return -1;
 	}
 		
 

@@ -4,6 +4,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
@@ -28,6 +29,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AcquistaTicket extends AppCompatActivity {
 
@@ -78,28 +81,29 @@ public class AcquistaTicket extends AppCompatActivity {
                 }
             });
             t.start();
-            Thread t1 = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
-                        final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                        final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                        out.writeUTF("dataorariosend");
-                        out.flush();
-                        boolean checkora = in.readBoolean();
-                        if(checkora){
-                            String orario = in.readUTF();
-                            orada.setText(orario);
-                        }else{
-                            return;
-                        }
-                    }catch (IOException e){
-                        e.printStackTrace();
+            Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
+                    final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                    final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                    out.writeUTF("dataorariosend");
+                    out.flush();
+                    boolean checkora = in.readBoolean();
+                    if (checkora) {
+                        String orario = in.readUTF();
+                        orada.setText(orario);
+                    } else {
+                        return;
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-            t1.start();
+            }
+        };
+        timer.schedule(timerTask,0,1000);
             btnAcquista.setEnabled(false);
             btnCalcola.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,8 +112,6 @@ public class AcquistaTicket extends AppCompatActivity {
                         Toast.makeText(AcquistaTicket.this,"Inserire tutti i campi",Toast.LENGTH_LONG).show();
                         return;
                     }else {
-                        final String Targa = listaauto.getSelectedItem().toString();
-                        OraDa = orada.getText().toString();
                         OraA = Integer.parseInt(oraa.getText().toString().trim());
                         final double Durata = OraA;
                         CodiceArea = codicearea.getText().toString().trim();
@@ -123,23 +125,15 @@ public class AcquistaTicket extends AppCompatActivity {
                                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                     out.writeUTF("costoticketsend");
                                     out.flush();
-                                    out.writeUTF(Targa);
-                                    out.flush();
                                     out.writeUTF(CodiceArea);
                                     out.flush();
-                                    out.writeUTF(OraDa);
-                                    out.flush();
                                     out.writeDouble(Durata);
-                                    out.flush();
-                                    out.writeUTF(Username);
-                                    out.flush();
-                                    out.writeUTF(Password);
                                     out.flush();
                                     CostoTicket = in.readDouble();
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            costoTotale.setText(String.valueOf(CostoTicket));
+                                            costoTotale.setText(String.valueOf(CostoTicket)+" \u20ac");
                                             btnAcquista.setEnabled(true);
                                         }
                                     });
@@ -165,44 +159,59 @@ public class AcquistaTicket extends AppCompatActivity {
                                 final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                 out.writeUTF("acquistasend");
                                 out.flush();
-                                final String confirm = in.readUTF();
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (confirm.equals("ok")) {
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(AcquistaTicket.this);
-                                            builder.setCancelable(true);
-                                            builder.setTitle("Acquisto effettuato");
-                                            builder.setMessage("Ticket acquistato correttamente");
-                                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    // NUOVA PAGINA DI CONTROLLO DEL TICKET
-                                                    ComponentName componentName = new ComponentName(AcquistaTicket.this, NotifyScheduler.class);
-                                                    JobInfo info = new JobInfo.Builder(123,componentName)
-                                                            .setRequiresCharging(false)
-                                                            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                                                            .setPersisted(true)
-                                                            .setPeriodic(15 * 60 * 1000)
-                                                            .build();
-                                                    JobScheduler scheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
-                                                    int result = scheduler.schedule(info);
-                                                    if(result==JobScheduler.RESULT_SUCCESS){
-                                                        Toast.makeText(AcquistaTicket.this,"Notifica avviata",Toast.LENGTH_LONG).show();
-                                                    }else{
-                                                        Toast.makeText(AcquistaTicket.this,"Errore avvio notifica",Toast.LENGTH_LONG).show();
+                                out.writeUTF(listaauto.getSelectedItem().toString());
+                                out.flush();
+                                out.writeUTF(CodiceArea);
+                                out.flush();
+                                out.writeDouble(Double.parseDouble(oraa.getText().toString().trim()));
+                                out.flush();
+                                out.writeDouble(CostoTicket);
+                                out.flush();
+                                out.writeUTF(Username);
+                                out.flush();
+                                out.writeUTF(Password);
+                                out.flush();
+                                final boolean notify = in.readBoolean();
+                                if(notify) {
+                                    final int IDTicket = in.readInt();
+                                    final String targa = in.readUTF();
+                                    final String codarea = in.readUTF();
+                                    final double durata = in.readDouble();
+                                    final boolean confirm = in.readBoolean();
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (confirm) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(AcquistaTicket.this);
+                                                builder.setCancelable(true);
+                                                builder.setTitle("Acquisto effettuato");
+                                                builder.setMessage("Ticket acquistato correttamente");
+                                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        // NUOVA PAGINA DI CONTROLLO DEL TICKET
+                                                        Intent intent = new Intent(AcquistaTicket.this, TicketInfoActivity.class);
+                                                        Bundle bundle2 = new Bundle();
+                                                        bundle2.putInt("IDTicket", IDTicket);
+                                                        bundle2.putString("Targa", targa);
+                                                        bundle2.putString("CodiceArea", codarea);
+                                                        bundle2.putDouble("Durata", durata);
+                                                        intent.putExtras(bundle2);
+                                                        AcquistaTicket.this.startActivity(intent);
                                                     }
-                                                }
-                                            });
-                                            AlertDialog dialog = builder.create();
-                                            dialog.show();
-                                        }else{
-                                            Toast.makeText(AcquistaTicket.this,"Impossibile inserire l'acquisto",Toast.LENGTH_LONG).show();
-                                            return;
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+                                            } else {
+                                                Toast.makeText(AcquistaTicket.this, "Impossibile inserire l'acquisto", Toast.LENGTH_LONG).show();
+                                                return;
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }else{
+                                    //Errore
+                                }
                                 out.close();
                             }catch(IOException e){
                                 e.printStackTrace();

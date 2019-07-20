@@ -33,7 +33,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `auto` WRITE;
 /*!40000 ALTER TABLE `auto` DISABLE KEYS */;
-INSERT INTO `auto` VALUES ('1','NPLGPP',NULL),('2','asdfghjklqwerty1',NULL),('3','asdfghjklqwerty2',NULL),('4','asdfghjklqwerty3',NULL),('5','asdfghjklqwerty1',NULL),('6','asdfghjklqwerty1',NULL),('ES851SV','asdfghjklqwerty1',NULL);
+INSERT INTO `auto` VALUES ('1','NPLGPP',NULL),('2','asdfghjklqwerty1',NULL),('3','asdfghjklqwerty2',NULL),('4','asdfghjklqwerty3',NULL),('5','asdfghjklqwerty1',NULL),('6','asdfghjklqwerty1',NULL),('7','asdfghjklqwerty9',NULL),('ES851SV','asdfghjklqwerty1',NULL);
 /*!40000 ALTER TABLE `auto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -43,7 +43,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `automobilisti` WRITE;
 /*!40000 ALTER TABLE `automobilisti` DISABLE KEYS */;
-INSERT INTO `automobilisti` VALUES ('asdfghjklqwerty1','Mario','Nobile','mario@mario.it','marionobile1','1234',0,0),('NPL','FLAVIO ','Insinna','ppeppenapo@live.it','sy','lar',NULL,NULL);
+INSERT INTO `automobilisti` VALUES ('asdfghjklqwerty1','Mario','Nobile','mario@mario.it','marionobile1','1234',0,0),('NPL','FLAVIO ','Insinna','ppeppenapo@live.it','sy','lar',94,NULL);
 /*!40000 ALTER TABLE `automobilisti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,7 +53,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `corrispondenza` WRITE;
 /*!40000 ALTER TABLE `corrispondenza` DISABLE KEYS */;
-INSERT INTO `corrispondenza` VALUES ('sy','4'),('sy','5'),('sy','6'),('marionobile1','ES851SV');
+INSERT INTO `corrispondenza` VALUES ('sy','4'),('sy','5'),('sy','6'),('marionobile1','ES851SV'),('sy','7');
 /*!40000 ALTER TABLE `corrispondenza` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (0,'00:00:02.0','0000-00-00','1','NPL',0);
+INSERT INTO `ticket` VALUES (0,'00:00:02.0','0000-00-00','1','NPL',0),(19,NULL,'2019-07-20 18:57:44','5','sy',0),(21,NULL,'2019-07-20 18:59:28','5','sy',0),(22,NULL,'2019-07-20 19:03:13','4','sy',0);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,4 +103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-20 14:45:03
+-- Dump completed on 2019-07-20 18:19:34
