@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `dbsmartparking` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `dbsmartparking` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `dbsmartparking`;
--- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.16, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: dbsmartparking
 -- ------------------------------------------------------
--- Server version	8.0.16
+-- Server version	8.0.11
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,21 +18,6 @@ USE `dbsmartparking`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `areaparcheggio`
---
-
-DROP TABLE IF EXISTS `areaparcheggio`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `areaparcheggio` (
-  `CodiceArea` int(5) NOT NULL AUTO_INCREMENT,
-  `CostoOrario` float NOT NULL,
-  `Dopo20` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`CodiceArea`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `areaparcheggio`
 --
 
@@ -43,50 +28,14 @@ INSERT INTO `areaparcheggio` VALUES (0,2,0);
 UNLOCK TABLES;
 
 --
--- Table structure for table `auto`
---
-
-DROP TABLE IF EXISTS `auto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `auto` (
-  `Targa` varchar(7) NOT NULL,
-  `CFProprietario` varchar(16) NOT NULL,
-  `Attivo` int(2) DEFAULT NULL,
-  PRIMARY KEY (`Targa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `auto`
 --
 
 LOCK TABLES `auto` WRITE;
 /*!40000 ALTER TABLE `auto` DISABLE KEYS */;
-INSERT INTO `auto` VALUES ('1','NPLGPP',NULL);
+INSERT INTO `auto` VALUES ('1','NPLGPP',NULL),('2','asdfghjklqwerty1',NULL),('3','asdfghjklqwerty2',NULL),('4','asdfghjklqwerty3',NULL),('5','asdfghjklqwerty1',NULL),('6','asdfghjklqwerty1',NULL),('ES851SV','asdfghjklqwerty1',NULL);
 /*!40000 ALTER TABLE `auto` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `automobilisti`
---
-
-DROP TABLE IF EXISTS `automobilisti`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `automobilisti` (
-  `CF` char(16) NOT NULL,
-  `Nome` varchar(20) NOT NULL,
-  `Cognome` varchar(20) NOT NULL,
-  `Email` varchar(20) NOT NULL,
-  `Username` varchar(20) NOT NULL,
-  `Password` varchar(20) NOT NULL,
-  `Credito` varchar(60) DEFAULT NULL,
-  `Attivo` int(2) DEFAULT NULL,
-  PRIMARY KEY (`CF`),
-  UNIQUE KEY `Username` (`Username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `automobilisti`
@@ -94,26 +43,9 @@ CREATE TABLE `automobilisti` (
 
 LOCK TABLES `automobilisti` WRITE;
 /*!40000 ALTER TABLE `automobilisti` DISABLE KEYS */;
-INSERT INTO `automobilisti` VALUES ('NPL','FLAVIO ','Insinna','ppeppenapo@live.it','sy','lar',NULL,NULL);
+INSERT INTO `automobilisti` VALUES ('asdfghjklqwerty1','Mario','Nobile','mario@mario.it','marionobile1','1234',0,0),('NPL','FLAVIO ','Insinna','ppeppenapo@live.it','sy','lar',NULL,NULL);
 /*!40000 ALTER TABLE `automobilisti` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `corrispondenza`
---
-
-DROP TABLE IF EXISTS `corrispondenza`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `corrispondenza` (
-  `username` varchar(20) DEFAULT NULL,
-  `Targa` varchar(7) NOT NULL,
-  KEY `CF` (`username`),
-  KEY `Targa` (`Targa`),
-  CONSTRAINT `Targa` FOREIGN KEY (`Targa`) REFERENCES `auto` (`Targa`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `username` FOREIGN KEY (`username`) REFERENCES `automobilisti` (`Username`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `corrispondenza`
@@ -121,29 +53,9 @@ CREATE TABLE `corrispondenza` (
 
 LOCK TABLES `corrispondenza` WRITE;
 /*!40000 ALTER TABLE `corrispondenza` DISABLE KEYS */;
+INSERT INTO `corrispondenza` VALUES ('sy','4'),('sy','5'),('sy','6'),('marionobile1','ES851SV');
 /*!40000 ALTER TABLE `corrispondenza` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `multa`
---
-
-DROP TABLE IF EXISTS `multa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `multa` (
-  `IDMulta` char(5) NOT NULL,
-  `DataEmissione` date NOT NULL,
-  `DataScadenza` date NOT NULL,
-  `Importo` int(5) NOT NULL,
-  `Targa` varchar(7) NOT NULL,
-  `IDVigile` int(10) DEFAULT NULL,
-  `IDTicket` int(5) NOT NULL,
-  PRIMARY KEY (`IDMulta`),
-  UNIQUE KEY `IDVigile` (`IDVigile`),
-  KEY `Targa` (`Targa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `multa`
@@ -155,22 +67,6 @@ LOCK TABLES `multa` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `pagamenti_auto`
---
-
-DROP TABLE IF EXISTS `pagamenti_auto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `pagamenti_auto` (
-  `IDMulta` char(5) NOT NULL,
-  `CF` char(16) NOT NULL,
-  `DataPagamento` date DEFAULT NULL,
-  KEY `CF` (`CF`),
-  KEY `IDMulta` (`IDMulta`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `pagamenti_auto`
 --
 
@@ -178,27 +74,6 @@ LOCK TABLES `pagamenti_auto` WRITE;
 /*!40000 ALTER TABLE `pagamenti_auto` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pagamenti_auto` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `ticket`
---
-
-DROP TABLE IF EXISTS `ticket`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `ticket` (
-  `IDTicket` int(5) NOT NULL AUTO_INCREMENT,
-  `datainizio` varchar(30) DEFAULT NULL,
-  `datafine` varchar(30) DEFAULT NULL,
-  `Targa` varchar(7) NOT NULL,
-  `CF` char(16) DEFAULT NULL,
-  `CodiceArea` int(5) NOT NULL,
-  PRIMARY KEY (`IDTicket`),
-  UNIQUE KEY `CF` (`CF`),
-  KEY `Targa` (`Targa`),
-  KEY `CodiceArea` (`CodiceArea`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `ticket`
@@ -209,26 +84,6 @@ LOCK TABLES `ticket` WRITE;
 INSERT INTO `ticket` VALUES (0,'00:00:02.0','0000-00-00','1','NPL',0);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `vigile`
---
-
-DROP TABLE IF EXISTS `vigile`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `vigile` (
-  `CF` varchar(16) NOT NULL,
-  `IDVigile` int(10) NOT NULL,
-  `Nome` varchar(20) NOT NULL,
-  `Cognome` varchar(20) NOT NULL,
-  `Email` varchar(30) NOT NULL,
-  `Username` varchar(30) NOT NULL,
-  `Password` varchar(30) NOT NULL,
-  PRIMARY KEY (`CF`,`IDVigile`),
-  UNIQUE KEY `Username` (`Username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `vigile`
@@ -248,4 +103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-19 17:20:33
+-- Dump completed on 2019-07-20 14:45:03
