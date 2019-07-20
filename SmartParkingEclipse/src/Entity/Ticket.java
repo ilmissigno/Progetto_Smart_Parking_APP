@@ -61,7 +61,7 @@ public class Ticket {
 	public boolean AcquistaTicket(String Targa, String CodiceArea, double Durata,String username,String password,DataOutputStream out) {
 		//setto automaticamente la data di acquisto e l'ora di acquisto
 		Date date = new Date(); 
-		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
+		//utilizzo tale formattazione cosï¿½ da aver una piena corrispondeza con il db
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	//	System.out.println(formatter.format(date));
 		TicketDAO ticket = new TicketDAO();
@@ -71,7 +71,7 @@ public class Ticket {
 			tm.beginTransaction();
 			String CF=aut.readCFAutomobilista(tm, username, password);
 			if(ticket.createTicket(tm, Durata,formatter.format(date).toString(), Targa,CF,CodiceArea)) {
-				
+				tm.commitTransaction();
 				/*
 				 * ATTIVAZIONE TIMER DI NOTIFICA
 				 */
@@ -80,6 +80,7 @@ public class Ticket {
 					public void actionPerformed(ActionEvent e) {
 						try {
 							Ticket t = ticket.readTicket(tm, CodiceArea, Targa);
+							tm.commitTransaction();
 							out.writeUTF("notifyticket");
 							out.flush();
 							out.writeInt(t.getIDTicket());

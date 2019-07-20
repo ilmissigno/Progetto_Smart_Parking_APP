@@ -1,10 +1,5 @@
 package Entity;
 
-import DAO.AutoDAO;
-import DAO.TransactionManager;
-import DAO.TransactionManagerFactory;
-import DAO.UtenteDAO;
-
 public class Auto {
 	
 	private String Targa;
@@ -29,19 +24,6 @@ public class Auto {
 	public void setProprietario(String proprietario) {
 		Proprietario = proprietario;
 	}
-	
-	public boolean checkAuto(String Targa) {
-		AutoDAO auto = new AutoDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			return auto.readAuto(tm,Targa);
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-			return false;
-		}
-	}
-	
 	
 	}
 	

@@ -13,6 +13,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class NotifyScheduler extends JobService {
@@ -30,7 +31,7 @@ public class NotifyScheduler extends JobService {
             public void run() {
                 final Handler handler = new Handler();
                 try{
-                    Socket s = SocketHandler.getSocket();
+                    Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     String command = in.readUTF();

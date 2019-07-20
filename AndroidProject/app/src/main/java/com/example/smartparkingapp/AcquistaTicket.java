@@ -36,6 +36,7 @@ public class AcquistaTicket extends AppCompatActivity {
     private String OraDa;
     private int OraA;
     private double CostoTicket;
+    private Socket s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +52,55 @@ public class AcquistaTicket extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         final String Username = bundle.getString("username");
         final String Password = bundle.getString("password");
-        GetListaAuto(listaauto,Username);
-        //GetOrario(orada);
-        btnAcquista.setEnabled(false);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
+                        final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                        final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                        out.writeUTF("caricaautosend");
+                        out.flush();
+                        out.writeUTF(Username);
+                        out.flush();
+                        boolean ok = in.readBoolean();
+                        if (ok) {
+                            int listaAutosize = in.readInt();
+                            ArrayList<String> auto = new ArrayList<String>();
+                            for (int i = 0; i < listaAutosize; i++)
+                                auto.add(in.readUTF());
+                            //Set auto to Spinner
+                            listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this, R.layout.support_simple_spinner_dropdown_item, auto));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
+                        final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                        final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                        out.writeUTF("dataorariosend");
+                        out.flush();
+                        boolean checkora = in.readBoolean();
+                        if(checkora){
+                            String orario = in.readUTF();
+                            orada.setText(orario);
+                        }else{
+                            return;
+                        }
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t1.start();
+            btnAcquista.setEnabled(false);
             btnCalcola.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -61,49 +108,49 @@ public class AcquistaTicket extends AppCompatActivity {
                         Toast.makeText(AcquistaTicket.this,"Inserire tutti i campi",Toast.LENGTH_LONG).show();
                         return;
                     }else {
-                            final String Targa = listaauto.getSelectedItem().toString();
-                            OraDa = orada.getText().toString();
-                            OraA = Integer.parseInt(oraa.getText().toString().trim());
-                            final double Durata = OraA;
-                            CodiceArea = codicearea.getText().toString().trim();
-                            final Handler handler = new Handler();
-                            Thread t = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Socket s = SocketHandler.getSocket();
-                                        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                                        out.writeUTF("costoticketsend");
-                                        out.flush();
-                                        out.writeUTF(Targa);
-                                        out.flush();
-                                        out.writeUTF(CodiceArea);
-                                        out.flush();
-                                        out.writeUTF(OraDa);
-                                        out.flush();
-                                        out.writeDouble(Durata);
-                                        out.flush();
-                                        out.writeUTF(Username);
-                                        out.flush();
-                                        out.writeUTF(Password);
-                                        out.flush();
-                                        DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                        CostoTicket = in.readDouble();
-                                        handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                costoTotale.setText(String.valueOf(CostoTicket));
-                                                btnAcquista.setEnabled(true);
-                                            }
-                                        });
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                        final String Targa = listaauto.getSelectedItem().toString();
+                        OraDa = orada.getText().toString();
+                        OraA = Integer.parseInt(oraa.getText().toString().trim());
+                        final double Durata = OraA;
+                        CodiceArea = codicearea.getText().toString().trim();
+                        final Handler handler = new Handler();
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    final Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                    final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                                    final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                                    out.writeUTF("costoticketsend");
+                                    out.flush();
+                                    out.writeUTF(Targa);
+                                    out.flush();
+                                    out.writeUTF(CodiceArea);
+                                    out.flush();
+                                    out.writeUTF(OraDa);
+                                    out.flush();
+                                    out.writeDouble(Durata);
+                                    out.flush();
+                                    out.writeUTF(Username);
+                                    out.flush();
+                                    out.writeUTF(Password);
+                                    out.flush();
+                                    CostoTicket = in.readDouble();
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            costoTotale.setText(String.valueOf(CostoTicket));
+                                            btnAcquista.setEnabled(true);
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                            t.start();
-                        }
+                            }
+                        });
+                        t.start();
                     }
+                }
             });
             btnAcquista.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,12 +160,11 @@ public class AcquistaTicket extends AppCompatActivity {
                         @Override
                         public void run() {
                             try{
-                                //Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
-                                Socket s = SocketHandler.getSocket();
-                                DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                                final Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+                                final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                 out.writeUTF("acquistasend");
                                 out.flush();
-                                DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                 final String confirm = in.readUTF();
                                 handler.post(new Runnable() {
                                     @Override
@@ -143,7 +189,7 @@ public class AcquistaTicket extends AppCompatActivity {
                                                     JobScheduler scheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
                                                     int result = scheduler.schedule(info);
                                                     if(result==JobScheduler.RESULT_SUCCESS){
-                                                       Toast.makeText(AcquistaTicket.this,"Notifica avviata",Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(AcquistaTicket.this,"Notifica avviata",Toast.LENGTH_LONG).show();
                                                     }else{
                                                         Toast.makeText(AcquistaTicket.this,"Errore avvio notifica",Toast.LENGTH_LONG).show();
                                                     }
@@ -167,51 +213,4 @@ public class AcquistaTicket extends AppCompatActivity {
                 }
             });
     }
-
-    private void GetListaAuto(final Spinner listaauto,final String user){
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
-                    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                    out.writeUTF("caricaautosend");
-                    out.flush();
-                    out.writeUTF(user);
-                    out.flush();
-                    DataInputStream in1 = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                    ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-                    boolean ok = in1.readBoolean();
-                    if(ok){
-                        int listaAutosize = in1.readInt();
-                        ArrayList<String> auto = new ArrayList<String>();
-                        for(int i=0;i<listaAutosize;i++)
-                            auto.add(in1.readUTF());
-                        //Set auto to Spinner
-                        listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this,R.layout.support_simple_spinner_dropdown_item,auto));
-                    }
-                }catch(IOException e){
-                    e.printStackTrace();
-                }
-            }
-        });
-        t.start();
-    }
-
-    private void GetOrario(TextView orada){
-        try{
-            Socket s = SocketHandler.getSocket();
-            DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-            String checkora = in.readUTF();
-            if(checkora.equals("dataorarioreceive")){
-                String orario = in.readUTF();
-                orada.setText(orario);
-            }else{
-                return;
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
 }

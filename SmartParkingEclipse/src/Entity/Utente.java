@@ -35,7 +35,7 @@ public class Utente {
 		try {
 			tm.beginTransaction();
 			if(u.readUtente(tm,username,password)) {
-				//ok
+				tm.commitTransaction();
 				return true;
 			}else {
 				//errore
@@ -55,6 +55,7 @@ public class Utente {
 			tm.beginTransaction();
 			if(u.createUtente(tm,CodiceFiscale,Cognome,Nome,username,password,email)) {
 				//ok
+				tm.commitTransaction();
 				return true;
 			}else {
 				//errore

@@ -54,7 +54,9 @@ public class Automobilista extends Utente {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			return auto.readContoAutomobilista(tm, username, password);
+			double conto = auto.readContoAutomobilista(tm, username, password);
+			tm.commitTransaction();
+			return conto;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return -1;
@@ -66,7 +68,12 @@ public class Automobilista extends Utente {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			return auto.updateContoAutomobilista(tm, username, password, CostoTotale);
+			if(auto.updateContoAutomobilista(tm, username, password, CostoTotale)) {
+				tm.commitTransaction();
+				return true;
+			}else {
+				return false;
+			}
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return false;
@@ -79,7 +86,12 @@ public class Automobilista extends Utente {
 		try {
 			tm.beginTransaction();
 			Importo = Importo * -1; //Aggiorno il conto in positivo
-			return auto.updateContoAutomobilista(tm, username, password, Importo);
+			if(auto.updateContoAutomobilista(tm, username, password, Importo)) {
+				tm.commitTransaction();
+				return true;
+			}else {
+				return false;
+			}
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return false;
@@ -94,13 +106,12 @@ public class Automobilista extends Utente {
 	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 	try {
 		tm.beginTransaction();
-		/*
 		if(aut.readAuto(tm,Targa)) {
 			//ok significa che l'auto � gi� inserita,
+			tm.commitTransaction();
 			return false;
-		}*/
-			
-		//else{
+		}
+		else{
 		//Altrimenti Creo l'auto
 			if(aut.createAuto( tm, Targa, CFProprietario,username)) {
 				tm.commitTransaction();
@@ -109,7 +120,7 @@ public class Automobilista extends Utente {
 				return false;
 			}
 	
-		//}
+		}
 		}
 		catch(Exception e) {
 		tm.rollbackTransaction();

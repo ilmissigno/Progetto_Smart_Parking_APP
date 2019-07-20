@@ -16,5 +16,5 @@ public interface IGestoreSmartParking {
 	void CaricaConto(String username, String password, double Importo, DataOutputStream out);
 	void RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password, String email,DataOutputStream out);
 	void AggiungiAuto(String Targa,String CFProprietario,String username,DataOutputStream out);
-	void  OttieniListaAuto(String username, DataOutputStream out, ObjectOutputStream objOut ) throws SQLException;
+	void  OttieniListaAuto(String username, DataOutputStream out) throws SQLException;
 }

@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000); //Devo connettermi al server
-                                s.setKeepAlive(true);
                                 final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                                 out.writeUTF("loginsend");
                                 out.flush();
@@ -71,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
                                                         Bundle bundle = new Bundle();
                                                         bundle.putString("username", Username);
                                                         bundle.putString("password", Password);
-                                                        SocketHandler socketHandler = new SocketHandler();
-                                                        socketHandler.setSocket(s);
                                                         Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
                                                         intent.putExtras(bundle);
                                                         MainActivity.this.startActivity(intent);

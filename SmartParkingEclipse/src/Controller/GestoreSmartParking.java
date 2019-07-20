@@ -64,8 +64,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	@Override
 	
 	public void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,DataOutputStream out,DataInputStream in) {
-		//double costoSingolo = ticket.OttieniCostoTicket(codiceArea);
-		double costoSingolo=2;
+		double costoSingolo = ticket.OttieniCostoTicket(codiceArea);
 		//Qui devo mandare alla boundary il costo totale del ticket
 		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
 		//Non lo so, oppure dovrei solo leggere con lo stream?
@@ -182,7 +181,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		// TODO Auto-generated method stub
 		if(account.RegistraUtente(CodiceFiscale, Cognome, Nome, username, password, email)) {
 			try {
-				out.writeUTF("ok");
+				out.writeBoolean(true);
 				out.flush();
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -207,7 +206,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 
 	
-	public void  OttieniListaAuto(String username, DataOutputStream out, ObjectOutputStream objOut  ) throws SQLException {
+	public void  OttieniListaAuto(String username, DataOutputStream out) throws SQLException {
 		ArrayList<String> listaAuto;
 		try {
 			listaAuto = new ArrayList<String>();

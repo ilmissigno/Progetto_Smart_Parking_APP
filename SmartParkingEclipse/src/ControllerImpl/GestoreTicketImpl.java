@@ -19,16 +19,11 @@ public class GestoreTicketImpl implements GestoreTicket{
 	@Override
 	public boolean ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket, String username,String password ,DataOutputStream out) {
 		Ticket ticket = new Ticket();
-		Auto auto = new Auto();
-		if(auto.checkAuto(Targa)) { //Devo vedere se l'auto e' presente nel DB
 			if(ticket.AcquistaTicket(Targa,CodiceArea,Durata,username,password,out)) {
 				return true;
 			}else {
 				return false;
 			}
-		}else {
-			return false;
-		}
 	}
 
 	@Override

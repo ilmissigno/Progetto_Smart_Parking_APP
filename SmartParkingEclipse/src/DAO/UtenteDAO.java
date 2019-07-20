@@ -12,7 +12,7 @@ public class UtenteDAO {
 		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT CF FROM UTENTI WHERE ((USERNAME=?)AND(PASSWORD=?))")) {
+				.prepareStatement("SELECT CF FROM AUTOMOBILISTI WHERE ((USERNAME=?)AND(PASSWORD=?))")) {
 
 			pt.setString(1, username);
 			pt.setString(2, password);
@@ -62,21 +62,22 @@ public class UtenteDAO {
 			String email) throws SQLException{
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("INSERT INTO UTENTI(CF,COGNOME,NOME,USERNAME,PASSWORD,EMAIL) VALUES(?,?,?,?,?,?)")) {
+				.prepareStatement("INSERT INTO AUTOMOBILISTI(CF,NOME,COGNOME,EMAIL,USERNAME,PASSWORD,CREDITO,ATTIVO) VALUES(?,?,?,?,?,?,?,?)")) {
 			pt.setString(1, CodiceFiscale);
-			pt.setString(2, Cognome);
-			pt.setString(3, Nome);
-			pt.setString(4, username);
-			pt.setString(5, password);
-			pt.setString(6, email);
-			try (ResultSet rs = pt.executeQuery()) {
-				if (rs.next() == true) {
-					return true;
-				}
+			pt.setString(2, Nome);
+			pt.setString(3, Cognome);
+			pt.setString(4, email);
+			pt.setString(5, username);
+			pt.setString(6, password);
+			pt.setDouble(7,0);
+			pt.setInt(8, 0);
+			if(pt.executeUpdate()==1) {
+				return true;
+			}else {
+				return false;
 			}
 
 		}
-		return false;
 	}
 	
 	public static String deleteUtente() {

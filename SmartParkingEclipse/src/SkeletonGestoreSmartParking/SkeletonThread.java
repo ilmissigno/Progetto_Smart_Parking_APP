@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import Controller.IGestoreSmartParking;
 
@@ -24,7 +26,6 @@ public class SkeletonThread extends Thread{
 		try {
 			DataInputStream in = new DataInputStream(new BufferedInputStream(client.getInputStream()));
 			DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));
-			ObjectOutputStream ObjOut=new ObjectOutputStream(client.getOutputStream());
 			String cmd = in.readUTF();
 			switch(cmd) {
 				case "loginsend":{
@@ -68,7 +69,17 @@ public class SkeletonThread extends Thread{
 				case "caricaautosend":{
 					String username = in.readUTF();
 					System.out.println("\nSkeletonThread : username = "+username);
-					iserver.OttieniListaAuto(username, out, ObjOut);
+					iserver.OttieniListaAuto(username, out);
+					break;
+				}
+				case "dataorariosend":{
+					Date date = new Date(); 
+					//utilizzo tale formattazione cos� da aver una piena corrispondeza con il db
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					out.writeBoolean(true);
+					out.flush();
+					out.writeUTF(formatter.format(date));
+					out.flush();
 					break;
 				}
 			}

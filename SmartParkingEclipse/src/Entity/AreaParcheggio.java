@@ -34,6 +34,7 @@ public class AreaParcheggio {
 		try {
 			tm.beginTransaction();
 			double costo = a.readAreaParcheggio(tm,codiceArea);
+			tm.commitTransaction();
 			return costo;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
