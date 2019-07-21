@@ -1,8 +1,13 @@
 package com.example.smartparkingapp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -21,19 +26,19 @@ public class TicketInfoActivity extends AppCompatActivity {
         final double durata = getIntent().getExtras().getDouble("Durata");
         TextView ticketinfo = findViewById(R.id.textViewTicket);
         ticketinfo.setText("Info Ticket: ID: "+idticket+" Targa:"+Targa+" CodiceArea: "+CodiceArea+" Durata in Ore: "+durata);
-        ComponentName componentName = new ComponentName(TicketInfoActivity.this, NotifyScheduler.class);
-        JobInfo info = new JobInfo.Builder(123,componentName)
-                .setRequiresCharging(false)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPersisted(true)
-                .setPeriodic(15 * 60 * 1000)
-                .build();
-        JobScheduler scheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
-        int result = scheduler.schedule(info);
-        if(result==JobScheduler.RESULT_SUCCESS){
-            Toast.makeText(TicketInfoActivity.this,"Notifica avviata",Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(TicketInfoActivity.this,"Errore avvio notifica",Toast.LENGTH_LONG).show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    "SmartParkingNotifica",
+                    "Prova notifica App",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+            Intent serviceIntent = new Intent(this, ServiceNotify.class);
+            ContextCompat.startForegroundService(this, serviceIntent);
         }
+
     }
 }
