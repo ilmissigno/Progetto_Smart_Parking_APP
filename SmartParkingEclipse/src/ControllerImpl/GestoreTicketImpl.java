@@ -38,5 +38,18 @@ public class GestoreTicketImpl implements GestoreTicket{
 		return t.OttieniTicket(CodiceArea,targa);
 	}
 	
+	public boolean TimerTicket(String username, String IDTicket,DataOutputStream out) {
+		Ticket t=new Ticket();
+		return t.TimerTicket(username,IDTicket,out);
+		
+		
+		
+		
+		
+		
+	}
+
+	
+	
 }
 

@@ -88,6 +88,13 @@ public class SkeletonThread extends Thread{
 					out.flush();
 					break;
 				}
+				// mi arriva questo comando
+				case "Notificasend":{ 
+					String username = in.readUTF();
+					String IDTicket=in.readUTF();
+					iserver.TimerTicket(username,IDTicket,out);
+					break;
+				}
 			}
 		}catch(IOException e) {
 			e.printStackTrace();

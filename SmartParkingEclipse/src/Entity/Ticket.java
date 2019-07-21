@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
-import javax.swing.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import DAO.TicketDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
@@ -154,6 +156,41 @@ public class Ticket {
 			tm.rollbackTransaction();
 			return -1;
 		}
+	}
+	
+	public boolean TimerTicket(String username, String IDTicket,DataOutputStream out) {
+		TicketDAO ticket = new TicketDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			String durata= ticket.readTicket(tm, IDTicket);
+			int durataInt=Integer.parseInt(durata);
+			//forse posso modularizzare di piu il codice , per ora lo metto qua
+			//calcolo il tempo dopo il quale deve scattare la notifica
+			int ScattoTimer_secondi=durataInt*3600;
+		    Timer timer = new Timer();
+			timer.scheduleAtFixedRate(new TimerTask() {
+				//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
+				//sideve provare
+	            @Override
+	            public void run() {
+	                //System.out.println("CIAO!");
+	            	try {
+						out.writeBoolean(true);
+						out.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+	            	//significa che è scattato
+	            }
+	            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
+	        },ScattoTimer_secondi , 100000);
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+			return false;
+		}
+		return false;
 	}
 	
 }

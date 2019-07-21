@@ -75,8 +75,25 @@ public class TicketDAO {
 
 		return -1;
 	}
+		public String readTicket(TransactionManager tm, String IDTicket) throws SQLException {
 		
+		tm.assertInTransaction();
+		try (PreparedStatement pt = tm.getConnection()
+				.prepareStatement("SELECT * FROM ticket WHERE (IDTicket=?)")) {
+			//ogni ID è univoco
+			pt.setString(1, IDTicket);
+			try (ResultSet rs = pt.executeQuery()) {
+				if (rs.next() == true) {
+					//devo aggiungere nel db questo campo durata
+					return rs.getString("durata");
+					
+				}
+			}
 
+		}
+
+		return "-1";
+	}
 	
 	
 	
