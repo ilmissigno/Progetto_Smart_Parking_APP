@@ -8,16 +8,16 @@ import Entity.Ticket;
 
 public class TicketDAO {
 	
-	public boolean createTicket(TransactionManager tm, String DataScadenza, String Targa,String username,String CodiceArea) throws Exception {
+	public boolean createTicket(TransactionManager tm, String DataScadenza, double Durata, String Targa,String username,String CodiceArea) throws Exception {
 		tm.assertInTransaction();
-
 		try (PreparedStatement ps = tm.getConnection()
-				.prepareStatement("INSERT INTO TICKET(IDTicket,datainizio,datafine,Targa,username,CodiceArea) VALUES(NULL,NULL,?,?,?,?)")) {
+				.prepareStatement("INSERT INTO TICKET(IDTicket,durata,datafine,Targa,username,CodiceArea) VALUES(NULL,?,?,?,?,?)")) {
 
 			ps.setString(1, DataScadenza);
-			ps.setString(2, Targa);
-			ps.setString(3, username);
-			ps.setInt(4, Integer.parseInt(CodiceArea));
+			ps.setDouble(2, Durata);
+			ps.setString(3, Targa);
+			ps.setString(4, username);
+			ps.setInt(5, Integer.parseInt(CodiceArea));
 
 			if(ps.executeUpdate()==1) {
 				return true;
@@ -75,17 +75,17 @@ public class TicketDAO {
 
 		return -1;
 	}
-		public String readTicket(TransactionManager tm, String IDTicket) throws SQLException {
+		public double readTicket(TransactionManager tm, int IDTicket) throws SQLException {
 		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
 				.prepareStatement("SELECT * FROM ticket WHERE (IDTicket=?)")) {
 			//ogni ID è univoco
-			pt.setString(1, IDTicket);
+			pt.setInt(1, IDTicket);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
 					//devo aggiungere nel db questo campo durata
-					return rs.getString("durata");
+					return rs.getDouble("durata");
 					
 				}
 			}

@@ -118,7 +118,7 @@ public class Ticket {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(ticket.createTicket(tm,ScadenzaTicket,Targa,username,CodiceArea)) {
+			if(ticket.createTicket(tm,ScadenzaTicket, Durata,Targa,username,CodiceArea)) {
 				tm.commitTransaction();
 				/*
 				 * ATTIVAZIONE TIMER DI NOTIFICA
@@ -158,13 +158,13 @@ public class Ticket {
 		}
 	}
 	
-	public boolean TimerTicket(String username, String IDTicket,DataOutputStream out) {
+	public void TimerTicket(String username, int IDTicket,DataOutputStream out) {
 		TicketDAO ticket = new TicketDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			String durata= ticket.readTicket(tm, IDTicket);
-			int durataInt=Integer.parseInt(durata);
+			double durata= ticket.readTicket(tm, IDTicket);
+			int durataInt=(int)durata;
 			//forse posso modularizzare di piu il codice , per ora lo metto qua
 			//calcolo il tempo dopo il quale deve scattare la notifica
 			int ScattoTimer_secondi=durataInt*3600;
@@ -188,9 +188,9 @@ public class Ticket {
 	        },ScattoTimer_secondi , 100000);
 		}catch(Exception e) {
 			tm.rollbackTransaction();
-			return false;
+			
 		}
-		return false;
+		
 	}
 	
 }

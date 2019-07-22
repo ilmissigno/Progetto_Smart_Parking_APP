@@ -227,16 +227,9 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		
 	}
 		
-	public void TimerTicket(String username, String IDTicket, DataOutputStream out) {
-		if(ticket.TimerTicket(username,IDTicket,out)) {
-			try {
-				out.writeBoolean(true);
-				out.flush();
-		
-		
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
+	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
+		ticket.TimerTicket(username,IDTicket,out);
+			
 		
 	}
 		
@@ -244,8 +237,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 
 	
 		
-	}
-
+	
 	
 	
 

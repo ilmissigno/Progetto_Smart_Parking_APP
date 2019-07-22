@@ -91,7 +91,7 @@ public class SkeletonThread extends Thread{
 				// mi arriva questo comando
 				case "Notificasend":{ 
 					String username = in.readUTF();
-					String IDTicket=in.readUTF();
+					int IDTicket=in.readInt();
 					iserver.TimerTicket(username,IDTicket,out);
 					break;
 				}
