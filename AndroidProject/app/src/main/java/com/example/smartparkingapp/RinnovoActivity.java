@@ -52,7 +52,7 @@ public class RinnovoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
+                    final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     out.writeUTF("dataorariosend");
@@ -81,7 +81,7 @@ public class RinnovoActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                final Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                                 final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                                 final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                 out.writeUTF("costoticketsend");
@@ -114,7 +114,7 @@ public class RinnovoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            final Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                            final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                             final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                             final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                             out.writeUTF("rinnovosend");

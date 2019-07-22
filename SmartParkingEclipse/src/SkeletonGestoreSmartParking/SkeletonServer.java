@@ -9,7 +9,7 @@ import Controller.IGestoreSmartParking;
 public  abstract class SkeletonServer  implements IGestoreSmartParking{
 	ServerSocket server;
 	Socket client;
-	final int porta = 8000;
+	final int porta = 8001;
 	
 	public void avvia_skeleton() {
 		try {

@@ -63,7 +63,7 @@ public class ServiceNotify extends Service {
             @Override
             public void run() {
                 try{
-                    Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                    Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     out.writeUTF("Notificasend");

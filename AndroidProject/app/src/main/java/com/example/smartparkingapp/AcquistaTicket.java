@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,10 +28,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.example.smartparkingapp.SntpClient;
 
 public class AcquistaTicket extends AppCompatActivity {
 
@@ -55,26 +61,32 @@ public class AcquistaTicket extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         final String Username = bundle.getString("username");
         final String Password = bundle.getString("password");
+        final Handler handler = new Handler();
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
+                        final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                         final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                         final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                         out.writeUTF("caricaautosend");
                         out.flush();
                         out.writeUTF(Username);
                         out.flush();
-                        boolean ok = in.readBoolean();
-                        if (ok) {
-                            int listaAutosize = in.readInt();
-                            ArrayList<String> auto = new ArrayList<String>();
-                            for (int i = 0; i < listaAutosize; i++)
-                                auto.add(in.readUTF());
-                            //Set auto to Spinner
-                            listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this, R.layout.support_simple_spinner_dropdown_item, auto));
-                        }
+                        final boolean ok = in.readBoolean();
+                        int listaAutosize = in.readInt();
+                        final ArrayList<String> auto = new ArrayList<String>();
+                        for (int i = 0; i < listaAutosize; i++)
+                            auto.add(in.readUTF());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (ok) {
+                                    //Set auto to Spinner
+                                    listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this, R.layout.support_simple_spinner_dropdown_item, auto));
+                                }
+                            }
+                        });
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -85,8 +97,21 @@ public class AcquistaTicket extends AppCompatActivity {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+                long nowAsPerDeviceTimeZone = 0;
+                SntpClient sntpClient = new SntpClient();
+
+                if (sntpClient.requestTime("0.it.pool.ntp.org", 0)) {
+                    nowAsPerDeviceTimeZone = sntpClient.getNtpTime();
+                    Calendar cal = Calendar.getInstance();
+                    TimeZone timeZoneInDevice = cal.getTimeZone();
+                    int differentialOfTimeZones = timeZoneInDevice.getOffset(System.currentTimeMillis());
+                    nowAsPerDeviceTimeZone -= differentialOfTimeZones;
+                }
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                orada.setText(simpleDateFormat.format(new Date(nowAsPerDeviceTimeZone)));
+                /*
                 try {
-                    final Socket s = new Socket(InetAddress.getByName("10.0.2.2"), 8000);
+                    final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     out.writeUTF("dataorariosend");
@@ -101,6 +126,7 @@ public class AcquistaTicket extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                */
             }
         };
         timer.schedule(timerTask,0,1000);
@@ -120,7 +146,7 @@ public class AcquistaTicket extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    final Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                    final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                     out.writeUTF("costoticketsend");
@@ -154,7 +180,7 @@ public class AcquistaTicket extends AppCompatActivity {
                         @Override
                         public void run() {
                             try{
-                                final Socket s = new Socket(InetAddress.getByName("10.0.2.2"),8000);
+                                final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                                 final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                                 final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                                 out.writeUTF("acquistasend");
