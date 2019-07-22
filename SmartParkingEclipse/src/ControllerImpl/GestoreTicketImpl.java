@@ -49,6 +49,20 @@ public class GestoreTicketImpl implements GestoreTicket{
 		
 	}
 
+	@Override
+	public boolean RinnovaTicket(int IDTicket, double durata, double costoTotale, String username, String password,
+			DataOutputStream out) {
+		// TODO Auto-generated method stub
+		
+		Ticket ticket = new Ticket();
+		if(ticket.RinnovaTicket(IDTicket,durata,username,password,out)) {
+			return true;
+		}else {
+			return false;
+		}
+	
+	}
+
 	
 	
 }

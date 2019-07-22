@@ -232,6 +232,36 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 			
 		
 	}
+
+	@Override
+	public void RinnovaTicket(int IDTicket, double durata, String username, String password,double costoTotale, DataOutputStream out) {
+		// TODO Auto-generated method stub
+		
+		try {
+			double conto = account.getConto(username, password);
+			if(conto>=costoTotale) {
+				if(ticket.RinnovaTicket(IDTicket, durata, costoTotale, username,password,out)) {
+					if(account.AggiornaConto(username,password,costoTotale)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
+				}else {
+					out.writeBoolean(false);
+					out.flush();
+				}
+			}else {
+				out.writeBoolean(false);
+				out.flush();
+			}
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 		
 	}
 

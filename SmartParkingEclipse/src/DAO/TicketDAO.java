@@ -101,10 +101,26 @@ public class TicketDAO {
 	
 	
 	
-	public static int updateTicket() {
-		return 0;
+	public static boolean updateTicket(TransactionManager tm, int IDTicket ,String DataScadenza, double Durata) throws Exception {
+		tm.assertInTransaction();
+		try (PreparedStatement ps = tm.getConnection()
+				.prepareStatement("UPDATE TICKET SET durata=?, datafine=? where IDTicket=?")) {
+			ps.setDouble(1, Durata);
+			ps.setString(2, DataScadenza);
+			ps.setInt(3, IDTicket);
+
+			if(ps.executeUpdate()==1) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+		
 		
 	}
+	
+		
+	
 	
 	public static int deleteTicket() {
 		return 0;

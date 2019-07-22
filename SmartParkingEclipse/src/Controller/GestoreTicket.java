@@ -10,4 +10,6 @@ public interface GestoreTicket {
 	boolean RinnovoTicket(String Targa,int Durata,int IDTicket,double CostoTicket);
 	int VerificaCopertura(String CodiceArea, String Targa);
 	void TimerTicket(String username, int iDTicket,DataOutputStream out);
+	boolean RinnovaTicket(int iDTicket, double durata, double costoTotale, String username, String password,
+			DataOutputStream out);
 }

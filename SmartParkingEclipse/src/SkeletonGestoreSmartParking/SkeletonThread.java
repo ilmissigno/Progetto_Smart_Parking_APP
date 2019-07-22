@@ -95,6 +95,16 @@ public class SkeletonThread extends Thread{
 					iserver.TimerTicket(username,IDTicket,out);
 					break;
 				}
+				
+				case "rinnovosend":{ 
+					int IDTicket=in.readInt();
+					double durata=in.readDouble();
+					String username=in.readUTF();
+					String pass=in.readUTF();
+					double costoTotale=in.readDouble();
+					iserver.RinnovaTicket(IDTicket,durata,username,pass,costoTotale,out);
+					break;
+				}
 			}
 		}catch(IOException e) {
 			e.printStackTrace();

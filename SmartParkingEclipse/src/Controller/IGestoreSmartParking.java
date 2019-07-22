@@ -19,4 +19,5 @@ public interface IGestoreSmartParking {
 	void AggiungiAuto(String Targa,String CFProprietario,String username,DataOutputStream out);
 	void  OttieniListaAuto(String username, DataOutputStream out) throws SQLException;
 	void TimerTicket(String username,int IDTicket, DataOutputStream out);
+	void RinnovaTicket(int iDTicket, double durata, String username,String password, double costoTotale, DataOutputStream out );
 }
