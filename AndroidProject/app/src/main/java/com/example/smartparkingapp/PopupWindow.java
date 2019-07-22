@@ -33,8 +33,15 @@ public class PopupWindow extends Activity {
         btnRinnovo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Qui fare il rinnovo
-                startActivity(new Intent(PopupWindow.this,MainActivity.class));
+                Intent intent1 = new Intent(PopupWindow.this, RinnovoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("Username",username);
+                bundle.putInt("IDTicket",IDTicket);
+                bundle.putString("Targa",Targa);
+                bundle.putString("CodiceArea",CodiceArea);
+                bundle.putString("DataScadenza",DataScadenza);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
             }
         });
     }

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TicketInfoActivity"></activity>
+        <activity android:name=".RinnovoActivity"></activity>
+        <activity android:name=".TicketInfoActivity" />
         <activity android:name=".AggiungiAuto" />
         <activity android:name=".HomePageActivity" />
         <activity android:name=".RegistrazioneActivity" />
@@ -26,7 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PopupWindow" android:theme="@style/Widget.AppCompat.PopupWindow"/>
+        <activity
+            android:name=".PopupWindow"
+            android:theme="@style/Widget.AppCompat.PopupWindow" />
+
         <service android:name=".ServiceNotify" />
     </application>
 

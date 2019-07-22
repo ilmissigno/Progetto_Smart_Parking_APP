@@ -186,7 +186,7 @@ public class Ticket {
 	            	//significa che � scattato
 	            }
 	            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
-	        },5000);
+	        },15000);
 			return;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
