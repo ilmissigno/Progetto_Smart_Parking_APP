@@ -87,7 +87,7 @@ public class Ticket {
 		Durata=(int)Durata;
 		int OraScadenzaTicket=(int)Durata+OrarioInt;
 		OraScadenza=Integer.toString(OraScadenzaTicket);
-		if(OraScadenzaTicket>24) {
+		if(OraScadenzaTicket>=24) {
 			//passo al giorno successivo
 			DataInt=DataInt+1;
 			//la  mia base Ã¨ 24, devo passare ad orario mattutino dopo le 24
@@ -134,7 +134,7 @@ public class Ticket {
 							out.flush();
 							out.writeUTF(CodiceArea);
 							out.flush();
-							out.writeDouble(durat);
+							out.writeUTF(ScadenzaTicket);
 							out.flush();
 				return true;
 			}else {
@@ -169,7 +169,7 @@ public class Ticket {
 			//calcolo il tempo dopo il quale deve scattare la notifica
 			int ScattoTimer_secondi=durataInt*3600;
 		    Timer timer = new Timer();
-			timer.scheduleAtFixedRate(new TimerTask() {
+			timer.schedule(new TimerTask() {
 				//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
 				//sideve provare
 	            @Override
@@ -178,14 +178,16 @@ public class Ticket {
 	            	try {
 						out.writeBoolean(true);
 						out.flush();
+						return;
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} 
-	            	//significa che è scattato
+	            	//significa che ï¿½ scattato
 	            }
 	            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
-	        },ScattoTimer_secondi , 100000);
+	        },5000);
+			return;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			

@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.Socket;
+
 public class TicketInfoActivity extends AppCompatActivity {
 
     @Override
@@ -20,12 +23,14 @@ public class TicketInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_info);
 
+        final String Username = getIntent().getExtras().getString("Username");
         final int idticket = getIntent().getExtras().getInt("IDTicket");
         final String Targa = getIntent().getExtras().getString("Targa");
         final String CodiceArea = getIntent().getExtras().getString("CodiceArea");
-        final double durata = getIntent().getExtras().getDouble("Durata");
+        final String DataScadenza = getIntent().getExtras().getString("DataScadenza");
         TextView ticketinfo = findViewById(R.id.textViewTicket);
-        ticketinfo.setText("Info Ticket: ID: "+idticket+" Targa:"+Targa+" CodiceArea: "+CodiceArea+" Durata in Ore: "+durata);
+        ticketinfo.setText("Info Ticket: ID: "+idticket+"\nTarga:"+Targa+"\nCodiceArea: "+CodiceArea+"\nData Scadenza: "+DataScadenza);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
@@ -37,6 +42,13 @@ public class TicketInfoActivity extends AppCompatActivity {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
             Intent serviceIntent = new Intent(this, ServiceNotify.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("Username",Username);
+            bundle.putInt("IDTicket",idticket);
+            bundle.putString("Targa",Targa);
+            bundle.putString("CodiceArea",CodiceArea);
+            bundle.putString("DataScadenza",DataScadenza);
+            serviceIntent.putExtras(bundle);
             ContextCompat.startForegroundService(this, serviceIntent);
         }
 

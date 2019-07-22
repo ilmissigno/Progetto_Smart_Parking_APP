@@ -176,7 +176,7 @@ public class AcquistaTicket extends AppCompatActivity {
                                     final int IDTicket = in.readInt();
                                     final String targa = in.readUTF();
                                     final String codarea = in.readUTF();
-                                    final double durata = in.readDouble();
+                                    final String datascadenza = in.readUTF();
                                     final boolean confirm = in.readBoolean();
                                     handler.post(new Runnable() {
                                         @Override
@@ -193,10 +193,11 @@ public class AcquistaTicket extends AppCompatActivity {
                                                         // NUOVA PAGINA DI CONTROLLO DEL TICKET
                                                         Intent intent = new Intent(AcquistaTicket.this, TicketInfoActivity.class);
                                                         Bundle bundle2 = new Bundle();
+                                                        bundle2.putString("Username",Username);
                                                         bundle2.putInt("IDTicket", IDTicket);
                                                         bundle2.putString("Targa", targa);
                                                         bundle2.putString("CodiceArea", codarea);
-                                                        bundle2.putDouble("Durata", durata);
+                                                        bundle2.putString("DataScadenza", datascadenza);
                                                         intent.putExtras(bundle2);
                                                         AcquistaTicket.this.startActivity(intent);
                                                     }

@@ -13,8 +13,8 @@ public class TicketDAO {
 		try (PreparedStatement ps = tm.getConnection()
 				.prepareStatement("INSERT INTO TICKET(IDTicket,durata,datafine,Targa,username,CodiceArea) VALUES(NULL,?,?,?,?,?)")) {
 
-			ps.setString(1, DataScadenza);
-			ps.setDouble(2, Durata);
+			ps.setDouble(1, Durata);
+			ps.setString(2, DataScadenza);
 			ps.setString(3, Targa);
 			ps.setString(4, username);
 			ps.setInt(5, Integer.parseInt(CodiceArea));
@@ -68,6 +68,8 @@ public class TicketDAO {
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
 					return rs.getInt("IDTicket");
+				}else {
+					System.out.println("Errore1");
 				}
 			}
 
@@ -80,19 +82,21 @@ public class TicketDAO {
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
 				.prepareStatement("SELECT * FROM ticket WHERE (IDTicket=?)")) {
-			//ogni ID è univoco
+			//ogni ID ï¿½ univoco
 			pt.setInt(1, IDTicket);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
 					//devo aggiungere nel db questo campo durata
 					return rs.getDouble("durata");
 					
+				}else {
+					System.out.println("Errore1");
 				}
 			}
 
 		}
 
-		return "-1";
+		return -1;
 	}
 	
 	
