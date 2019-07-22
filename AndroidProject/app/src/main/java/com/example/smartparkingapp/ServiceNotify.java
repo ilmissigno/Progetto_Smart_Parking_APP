@@ -42,6 +42,7 @@ public class ServiceNotify extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         final String TAG = "ServiceNotify";
         final String username = intent.getExtras().getString("Username");
+        final String Password = intent.getExtras().getString("Password");
         final int IDTicket = intent.getExtras().getInt("IDTicket");
         final String Targa = intent.getExtras().getString("Targa");
         final String CodiceArea = intent.getExtras().getString("CodiceArea");
@@ -79,6 +80,7 @@ public class ServiceNotify extends Service {
                                 Intent intent1 = new Intent(ServiceNotify.this, PopupWindow.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("Username", username);
+                                bundle.putString("Password",Password);
                                 bundle.putInt("IDTicket", IDTicket);
                                 bundle.putString("Targa", Targa);
                                 bundle.putString("CodiceArea", CodiceArea);

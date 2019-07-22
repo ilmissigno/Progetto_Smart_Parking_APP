@@ -124,7 +124,7 @@ public class Ticket {
 				 * ATTIVAZIONE TIMER DI NOTIFICA
 				 */
 				tm.beginTransaction();
-							int ID = ticket.readTicket(tm, CodiceArea, Targa);
+							int ID = ticket.readTicket(tm, Targa,ScadenzaTicket);
 							tm.commitTransaction();
 							out.writeBoolean(true);
 							out.flush();
@@ -168,6 +168,9 @@ public class Ticket {
 			//forse posso modularizzare di piu il codice , per ora lo metto qua
 			//calcolo il tempo dopo il quale deve scattare la notifica
 			int ScattoTimer_secondi=durataInt*3600;
+			//A meno di 10 minuti
+			ScattoTimer_secondi = ScattoTimer_secondi-(600*1000);
+			int ScattoTimer_millisecondi = ScattoTimer_secondi*1000;
 		    Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
 				//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
@@ -186,7 +189,7 @@ public class Ticket {
 	            	//significa che � scattato
 	            }
 	            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
-	        },15000);
+	        },ScattoTimer_millisecondi);
 			return;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
@@ -220,8 +223,8 @@ public class Ticket {
 		char Cifra2=DataString.charAt(12);
 		String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
 		int  OrarioInt=Integer.parseInt(orario);
-		Durata=(int)Durata;
-		int OraScadenzaTicket=(int)Durata+OrarioInt;
+		durata=(int)durata;
+		int OraScadenzaTicket=(int)durata+OrarioInt;
 		OraScadenza=Integer.toString(OraScadenzaTicket);
 		if(OraScadenzaTicket>=24) {
 			//passo al giorno successivo
@@ -249,15 +252,17 @@ public class Ticket {
 		Scadenza.setCharAt(12, Cifra2);
 		String ScadenzaTicket=Scadenza.toString();
 		System.out.println(ScadenzaTicket);
-		final double durat = Durata;
+		final double durat = durata;
 		TicketDAO ticket = new TicketDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(ticket.updateTicket(tm, IDTicket,ScadenzaTicket, Durata)) {
+			if(ticket.updateTicket(tm, IDTicket,ScadenzaTicket, durata)) {
 				tm.commitTransaction();
 					
 							out.writeBoolean(true);
+							out.flush();
+							out.writeInt(IDTicket);
 							out.flush();
 							out.writeUTF(ScadenzaTicket);
 							out.flush();

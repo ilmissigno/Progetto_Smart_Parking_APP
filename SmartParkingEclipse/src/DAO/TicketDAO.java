@@ -57,13 +57,13 @@ public class TicketDAO {
 	
 	
 	
-	public int readTicket(TransactionManager tm, String CodiceArea, String Targa) throws SQLException {
+	public int readTicket(TransactionManager tm, String Targa,String DataScadenza) throws SQLException {
 		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT * FROM ticket WHERE (CodiceArea=? AND Targa=?)")) {
+				.prepareStatement("SELECT * FROM ticket WHERE (datafine=? AND Targa=?)")) {
 
-			pt.setString(1, CodiceArea);
+			pt.setString(1, DataScadenza);
 			pt.setString(2, Targa);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
@@ -101,7 +101,7 @@ public class TicketDAO {
 	
 	
 	
-	public static boolean updateTicket(TransactionManager tm, int IDTicket ,String DataScadenza, double Durata) throws Exception {
+	public boolean updateTicket(TransactionManager tm, int IDTicket ,String DataScadenza, double Durata) throws Exception {
 		tm.assertInTransaction();
 		try (PreparedStatement ps = tm.getConnection()
 				.prepareStatement("UPDATE TICKET SET durata=?, datafine=? where IDTicket=?")) {

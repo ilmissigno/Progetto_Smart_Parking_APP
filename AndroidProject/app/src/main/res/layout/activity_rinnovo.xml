@@ -121,7 +121,7 @@
         app:layout_constraintTop_toBottomOf="@+id/codArea" />
 
     <EditText
-        android:id="@+id/ora2"
+        android:id="@+id/ora3"
         android:layout_width="103dp"
         android:layout_height="49dp"
         android:layout_marginTop="20dp"
@@ -146,7 +146,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btnCalcolaCostoOra"
-        app:layout_constraintEnd_toStartOf="@+id/ora2"
+        app:layout_constraintEnd_toStartOf="@+id/ora3"
         app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -163,6 +163,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ora2" />
+        app:layout_constraintTop_toBottomOf="@+id/ora3" />
 
 </android.support.constraint.ConstraintLayout>

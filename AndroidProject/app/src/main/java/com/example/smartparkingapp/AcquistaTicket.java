@@ -194,6 +194,7 @@ public class AcquistaTicket extends AppCompatActivity {
                                                         Intent intent = new Intent(AcquistaTicket.this, TicketInfoActivity.class);
                                                         Bundle bundle2 = new Bundle();
                                                         bundle2.putString("Username",Username);
+                                                        bundle2.putString("Password",Password);
                                                         bundle2.putInt("IDTicket", IDTicket);
                                                         bundle2.putString("Targa", targa);
                                                         bundle2.putString("CodiceArea", codarea);

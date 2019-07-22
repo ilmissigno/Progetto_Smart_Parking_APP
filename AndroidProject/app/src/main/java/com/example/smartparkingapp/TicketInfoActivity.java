@@ -24,6 +24,7 @@ public class TicketInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ticket_info);
 
         final String Username = getIntent().getExtras().getString("Username");
+        final String Password = getIntent().getExtras().getString("Password");
         final int idticket = getIntent().getExtras().getInt("IDTicket");
         final String Targa = getIntent().getExtras().getString("Targa");
         final String CodiceArea = getIntent().getExtras().getString("CodiceArea");
@@ -44,6 +45,7 @@ public class TicketInfoActivity extends AppCompatActivity {
             Intent serviceIntent = new Intent(this, ServiceNotify.class);
             Bundle bundle = new Bundle();
             bundle.putString("Username",Username);
+            bundle.putString("Password",Password);
             bundle.putInt("IDTicket",idticket);
             bundle.putString("Targa",Targa);
             bundle.putString("CodiceArea",CodiceArea);

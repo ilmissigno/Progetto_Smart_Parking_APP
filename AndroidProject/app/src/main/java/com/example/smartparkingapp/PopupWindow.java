@@ -21,6 +21,7 @@ public class PopupWindow extends Activity {
         int height = dm.heightPixels;
         getWindow().setLayout((int)(width*.9),(int)(height*.8));
         final String username = intent.getExtras().getString("Username");
+        final String Password = intent.getExtras().getString("Password");
         final int IDTicket = intent.getExtras().getInt("IDTicket");
         final String Targa = intent.getExtras().getString("Targa");
         final String CodiceArea = intent.getExtras().getString("CodiceArea");
@@ -36,6 +37,7 @@ public class PopupWindow extends Activity {
                 Intent intent1 = new Intent(PopupWindow.this, RinnovoActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("Username",username);
+                bundle.putString("Password",Password);
                 bundle.putInt("IDTicket",IDTicket);
                 bundle.putString("Targa",Targa);
                 bundle.putString("CodiceArea",CodiceArea);
