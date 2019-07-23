@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RinnovoActivity"></activity>
+        <activity android:name=".CancellaAutoActivity"></activity>
+        <activity android:name=".CaricaContoActivity" />
+        <activity android:name=".RinnovoActivity" />
         <activity android:name=".TicketInfoActivity" />
         <activity android:name=".AggiungiAuto" />
         <activity android:name=".HomePageActivity" />
