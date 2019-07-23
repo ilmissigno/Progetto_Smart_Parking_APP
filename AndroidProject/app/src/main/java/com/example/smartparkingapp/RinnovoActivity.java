@@ -19,6 +19,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,6 +55,9 @@ public class RinnovoActivity extends AppCompatActivity {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                orada.setText(simpleDateFormat.format(Calendar.getInstance(TimeZone.getTimeZone("Italy/Rome")).getTime()));
+                /*
                 try {
                     final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
@@ -66,7 +73,7 @@ public class RinnovoActivity extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         };
         timer.schedule(timerTask,0,1000);

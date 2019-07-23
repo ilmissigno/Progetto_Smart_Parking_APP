@@ -1,8 +1,5 @@
 package com.example.smartparkingapp;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -11,7 +8,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,18 +21,15 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.example.smartparkingapp.SntpClient;
 
 public class AcquistaTicket extends AppCompatActivity {
 
@@ -97,18 +90,9 @@ public class AcquistaTicket extends AppCompatActivity {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                long nowAsPerDeviceTimeZone = 0;
-                SntpClient sntpClient = new SntpClient();
 
-                if (sntpClient.requestTime("0.it.pool.ntp.org", 0)) {
-                    nowAsPerDeviceTimeZone = sntpClient.getNtpTime();
-                    Calendar cal = Calendar.getInstance();
-                    TimeZone timeZoneInDevice = cal.getTimeZone();
-                    int differentialOfTimeZones = timeZoneInDevice.getOffset(System.currentTimeMillis());
-                    nowAsPerDeviceTimeZone -= differentialOfTimeZones;
-                }
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                orada.setText(simpleDateFormat.format(new Date(nowAsPerDeviceTimeZone)));
+                orada.setText(simpleDateFormat.format(Calendar.getInstance(TimeZone.getTimeZone("Italy/Rome")).getTime()));
                 /*
                 try {
                     final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
