@@ -127,7 +127,7 @@ public class SkeletonThread extends Thread{
 					break;
 				}
 				
-				case "eliminaAutosend":{ 
+				case "deleteautosend":{ 
 					String Targa=in.readUTF();
 					String username=in.readUTF();
 					iserver.EliminaAuto(Targa,username,out);

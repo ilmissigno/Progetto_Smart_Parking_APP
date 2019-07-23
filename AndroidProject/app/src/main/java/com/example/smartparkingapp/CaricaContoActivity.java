@@ -40,7 +40,7 @@ public class CaricaContoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            Socket s = new Socket(InetAddress.getByName("47.53.90.210"),8001);
+                            Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                             DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                             DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                             out.writeUTF("caricacontosend");
@@ -91,7 +91,7 @@ public class CaricaContoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try{
-                    Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
+                    Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                     DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     out.writeUTF("getcreditosend");

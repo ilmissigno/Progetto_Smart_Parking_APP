@@ -17,7 +17,8 @@
         <activity android:name=".CancellaAutoActivity"></activity>
         <activity android:name=".CaricaContoActivity" />
         <activity android:name=".RinnovoActivity" />
-        <activity android:name=".TicketInfoActivity" />
+        <activity android:name=".TicketInfoActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".AggiungiAuto" />
         <activity android:name=".HomePageActivity" />
         <activity android:name=".RegistrazioneActivity" />

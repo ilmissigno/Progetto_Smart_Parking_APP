@@ -189,7 +189,7 @@ public class Ticket {
 	            	//significa che � scattato
 	            }
 	            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
-	        },ScattoTimer_millisecondi);
+	        },20000);
 			return;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
@@ -282,8 +282,12 @@ public class Ticket {
 			TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 			try {
 				tm.beginTransaction();
-				if(ticket.deleteTicket(tm,IDTicket));
-				return true;
+				if(ticket.deleteTicket(tm,IDTicket)) {
+					tm.commitTransaction();
+					return true;
+				}else {
+					return false;
+				}
 			}catch(Exception e) {
 				tm.rollbackTransaction();
 				return false;

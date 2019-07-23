@@ -48,7 +48,7 @@ public class AggiungiAuto extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try{
-                                    Socket client = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
+                                    Socket client = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                                     SocketHandler s = new SocketHandler();
                                     s.setSocket(client);
                                     DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));

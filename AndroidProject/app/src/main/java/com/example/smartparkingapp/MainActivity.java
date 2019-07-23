@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001); //Devo connettermi al server
+                                final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER); //Devo connettermi al server
                                 final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                                 out.writeUTF("loginsend");
                                 out.flush();

@@ -82,7 +82,7 @@ return CorrispondenzaUtente;
 		public boolean deleteCorrispondenza(TransactionManager tm, String targa, String username) throws SQLException {
 			tm.assertInTransaction();
 			try (PreparedStatement ps = tm.getConnection()
-					.prepareStatement("DELETE FROM corrispondenza WHERE targa=? AND username=?")) {
+					.prepareStatement("DELETE FROM corrispondenza WHERE Targa=? AND username=?")) {
 
 				ps.setString(1, targa);
 				ps.setString(2, username);

@@ -81,6 +81,7 @@ public class Corrispondenza {
 					try {
 						tm.beginTransaction();
 						if(corrispondenza.deleteCorrispondenza(tm,targa,username));
+						tm.commitTransaction();
 						return true;
 					}catch(Exception e) {
 						tm.rollbackTransaction();

@@ -35,7 +35,7 @@ public class CancellaAutoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    final Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
+                    final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     out.writeUTF("caricaautosend");
@@ -70,10 +70,10 @@ public class CancellaAutoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            Socket s = new Socket(InetAddress.getByName("47.53.90.210"),8001);
+                            Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                             DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                             DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                            out.writeUTF("eliminaAutosend");
+                            out.writeUTF("deleteautosend");
                             out.flush();
                             out.writeUTF(listaauto.getSelectedItem().toString().trim());
                             out.flush();

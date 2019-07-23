@@ -48,7 +48,7 @@ public class ServiceNotify extends Service {
         final String CodiceArea = intent.getExtras().getString("CodiceArea");
         final String DataScadenza = intent.getExtras().getString("DataScadenza");
         Intent notificationIntent = new Intent(this,TicketInfoActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,1,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, "SmartParkingNotifica")
                 .setContentTitle("Info Ticket")
                 .setContentText("Info Ticket: ID: "+IDTicket+"\n Targa:"+Targa+"\n CodiceArea: "+CodiceArea+"\n Data Scadenza: "+DataScadenza)
@@ -63,7 +63,7 @@ public class ServiceNotify extends Service {
             @Override
             public void run() {
                 try{
-                    Socket s = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
+                    Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                     final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     out.writeUTF("Notificasend");

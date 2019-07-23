@@ -66,7 +66,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                 public void run() {
                                     try{
                                         //Sostituire InetAddress con l'indirizzo del controller dentro getByName
-                                        Socket client = new Socket(InetAddress.getByName("47.53.90.210"), 8001);
+                                        Socket client = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                                         SocketHandler s = new SocketHandler();
                                         s.setSocket(client);
                                         DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));

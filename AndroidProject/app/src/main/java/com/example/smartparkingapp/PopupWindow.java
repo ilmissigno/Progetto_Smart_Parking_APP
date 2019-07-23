@@ -50,10 +50,10 @@ public class PopupWindow extends Activity {
             @Override
             public void run() {
                 if(!isRinnovato){
-                    DeleteTicket(IDTicket);
+                    DeleteTicket(IDTicket,username,Password);
                 }else return;
             }
-        },(600*1000));
+        },20000);
         Button btnRinnovo = findViewById(R.id.btnRinnovo);
         btnRinnovo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,13 +73,12 @@ public class PopupWindow extends Activity {
         });
     }
 
-    protected void DeleteTicket(final int IDTicket){
-        final Handler handler = new Handler();
+    protected void DeleteTicket(final int IDTicket,final String Username,final String Password){
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    Socket s = new Socket(InetAddress.getByName("47.53.90.210"),8001);
+                    Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
                     DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                     DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
                     out.writeUTF("eliminaticketsend");
@@ -87,14 +86,14 @@ public class PopupWindow extends Activity {
                     out.writeInt(IDTicket);
                     out.flush();
                     final boolean confirm = in.readBoolean();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
                             if(confirm){
-                                Toast.makeText(PopupWindow.this,"Ticket Scaduto",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(PopupWindow.this,HomePageActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("username",Username);
+                                bundle.putString("password",Password);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                             }
-                        }
-                    });
                 }catch (IOException e){
                     e.printStackTrace();
                 }
