@@ -12,4 +12,5 @@ public interface GestoreTicket {
 	void TimerTicket(String username, int iDTicket,DataOutputStream out);
 	boolean RinnovaTicket(int iDTicket, double durata, double costoTotale, String username, String password,
 			DataOutputStream out);
+	boolean EliminaTicket(int iDTicket);
 }

@@ -122,11 +122,26 @@ public class TicketDAO {
 		
 	
 	
-	public static int deleteTicket() {
-		return 0;
+	public boolean deleteTicket(TransactionManager tm, int IDTicket) throws SQLException {
+		tm.assertInTransaction();
+		try (PreparedStatement ps = tm.getConnection()
+				.prepareStatement("DELETE FROM ticket WHERE IDTicket=?")) {
+
+			ps.setInt(1, IDTicket);
+
+			if(ps.executeUpdate()==1) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+		
+		
 		
 	}
-	
+
+
+
 	
 
 }

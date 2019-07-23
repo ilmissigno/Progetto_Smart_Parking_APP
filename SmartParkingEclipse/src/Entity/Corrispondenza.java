@@ -7,6 +7,7 @@ import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
 import DAO.AutoDAO;
 import DAO.CorrispondenzaDAO;
+import DAO.TicketDAO;
 
 public class Corrispondenza {
 	String Targa;
@@ -72,6 +73,24 @@ public class Corrispondenza {
 		}
 
 		return listaCorrispondenze;
+	}
+	public boolean EliminaCorrispondenza(String targa, String username) {
+		// TODO Auto-generated method stub
+					CorrispondenzaDAO corrispondenza = new CorrispondenzaDAO();
+					TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+					try {
+						tm.beginTransaction();
+						if(corrispondenza.deleteCorrispondenza(tm,targa,username));
+						return true;
+					}catch(Exception e) {
+						tm.rollbackTransaction();
+						return false;
+					}
+			
+	
+		
+		
+		
 	}
 
 

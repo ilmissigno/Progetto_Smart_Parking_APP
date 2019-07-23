@@ -157,20 +157,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		
 	}
 
-	@Override
-	public void CaricaConto(String username, String password, double Importo, DataOutputStream out) {
-		try {
-			if(account.CaricaConto(username, password, Importo)) {
-				out.writeUTF("ok");
-				out.flush();
-			}else {
-				out.writeUTF("no");
-				out.flush();
-			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	@Override
 	public void RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password,
@@ -260,10 +247,79 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void CaricaConto(String username,String password ,double Importo, DataOutputStream out) {
+		try {
+			if(account.CaricaConto(username, password,Importo)) {
+				out.writeBoolean(true);
+				out.flush();
+			}else {
+				out.writeBoolean(false);
+				out.flush();
+			}
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void EliminaTicket(int IDTicket, DataOutputStream out) {
+		// TODO Auto-generated method stub
+		try {
+			if(ticket.EliminaTicket(IDTicket)) {
+				out.writeBoolean(true);
+				out.flush();
+			}else {
+				out.writeBoolean(false);
+				out.flush();
+			}
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void EliminaAuto(String targa,String username, DataOutputStream out) {
+		// TODO Auto-generated method stub
+		
+		try {
+			if(account.EliminaAuto(targa,username)) {
+				out.writeBoolean(true);
+				out.flush();
+			}else {
+				out.writeBoolean(false);
+				out.flush();
+			}
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void LeggiCredito(String username, String password,DataOutputStream out) {
+			double Credito=account.getConto(username,password);
+			try {
+				out.writeBoolean(true);
+				out.flush();
+				out.writeDouble(Credito);
+				out.flush();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
+}
+	
+		
+	
+
+	
 	
 	
 		
-	}
+	
 
 	
 		

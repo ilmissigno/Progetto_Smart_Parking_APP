@@ -275,5 +275,21 @@ public class Ticket {
 			return false;
 		}
 	}
-	
+
+	public boolean EliminaTicket(int IDTicket) {
+		// TODO Auto-generated method stub
+			TicketDAO ticket = new TicketDAO();
+			TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+			try {
+				tm.beginTransaction();
+				if(ticket.deleteTicket(tm,IDTicket));
+				return true;
+			}catch(Exception e) {
+				tm.rollbackTransaction();
+				return false;
+			}
+	}
 }
+	
+	
+

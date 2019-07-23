@@ -78,4 +78,22 @@ return CorrispondenzaUtente;
 		}
 		
 	}
+
+		public boolean deleteCorrispondenza(TransactionManager tm, String targa, String username) throws SQLException {
+			tm.assertInTransaction();
+			try (PreparedStatement ps = tm.getConnection()
+					.prepareStatement("DELETE FROM corrispondenza WHERE targa=? AND username=?")) {
+
+				ps.setString(1, targa);
+				ps.setString(2, username);
+
+				if(ps.executeUpdate()==1) {
+					return true;
+				}else {
+					return false;
+				}
+			}
+		}
 }
+			
+

@@ -105,6 +105,36 @@ public class SkeletonThread extends Thread{
 					iserver.RinnovaTicket(IDTicket,durata,username,pass,costoTotale,out);
 					break;
 				}
+				
+				case "caricacontosend":{ 
+					String username=in.readUTF();
+					double quantita=in.readDouble();
+					String password=in.readUTF();
+					iserver.CaricaConto(username,password,quantita,out);
+					
+					break;
+				}
+				
+				case "getcreditosend":{
+					String username=in.readUTF();
+					String password=in.readUTF();
+					iserver.LeggiCredito(username,password,out);
+				}
+				case "eliminaticketsend":{ 
+					int IDTicket=in.readInt();
+					iserver.EliminaTicket(IDTicket,out);
+					
+					break;
+				}
+				
+				case "eliminaAutosend":{ 
+					String Targa=in.readUTF();
+					String username=in.readUTF();
+					iserver.EliminaAuto(Targa,username,out);
+					
+					break;
+				}
+				
 			}
 		}catch(IOException e) {
 			e.printStackTrace();

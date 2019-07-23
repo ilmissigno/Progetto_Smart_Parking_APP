@@ -63,7 +63,20 @@ public class GestoreTicketImpl implements GestoreTicket{
 	
 	}
 
+	@Override
+	public boolean EliminaTicket(int IDTicket) {
+		// TODO Auto-generated method stub
+		Ticket ticket = new Ticket();
+		if(ticket.EliminaTicket(IDTicket)) {
+			return true;
+		}else {
+			return false;
+		}
 	
-	
+		
+	}
 }
+	
+	
+
 

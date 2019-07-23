@@ -39,11 +39,6 @@ public class GestoreAccountImpl implements GestoreAccount {
 		}
 	}
 
-	@Override
-	public double getConto(String username, String password) {
-		Automobilista u = new Automobilista();
-		return u.getConto(username,password);
-	}
 
 	@Override
 	public boolean AggiornaConto(String username, String password, double CostoTotale) {
@@ -56,9 +51,9 @@ public class GestoreAccountImpl implements GestoreAccount {
 	}
 
 	@Override
-	public boolean CaricaConto(String username, String password, double Importo) {
+	public boolean CaricaConto(String username ,String password,double Importo) {
 		Automobilista a = new Automobilista();
-		if(a.CaricaConto(username,password,Importo)) {
+		if(a.CaricaConto(username, password,Importo)) {
 			return true;
 		}else {
 			return false;
@@ -89,8 +84,33 @@ public class GestoreAccountImpl implements GestoreAccount {
 		
 		
 	}
-	}
+
+	public boolean EliminaAuto(String targa,String username) {
+		// TODO Auto-generated method stub
+			Corrispondenza ListaAuto=new Corrispondenza();
+				if(ListaAuto.EliminaCorrispondenza(targa,username)) {
+					return true;
+				}
+				else { return false;
+					
+				}
+			
 	
+	}
+
+
+	@Override
+	public double getConto(String username, String password) {
+		// TODO Auto-generated method stub
+		Automobilista u = new Automobilista();
+		return u.getConto(username,password);
+		
+	}
+
+	
+	}
+
+
 	
 	
 	

@@ -68,7 +68,7 @@ public class Automobilista extends Utente {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(auto.updateContoAutomobilista(tm, username, password, CostoTotale)) {
+			if(auto.updateContoAutomobilista(tm, username,password, CostoTotale)) {
 				tm.commitTransaction();
 				return true;
 			}else {
@@ -80,7 +80,7 @@ public class Automobilista extends Utente {
 		}
 	}
 	
-	public boolean CaricaConto(String username, String password, double Importo) {
+	public boolean CaricaConto(String username, String password,double Importo) {
 		AutomobilistaDAO auto = new AutomobilistaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
