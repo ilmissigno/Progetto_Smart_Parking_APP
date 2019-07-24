@@ -62,38 +62,8 @@ public class ServiceNotify extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                    final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                    final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                    out.writeUTF("Notificasend");
-                    out.flush();
-                    out.writeUTF(username);
-                    out.flush();
-                    out.writeInt(IDTicket);
-                    out.flush();
-                    final boolean command = in.readBoolean();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(command) {
-                                Intent intent1 = new Intent(ServiceNotify.this, PopupWindow.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putString("Username", username);
-                                bundle.putString("Password",Password);
-                                bundle.putInt("IDTicket", IDTicket);
-                                bundle.putString("Targa", Targa);
-                                bundle.putString("CodiceArea", CodiceArea);
-                                bundle.putString("DataScadenza", DataScadenza);
-                                intent1.putExtras(bundle);
-                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                ServiceNotify.this.startActivity(intent1);
-                            }
-                        }
-                    });
-                }catch(IOException e){
-                    e.printStackTrace();
-                }
+               ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+               proxyAutomobilista.sendNotify(username,IDTicket,Password,Targa,CodiceArea,DataScadenza,handler,ServiceNotify.this);
             }
         }).start();
         return START_NOT_STICKY;

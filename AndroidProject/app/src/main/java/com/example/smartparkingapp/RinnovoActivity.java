@@ -87,27 +87,15 @@ public class RinnovoActivity extends AppCompatActivity {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                                final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                                final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                out.writeUTF("costoticketsend");
-                                out.flush();
-                                out.writeUTF(CodiceArea);
-                                out.flush();
-                                out.writeDouble(Durata);
-                                out.flush();
-                                CostoTicket = in.readDouble();
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        costoTotale.setText(String.valueOf(CostoTicket)+" \u20ac");
-                                        btnRin.setEnabled(true);
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                            CostoTicket = proxyAutomobilista.calcolaCosto(CodiceArea,Durata);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    costoTotale.setText(String.valueOf(CostoTicket)+" \u20ac");
+                                    btnRin.setEnabled(true);
+                                }
+                            });
                         }
                     });
                     t.start();
@@ -120,65 +108,8 @@ public class RinnovoActivity extends AppCompatActivity {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try{
-                            final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                            final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                            final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                            out.writeUTF("rinnovosend");
-                            out.flush();
-                            out.writeInt(IDTicket);
-                            out.flush();
-                            out.writeDouble(Double.parseDouble(oraa.getText().toString().trim()));
-                            out.flush();
-                            out.writeUTF(username);
-                            out.flush();
-                            out.writeUTF(Password);
-                            out.flush();
-                            out.writeDouble(CostoTicket);
-                            out.flush();
-                            boolean confirm = in.readBoolean();
-                            if(confirm){
-                                final int idTicket = in.readInt();
-                                final String datascad = in.readUTF();
-                                final boolean ok = in.readBoolean();
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                            if(ok){
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(RinnovoActivity.this);
-                                                builder.setCancelable(true);
-                                                builder.setTitle("Rinnovo Effettuato");
-                                                builder.setMessage("Rinnovo del Ticket effettuato correttamente");
-                                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        Intent intent = new Intent(RinnovoActivity.this,TicketInfoActivity.class);
-                                                        Bundle bundle2 = new Bundle();
-                                                        bundle2.putString("Username",username);
-                                                        bundle2.putString("Password",Password);
-                                                        bundle2.putInt("IDTicket", idTicket);
-                                                        bundle2.putString("Targa", targa.getText().toString());
-                                                        bundle2.putString("CodiceArea", codarea.getText().toString());
-                                                        bundle2.putString("DataScadenza", datascad);
-                                                        intent.putExtras(bundle2);
-                                                        RinnovoActivity.this.startActivity(intent);
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }else{
-                                                Toast.makeText(RinnovoActivity.this, "Impossibile Effettuare il Rinnovo", Toast.LENGTH_LONG).show();
-                                                return;
-                                            }
-                                    }
-                                });
-                            }else{
-                                Toast.makeText(RinnovoActivity.this, "Impossibile Effettuare il Rinnovo", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                        }catch(IOException e){
-                            e.printStackTrace();
-                        }
+                       ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                       proxyAutomobilista.rinnovoTicket(targa.getText().toString(),codarea.getText().toString(),IDTicket,Double.parseDouble(oraa.getText().toString().trim()),username,Password,CostoTicket,handler,RinnovoActivity.this);
                     }
                 });
                 t.start();

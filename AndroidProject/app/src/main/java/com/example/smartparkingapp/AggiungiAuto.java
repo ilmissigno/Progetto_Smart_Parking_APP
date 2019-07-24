@@ -47,48 +47,8 @@ public class AggiungiAuto extends AppCompatActivity {
                         Thread thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                try{
-                                    Socket client = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                                    SocketHandler s = new SocketHandler();
-                                    s.setSocket(client);
-                                    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));
-                                    out.writeUTF("addautosend");
-                                    out.flush();
-                                    out.writeUTF(Targa);
-                                    out.flush();
-                                    out.writeUTF(CF);
-                                    out.flush();
-                                    out.writeUTF(username);
-                                    out.flush();
-                                    DataInputStream in = new DataInputStream(new BufferedInputStream(client.getInputStream()));
-                                    final boolean confirm = in.readBoolean();
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if(confirm){
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(AggiungiAuto.this);
-                                                builder.setCancelable(true);
-                                                builder.setTitle("Aggiunta Auto");
-                                                builder.setMessage("Auto aggiunta correttamente!");
-                                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        Intent intent = new Intent(AggiungiAuto.this,HomePageActivity.class);
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putString("username",username);
-                                                        bundle.putString("password",password);
-                                                        intent.putExtras(bundle);
-                                                        AggiungiAuto.this.startActivity(intent);
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }
-                                        }
-                                    });
-                                }catch(IOException e){
-                                    e.printStackTrace();
-                                }
+                                ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                                proxyAutomobilista.addAuto(Targa,CF,username,password,handler,AggiungiAuto.this);
                             }
                         });
                         thread.start();

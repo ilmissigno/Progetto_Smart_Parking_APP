@@ -58,32 +58,16 @@ public class AcquistaTicket extends AppCompatActivity {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                        final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                        final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                        out.writeUTF("caricaautosend");
-                        out.flush();
-                        out.writeUTF(Username);
-                        out.flush();
-                        final boolean ok = in.readBoolean();
-                        int listaAutosize = in.readInt();
-                        final ArrayList<String> auto = new ArrayList<String>();
-                        for (int i = 0; i < listaAutosize; i++)
-                            auto.add(in.readUTF());
+                    ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                    final ArrayList<String> auto = proxyAutomobilista.getListaAuto(Username);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (ok) {
                                     //Set auto to Spinner
                                     listaauto.setAdapter(new ArrayAdapter<String>(AcquistaTicket.this, R.layout.support_simple_spinner_dropdown_item, auto));
-                                }
                             }
                         });
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
             });
             t.start();
             Timer timer = new Timer();
@@ -129,17 +113,8 @@ public class AcquistaTicket extends AppCompatActivity {
                         Thread t = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                                    final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                                    final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                    out.writeUTF("costoticketsend");
-                                    out.flush();
-                                    out.writeUTF(CodiceArea);
-                                    out.flush();
-                                    out.writeDouble(Durata);
-                                    out.flush();
-                                    CostoTicket = in.readDouble();
+                                ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                                CostoTicket = proxyAutomobilista.calcolaCosto(CodiceArea,Durata);
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -147,9 +122,6 @@ public class AcquistaTicket extends AppCompatActivity {
                                             btnAcquista.setEnabled(true);
                                         }
                                     });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
                             }
                         });
                         t.start();
@@ -163,71 +135,8 @@ public class AcquistaTicket extends AppCompatActivity {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try{
-                                final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                                final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                                final DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                out.writeUTF("acquistasend");
-                                out.flush();
-                                out.writeUTF(listaauto.getSelectedItem().toString());
-                                out.flush();
-                                out.writeUTF(CodiceArea);
-                                out.flush();
-                                out.writeDouble(Double.parseDouble(oraa.getText().toString().trim()));
-                                out.flush();
-                                out.writeDouble(CostoTicket);
-                                out.flush();
-                                out.writeUTF(Username);
-                                out.flush();
-                                out.writeUTF(Password);
-                                out.flush();
-                                final boolean notify = in.readBoolean();
-                                if(notify) {
-                                    final int IDTicket = in.readInt();
-                                    final String targa = in.readUTF();
-                                    final String codarea = in.readUTF();
-                                    final String datascadenza = in.readUTF();
-                                    final boolean confirm = in.readBoolean();
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (confirm) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(AcquistaTicket.this);
-                                                builder.setCancelable(true);
-                                                builder.setTitle("Acquisto effettuato");
-                                                builder.setMessage("Ticket acquistato correttamente");
-                                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        // NUOVA PAGINA DI CONTROLLO DEL TICKET
-                                                        Intent intent = new Intent(AcquistaTicket.this, TicketInfoActivity.class);
-                                                        Bundle bundle2 = new Bundle();
-                                                        bundle2.putString("Username",Username);
-                                                        bundle2.putString("Password",Password);
-                                                        bundle2.putInt("IDTicket", IDTicket);
-                                                        bundle2.putString("Targa", targa);
-                                                        bundle2.putString("CodiceArea", codarea);
-                                                        bundle2.putString("DataScadenza", datascadenza);
-                                                        intent.putExtras(bundle2);
-                                                        AcquistaTicket.this.startActivity(intent);
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            } else {
-                                                Toast.makeText(AcquistaTicket.this, "Impossibile inserire l'acquisto", Toast.LENGTH_LONG).show();
-                                                return;
-                                            }
-                                        }
-                                    });
-                                }else{
-                                    //Errore
-                                }
-                                out.close();
-                            }catch(IOException e){
-                                e.printStackTrace();
-                            }
+                            ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                            proxyAutomobilista.acquistaTicket(listaauto,CodiceArea,Double.parseDouble(oraa.getText().toString().trim()),CostoTicket,Username,Password,handler,AcquistaTicket.this);
                         }
                     });
                     t.start();

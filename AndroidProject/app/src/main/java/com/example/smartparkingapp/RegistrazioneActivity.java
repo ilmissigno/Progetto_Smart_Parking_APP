@@ -64,53 +64,8 @@ public class RegistrazioneActivity extends AppCompatActivity {
                             Thread t = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try{
-                                        //Sostituire InetAddress con l'indirizzo del controller dentro getByName
-                                        Socket client = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                                        SocketHandler s = new SocketHandler();
-                                        s.setSocket(client);
-                                        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));
-                                        out.writeUTF("registrazionesend");
-                                        out.flush();
-                                        out.writeUTF(CodiceFiscale);
-                                        out.flush();
-                                        out.writeUTF(Cognome);
-                                        out.flush();
-                                        out.writeUTF(Nome);
-                                        out.flush();
-                                        out.writeUTF(Username);
-                                        out.flush();
-                                        out.writeUTF(Password);
-                                        out.flush();
-                                        out.writeUTF(Email);
-                                        out.flush();
-                                        DataInputStream in = new DataInputStream(new BufferedInputStream(client.getInputStream()));
-                                        final boolean confirm = in.readBoolean();
-                                        handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (confirm) {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegistrazioneActivity.this);
-                                                    builder.setCancelable(true);
-                                                    builder.setTitle("Registrazione Effettuata");
-                                                    builder.setMessage("Registrazione Completata, effettuare il Login");
-                                                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            Intent intent = new Intent(RegistrazioneActivity.this,MainActivity.class);
-                                                            RegistrazioneActivity.this.startActivity(intent);
-                                                        }
-                                                    });
-                                                    AlertDialog dialog = builder.create();
-                                                    dialog.show();
-                                                }
-                                            }
-                                        });
-                                        out.close();
-                                        client.close();
-                                    }catch(IOException e){
-                                        e.printStackTrace();
-                                    }
+                                    ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                                    proxyAutomobilista.Registrati(CodiceFiscale,Cognome,Nome,Username,Password,Email,handler,RegistrazioneActivity.this);
                                 }
                             });
                             t.start();

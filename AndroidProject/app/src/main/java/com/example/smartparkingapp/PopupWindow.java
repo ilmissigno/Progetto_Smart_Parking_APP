@@ -77,26 +77,8 @@ public class PopupWindow extends Activity {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                    DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                    out.writeUTF("eliminaticketsend");
-                    out.flush();
-                    out.writeInt(IDTicket);
-                    out.flush();
-                    final boolean confirm = in.readBoolean();
-                            if(confirm){
-                                Intent intent = new Intent(PopupWindow.this,HomePageActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putString("username",Username);
-                                bundle.putString("password",Password);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            }
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
+                ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                proxyAutomobilista.deleteTicket(IDTicket,Username,Password,PopupWindow.this);
             }
         });
         t.start();

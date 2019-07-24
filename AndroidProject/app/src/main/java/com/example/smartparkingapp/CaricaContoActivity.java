@@ -39,45 +39,8 @@ public class CaricaContoActivity extends AppCompatActivity {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try{
-                            Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                            DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                            out.writeUTF("caricacontosend");
-                            out.flush();
-                            out.writeUTF(username);
-                            out.flush();
-                            out.writeDouble(nuovoCredito);
-                            out.flush();
-                            out.writeUTF(password);
-                            out.flush();
-                            final boolean confirm = in.readBoolean();
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(confirm){
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(CaricaContoActivity.this);
-                                        builder.setCancelable(true);
-                                        builder.setTitle("Credito caricato");
-                                        builder.setMessage("Credito caricato correttamente");
-                                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                Intent intent = new Intent(CaricaContoActivity.this,HomePageActivity.class);
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("username",username);
-                                                intent.putExtras(bundle);
-                                                CaricaContoActivity.this.startActivity(intent);
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
-                                    }
-                                }
-                            });
-                        }catch (IOException e){
-                            e.printStackTrace();
-                        }
+                        ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                        proxyAutomobilista.caricaConto(username,nuovoCredito,password,handler,CaricaContoActivity.this);
                     }
                 });
                 t.start();
@@ -90,29 +53,8 @@ public class CaricaContoActivity extends AppCompatActivity {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER);
-                    DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                    out.writeUTF("getcreditosend");
-                    out.flush();
-                    out.writeUTF(username);
-                    out.flush();
-                    out.writeUTF(password);
-                    out.flush();
-                    final boolean confirm = in.readBoolean();
-                    final double vecchioCredito = in.readDouble();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(confirm){
-                                Credito.setText(vecchioCredito+" \u20ac");
-                            }
-                        }
-                    });
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
+               ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+               Credito.setText(proxyAutomobilista.getVecchioCredito(username,password,handler)+" \u20ac");
             }
         });
         t.start();

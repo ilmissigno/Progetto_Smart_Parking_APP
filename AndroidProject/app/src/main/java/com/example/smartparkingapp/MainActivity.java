@@ -45,44 +45,8 @@ public class MainActivity extends AppCompatActivity {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                final Socket s = new Socket(InetAddress.getByName(SocketHandler.URL_SERVER), SocketHandler.PORTA_SERVER); //Devo connettermi al server
-                                final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
-                                out.writeUTF("loginsend");
-                                out.flush();
-                                out.writeUTF(Username);
-                                out.flush();
-                                out.writeUTF(Password);
-                                out.flush();
-                                DataInputStream in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-                                final boolean auth = in.readBoolean();
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                            if (auth) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                                builder.setCancelable(true);
-                                                builder.setTitle("Login Effettuato");
-                                                builder.setMessage("Benvenuto " + Username + "!");
-                                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putString("username", Username);
-                                                        bundle.putString("password", Password);
-                                                        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-                                                        intent.putExtras(bundle);
-                                                        MainActivity.this.startActivity(intent);
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }
-                                    }
-                                });
-                            }catch (IOException e){
-                                e.printStackTrace();
-                            }
+                            ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                            proxyAutomobilista.Login(Username,Password,handler,MainActivity.this);
                         }
                     });
                     t.start();
