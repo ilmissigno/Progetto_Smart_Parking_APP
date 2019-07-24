@@ -44,7 +44,7 @@ public class PopupWindow extends Activity {
         TextView textView = findViewById(R.id.textViewNotify);
         textView.setText("ATTENZIONE! TICKET IN SCADENZA\n"+"Attenzione, il Ticket acquistato è in scadenza, le " +
                 "informazioni sul ticket sono le seguenti:\n" +
-                "IDTicket "+IDTicket+" Targa "+Targa+" CodiceArea "+CodiceArea+"\n Vuoi Rinnovare il Ticket? \nSe si cliccare su Rinnova, altrimenti cliccare su Non Rinnova");
+                "IDTicket "+IDTicket+" Targa "+Targa+" CodiceArea "+CodiceArea+"\n Vuoi Rinnovare il Ticket? \nSe si cliccare su Rinnova");
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

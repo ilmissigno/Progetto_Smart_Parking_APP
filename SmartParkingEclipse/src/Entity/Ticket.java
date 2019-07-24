@@ -87,6 +87,8 @@ public class Ticket {
 		Durata=(int)Durata;
 		int OraScadenzaTicket=(int)Durata+OrarioInt;
 		OraScadenza=Integer.toString(OraScadenzaTicket);
+		if(OraScadenzaTicket<10)
+			OrarioMattina=true;
 		if(OraScadenzaTicket>=24) {
 			//passo al giorno successivo
 			DataInt=DataInt+1;
