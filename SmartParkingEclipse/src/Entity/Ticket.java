@@ -160,42 +160,16 @@ public class Ticket {
 		}
 	}
 	
-	public void TimerTicket(String username, int IDTicket,DataOutputStream out) {
+	public double TimerTicket(String username, int IDTicket) {
 		TicketDAO ticket = new TicketDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
 			double durata= ticket.readTicket(tm, IDTicket);
-			int durataInt=(int)durata;
-			//forse posso modularizzare di piu il codice , per ora lo metto qua
-			//calcolo il tempo dopo il quale deve scattare la notifica
-			int ScattoTimer_secondi=durataInt*3600;
-			//A meno di 10 minuti
-			ScattoTimer_secondi = ScattoTimer_secondi-(600*1000);
-			int ScattoTimer_millisecondi = ScattoTimer_secondi*1000;
-		    Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
-				//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
-				//sideve provare
-	            @Override
-	            public void run() {
-	                //System.out.println("CIAO!");
-	            	try {
-						out.writeBoolean(true);
-						out.flush();
-						return;
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} 
-	            	//significa che � scattato
-	            }
-	            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
-	        },20000);
-			return;
+			return durata;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
-			
+			return -1;
 		}
 		
 	}

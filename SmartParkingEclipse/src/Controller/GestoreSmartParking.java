@@ -134,12 +134,6 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	}
 
 	@Override
-	public void RinnovoTicket(String targa, double Durata, int IDTicket, double costoTicket,DataOutputStream out) {
-		// TODO Auto-generated method stub
-		//AMALFITANO
-	}
-
-	@Override
 	public void EffettuaMulta() {
 		// TODO Auto-generated method stub
 		
