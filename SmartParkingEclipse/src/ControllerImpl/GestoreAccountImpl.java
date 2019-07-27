@@ -9,6 +9,7 @@ import Controller.GestoreAccount;
 import DAO.CorrispondenzaDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
+import Entity.Auto;
 import Entity.Automobilista;
 import Entity.Corrispondenza;
 import Entity.Utente;
@@ -61,9 +62,9 @@ public class GestoreAccountImpl implements GestoreAccount {
 	}
 	
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username)  {
-		Automobilista a = new Automobilista();
+		Auto a = new Auto();
 		Corrispondenza ListaAuto=new Corrispondenza();
-		if(a.AggiungiAuto(Targa, CFProprietario, username)) {
+		if(a.AggiungiAuto(Targa, CFProprietario)) {
 			//Significa che ho aggiunto l'auto
 			if(ListaAuto.InserisciCorrispondenza( Targa,username)) {
 				return true;

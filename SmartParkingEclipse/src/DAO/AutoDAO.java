@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class AutoDAO {
 
-	public boolean createAuto(TransactionManager tm, String Targa,String CFProprietario,String username ) throws SQLException{
+	public boolean createAuto(TransactionManager tm, String Targa,String CFProprietario) throws SQLException{
 		//da implementare
 		String query = "INSERT INTO AUTO(TARGA,CFPROPRIETARIO) VALUES(?,?)";
 		tm.assertInTransaction();

@@ -5,24 +5,22 @@ import java.util.ArrayList;
 
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
-import DAO.AutoDAO;
 import DAO.CorrispondenzaDAO;
-import DAO.TicketDAO;
 
 public class Corrispondenza {
-	String Targa;
-	String Username;
-
-	public Corrispondenza(String username, String targa) {
-		// TODO Auto-generated constructor stub
-		this.Targa=targa;
-		this.Username=username;
-	}
+	
+	private ArrayList<String> listaAuto;
+	
 	public Corrispondenza() {};
-
-	public String getTarga() {
-		return this.Targa;
+	
+	public ArrayList<String> getListaAuto() {
+		return listaAuto;
 	}
+
+	public void setListaAuto(ArrayList<String> listaAuto) {
+		this.listaAuto = listaAuto;
+	}
+
 	public boolean InserisciCorrispondenza(String Targa,String username)  {
 
 

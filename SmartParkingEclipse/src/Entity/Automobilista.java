@@ -98,35 +98,6 @@ public class Automobilista extends Utente {
 		}
 	}
 	
-	
-	public boolean AggiungiAuto(String Targa,String CFProprietario,String username){
-	//boolean autopresente=false;
-	//boolean autoassociata=false;
-	AutoDAO aut = new AutoDAO();
-	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-	try {
-		tm.beginTransaction();
-		if(aut.readAuto(tm,Targa)) {
-			//ok significa che l'auto � gi� inserita,
-			tm.commitTransaction();
-			return false;
-		}
-		else{
-		//Altrimenti Creo l'auto
-			if(aut.createAuto( tm, Targa, CFProprietario,username)) {
-				tm.commitTransaction();
-				return true;
-			}else {
-				return false;
-			}
-	
-		}
-		}
-		catch(Exception e) {
-		tm.rollbackTransaction();
-		return false;
-	}
-	}
 }
 		
 	
