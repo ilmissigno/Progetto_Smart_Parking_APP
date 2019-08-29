@@ -56,12 +56,11 @@ public class Corrispondenza {
 
 	public ArrayList<String> GetList(String Username) throws SQLException {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		ArrayList<String> listaCorrispondenze = new ArrayList<String>();
-
+		CorrispondenzaDAO corrispondenza = new CorrispondenzaDAO();
 		try {
 			tm.beginTransaction();
 
-			listaCorrispondenze = CorrispondenzaDAO.readList(tm, Username);
+			this.setListaAuto(corrispondenza.readList(tm, Username));
 			tm.commitTransaction();
 		}
 
@@ -70,7 +69,7 @@ public class Corrispondenza {
 			throw new SQLException("Impossibile ottenere Lista.");
 		}
 
-		return listaCorrispondenze;
+		return this.getListaAuto();
 	}
 	public boolean EliminaCorrispondenza(String targa, String username) {
 		// TODO Auto-generated method stub

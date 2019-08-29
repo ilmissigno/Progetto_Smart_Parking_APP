@@ -13,10 +13,11 @@ import Entity.Ticket;
 public class GestoreTicketImpl implements GestoreTicket{
 
 	@Override
-	public double OttieniCostoTicket(String CodiceArea) {
+	public double OttieniCostoTicket(String CodiceArea, double Durata) {
 		AreaParcheggio area = new AreaParcheggio();
 		double costo = area.OttieniCostoTicket(CodiceArea);
-		return costo;
+		double costoTotale = costo*Durata;
+		return costoTotale;
 	}
 
 	@Override
