@@ -52,7 +52,6 @@ public class AutomobilistaDAO extends UtenteDAO{
 	
 	
 	public void readContoAutomobilista(TransactionManager tm, String username, String password) throws SQLException {
-		double saldo = 0;
 		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
@@ -68,7 +67,7 @@ public class AutomobilistaDAO extends UtenteDAO{
 				}
 			}
 
-			System.out.println("Saldo residuo:" + saldo);
+			System.out.println("Saldo residuo:" + this.getCredito());
 		}
 		
 	}

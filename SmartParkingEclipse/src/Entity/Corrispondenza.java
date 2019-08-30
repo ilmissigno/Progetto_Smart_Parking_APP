@@ -57,7 +57,7 @@ public class Corrispondenza {
 			}else {
 				//devo avvisare che l'associazione di quell'auto all'utente c'� gi�
 				//altrimenti devo creare la corrispondenza
-				if(ListaAuto.createCorrispondenza(tm, Targa)) {
+				if(ListaAuto.createCorrispondenza(tm, Targa,username)) {
 					//AutoAggiunta
 					tm.commitTransaction();
 					this.setListaAuto(new ArrayList<String>());

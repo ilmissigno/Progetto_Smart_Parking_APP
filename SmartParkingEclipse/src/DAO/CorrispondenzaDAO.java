@@ -16,7 +16,7 @@ public class CorrispondenzaDAO {
 	private String username;
 	
 	public CorrispondenzaDAO() {
-		
+		this.setListaAuto(new ArrayList<String>());
 	}
 	
 	public CorrispondenzaDAO(String Targa,String Username) {
@@ -93,13 +93,13 @@ public class CorrispondenzaDAO {
 		}
 	
 
-		public boolean createCorrispondenza(TransactionManager tm, String Targa) throws SQLException {
+		public boolean createCorrispondenza(TransactionManager tm, String Targa,String Username) throws SQLException {
 			tm.assertInTransaction();
 
 			try (PreparedStatement ps = tm.getConnection()
 					.prepareStatement("INSERT INTO corrispondenza(username,Targa) VALUES(?,?)")) {
 
-				ps.setString(1, this.getUsername());
+				ps.setString(1, Username);
 				ps.setString(2, Targa);
 				if(ps.executeUpdate()==1) {
 					return true;

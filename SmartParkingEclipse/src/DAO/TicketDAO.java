@@ -24,7 +24,7 @@ public class TicketDAO {
 	}
 
 	public void setIDTicket(int iDTicket) {
-		//IDTicket = iDTicket;
+		IDTicket = iDTicket;
 	}
 
 	public double getDurata() {
@@ -83,7 +83,7 @@ public class TicketDAO {
 				this.setDurata(Durata);
 				this.setTargaAuto(Targa);
 				this.setUsername(username);
-				this.setScadenzaTicket(ScadenzaTicket);
+				this.setScadenzaTicket(DataScadenza);
 				
 				return true;
 			}else {
@@ -132,13 +132,9 @@ public class TicketDAO {
 			pt.setString(2, Targa);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					this.setCodiceArea(String.valueOf(rs.getInt("CodiceArea")));
-					this.setDurata(rs.getDouble("durata"));
-					this.setTargaAuto(Targa);
-					this.setUsername(rs.getString("username"));
-					this.setScadenzaTicket(DataScadenza);
 					this.setIDTicket(rs.getInt("IDTicket"));
-					return this.getIDTicket();
+					System.out.println(this.getIDTicket());
+					return 1;
 				}else {
 					System.out.println("Errore1");
 				}

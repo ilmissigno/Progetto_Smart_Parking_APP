@@ -71,7 +71,7 @@ public class AutoDAO {
 		try (PreparedStatement pt = tm.getConnection()
 				.prepareStatement(query)) {
 			pt.setString(1,Targa);
-			pt.setString(2,Proprietario);
+			pt.setString(2,proprietario);
 			if(pt.executeUpdate()==1) {
 				this.setTarga(Targa);
 				this.setProprietario(proprietario);

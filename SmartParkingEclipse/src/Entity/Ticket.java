@@ -35,7 +35,7 @@ public class Ticket {
 	}
 
 	public void setIDTicket(int iDTicket) {
-		//IDTicket = iDTicket;
+		IDTicket = iDTicket;
 	}
 
 	public double getDurata() {
@@ -140,11 +140,11 @@ public class Ticket {
 				this.setTargaAuto(Targa);
 				this.setUsername(username);
 				this.setScadenzaTicket(ScadenzaTicket);
-				
 				tm.beginTransaction();
-							
-							this.setIDTicket(ticket.readTicket(tm, Targa,ScadenzaTicket));
+				ticket.readTicket(tm, Targa, ScadenzaTicket);
 							tm.commitTransaction();
+							this.setIDTicket(ticket.getIDTicket());
+							System.out.println(this.getIDTicket());
 							out.writeBoolean(true);
 							out.flush();
 							out.writeInt(this.getIDTicket());
@@ -170,7 +170,9 @@ public class Ticket {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			return ticket.readTicket(tm, CodiceArea, Targa);
+			int ID = ticket.readTicket(tm, CodiceArea, Targa);
+			tm.commitTransaction();
+			return ID;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return -1;
@@ -182,13 +184,15 @@ public class Ticket {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			this.setDurata(ticket.readTicket(tm, IDTicket));
+			double durata = ticket.readTicket(tm, IDTicket);
+			tm.commitTransaction();
+			this.setDurata(durata);
 			this.setCodiceArea(ticket.getCodiceArea());
 			this.setTargaAuto(ticket.getUsername());
 			this.setUsername(username);
 			this.setScadenzaTicket(ticket.getScadenzaTicket());
 			this.setIDTicket(IDTicket);
-			return this.getDurata();
+			return durata;
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return -1;

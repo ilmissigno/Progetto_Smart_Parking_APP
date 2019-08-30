@@ -86,7 +86,6 @@ public class Auto {
 				}else {
 					return false;
 				}
-		
 			}
 			}
 			catch(Exception e) {
