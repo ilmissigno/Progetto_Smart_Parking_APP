@@ -6,6 +6,74 @@ import java.sql.SQLException;
 
 public class UtenteDAO {
 	
+	private String CodiceFiscale;
+	private String Cognome;
+	private String Nome;
+	private String username;
+	private String password;
+	private String Email;
+	
+	public UtenteDAO() {
+		
+	}
+	
+	public UtenteDAO(String CodiceFiscale,String Cognome,String Nome,String username,String password,String email) {
+		this.setCodiceFiscale(CodiceFiscale);
+		this.setCognome(Cognome);
+		this.setNome(Nome);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setEmail(email);
+	}
+	
+	public String getCodiceFiscale() {
+		return CodiceFiscale;
+	}
+
+	public void setCodiceFiscale(String codiceFiscale) {
+		CodiceFiscale = codiceFiscale;
+	}
+
+	public String getCognome() {
+		return Cognome;
+	}
+
+	public void setCognome(String cognome) {
+		Cognome = cognome;
+	}
+
+	public String getNome() {
+		return Nome;
+	}
+
+	public void setNome(String nome) {
+		Nome = nome;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getEmail() {
+		return Email;
+	}
+
+	public void setEmail(String email) {
+		Email = email;
+	}
+	
 	
 	//Chiamata readUtente al posto di Login
 	public boolean readUtente(TransactionManager tm, String username, String password) throws SQLException {

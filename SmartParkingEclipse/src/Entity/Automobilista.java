@@ -9,44 +9,23 @@ import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
 
 public class Automobilista extends Utente {
-	private String CodiceFiscale;
-	private String Cognome;
-	private String Nome;
-	private String Email;
+private double Credito;
 	
 	public Automobilista() {
+		
+	}
+	
+	public Automobilista(String username, String Password) {
+		this.setUsername(username);
+		this.setPassword(Password);
+	}
+	
+	public double getCredito() {
+		return Credito;
 	}
 
-	public String getCodiceFiscale() {
-		return CodiceFiscale;
-	}
-
-	public void setCodiceFiscale(String codiceFiscale) {
-		CodiceFiscale = codiceFiscale;
-	}
-
-	public String getCognome() {
-		return Cognome;
-	}
-
-	public void setCognome(String cognome) {
-		Cognome = cognome;
-	}
-
-	public String getNome() {
-		return Nome;
-	}
-
-	public void setNome(String nome) {
-		Nome = nome;
-	}
-
-	public String getEmail() {
-		return Email;
-	}
-
-	public void setEmail(String email) {
-		Email = email;
+	public void setCredito(double credito) {
+		Credito = credito;
 	}
 	
 	public double getConto(String username,String password) {
@@ -54,22 +33,28 @@ public class Automobilista extends Utente {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			double conto = auto.readContoAutomobilista(tm, username, password);
+			auto.readContoAutomobilista(tm, username, password);
 			tm.commitTransaction();
-			return conto;
+			this.setUsername(username);
+			this.setPassword(password);
+			this.setCredito(auto.getCredito());
+			return this.getCredito();
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return -1;
 		}
 	}
 	
-	public boolean AggiornaConto(String username,String password,double CostoTotale) {
-		AutomobilistaDAO auto = new AutomobilistaDAO();
+	public boolean AggiornaConto(double CostoTotale) {
+		AutomobilistaDAO auto = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(auto.updateContoAutomobilista(tm, username,password, CostoTotale)) {
+			if(auto.updateContoAutomobilista(tm,CostoTotale)) {
 				tm.commitTransaction();
+				this.setUsername(this.getUsername());
+				this.setPassword(this.getPassword());
+				this.setCredito(this.getCredito()-CostoTotale);
 				return true;
 			}else {
 				return false;
@@ -80,14 +65,17 @@ public class Automobilista extends Utente {
 		}
 	}
 	
-	public boolean CaricaConto(String username, String password,double Importo) {
-		AutomobilistaDAO auto = new AutomobilistaDAO();
+	public boolean CaricaConto(double Importo) {
+		AutomobilistaDAO auto = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		double CostoTotale = Importo*-1;
 		try {
 			tm.beginTransaction();
-			Importo = Importo * -1; //Aggiorno il conto in positivo
-			if(auto.updateContoAutomobilista(tm, username, password, Importo)) {
+			if(auto.updateContoAutomobilista(tm,CostoTotale)) {
 				tm.commitTransaction();
+				this.setUsername(this.getUsername());
+				this.setPassword(this.getPassword());
+				this.setCredito(this.getCredito()+Importo);
 				return true;
 			}else {
 				return false;

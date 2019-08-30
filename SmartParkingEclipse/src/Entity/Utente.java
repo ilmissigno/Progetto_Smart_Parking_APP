@@ -6,13 +6,50 @@ import DAO.TransactionManagerFactory;
 import DAO.UtenteDAO;
 
 public class Utente {
+	private String CodiceFiscale;
+	private String Cognome;
+	private String Nome;
 	private String username;
 	private String password;
+	private String Email;
 	
 	public Utente() {
 		
 	}
 	
+	public Utente(String CodiceFiscale,String Cognome,String Nome,String username,String password,String email) {
+		this.setCodiceFiscale(CodiceFiscale);
+		this.setCognome(Cognome);
+		this.setNome(Nome);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setEmail(email);
+	}
+	
+	public String getCodiceFiscale() {
+		return CodiceFiscale;
+	}
+
+	public void setCodiceFiscale(String codiceFiscale) {
+		CodiceFiscale = codiceFiscale;
+	}
+
+	public String getCognome() {
+		return Cognome;
+	}
+
+	public void setCognome(String cognome) {
+		Cognome = cognome;
+	}
+
+	public String getNome() {
+		return Nome;
+	}
+
+	public void setNome(String nome) {
+		Nome = nome;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -27,6 +64,14 @@ public class Utente {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getEmail() {
+		return Email;
+	}
+
+	public void setEmail(String email) {
+		Email = email;
 	}
 
 	public boolean Login(String username, String password) {

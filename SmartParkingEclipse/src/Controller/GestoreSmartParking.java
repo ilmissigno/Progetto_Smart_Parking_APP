@@ -63,7 +63,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 
 	@Override
 	public void GetCostoTicket(String codiceArea, double Durata, DataOutputStream out) {
-		double costoTotale = ticket.OttieniCostoTicket(codiceArea,Durata);
+		double costoTotale = ticket.OttieniCostoTicket(Integer.parseInt(codiceArea),Durata);
 		//double costoTotale = Durata*costoSingolo;
 		try {
 			out.writeDouble(costoTotale);

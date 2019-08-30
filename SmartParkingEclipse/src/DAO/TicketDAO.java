@@ -8,6 +8,65 @@ import Entity.Ticket;
 
 public class TicketDAO {
 	
+	private int IDTicket;
+	private double Durata;
+	private String TargaAuto;
+	private String CodiceArea;
+	private String username;
+	private String ScadenzaTicket;
+	
+	public TicketDAO() {
+		
+	}
+
+	public int getIDTicket() {
+		return IDTicket;
+	}
+
+	public void setIDTicket(int iDTicket) {
+		//IDTicket = iDTicket;
+	}
+
+	public double getDurata() {
+		return Durata;
+	}
+
+	public void setDurata(double durata) {
+		Durata = durata;
+	}
+
+	public String getScadenzaTicket() {
+		return ScadenzaTicket;
+	}
+
+	public void setScadenzaTicket(String scadenzaTicket) {
+		ScadenzaTicket = scadenzaTicket;
+	}
+
+	public String getTargaAuto() {
+		return TargaAuto;
+	}
+
+	public void setTargaAuto(String targaAuto) {
+		TargaAuto = targaAuto;
+	}
+
+	public String getCodiceArea() {
+		return CodiceArea;
+	}
+
+	public void setCodiceArea(String codiceArea) {
+		CodiceArea = codiceArea;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	public boolean createTicket(TransactionManager tm, String DataScadenza, double Durata, String Targa,String username,String CodiceArea) throws Exception {
 		tm.assertInTransaction();
 		try (PreparedStatement ps = tm.getConnection()
@@ -20,6 +79,12 @@ public class TicketDAO {
 			ps.setInt(5, Integer.parseInt(CodiceArea));
 
 			if(ps.executeUpdate()==1) {
+				this.setCodiceArea(CodiceArea);
+				this.setDurata(Durata);
+				this.setTargaAuto(Targa);
+				this.setUsername(username);
+				this.setScadenzaTicket(ScadenzaTicket);
+				
 				return true;
 			}else {
 				return false;
@@ -67,7 +132,13 @@ public class TicketDAO {
 			pt.setString(2, Targa);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					return rs.getInt("IDTicket");
+					this.setCodiceArea(String.valueOf(rs.getInt("CodiceArea")));
+					this.setDurata(rs.getDouble("durata"));
+					this.setTargaAuto(Targa);
+					this.setUsername(rs.getString("username"));
+					this.setScadenzaTicket(DataScadenza);
+					this.setIDTicket(rs.getInt("IDTicket"));
+					return this.getIDTicket();
 				}else {
 					System.out.println("Errore1");
 				}
@@ -86,9 +157,13 @@ public class TicketDAO {
 			pt.setInt(1, IDTicket);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					//devo aggiungere nel db questo campo durata
-					return rs.getDouble("durata");
-					
+					this.setCodiceArea(String.valueOf(rs.getInt("CodiceArea")));
+					this.setDurata(rs.getDouble("durata"));
+					this.setTargaAuto(rs.getString("Targa"));
+					this.setUsername(rs.getString("username"));
+					this.setScadenzaTicket(rs.getString("datafine"));
+					this.setIDTicket(rs.getInt("IDTicket"));
+					return this.getDurata();
 				}else {
 					System.out.println("Errore1");
 				}

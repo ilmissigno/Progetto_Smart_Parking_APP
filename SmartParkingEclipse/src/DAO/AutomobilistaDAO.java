@@ -4,10 +4,27 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AutomobilistaDAO {
+public class AutomobilistaDAO extends UtenteDAO{
 	
+	private double Credito;
 	
+	public AutomobilistaDAO() {
+		
+	}
 	
+	public AutomobilistaDAO(String username, String Password) {
+		this.setUsername(username);
+		this.setPassword(Password);
+	}
+	
+	public double getCredito() {
+		return Credito;
+	}
+
+	public void setCredito(double credito) {
+		Credito = credito;
+	}
+
 	public static String createAutomobilista() {
 		return null;
 		
@@ -18,13 +35,13 @@ public class AutomobilistaDAO {
 		
 	}
 	
-	public boolean updateContoAutomobilista(TransactionManager tm, String username, String password, double CostoTotale) throws SQLException {
+	public boolean updateContoAutomobilista(TransactionManager tm, double CostoTotale) throws SQLException {
 		tm.assertInTransaction();
 		try(PreparedStatement pt = tm.getConnection()
 				.prepareStatement("UPDATE automobilisti SET Credito=Credito-? WHERE Username=? AND Password=?")){
 			pt.setDouble(1, CostoTotale);
-			pt.setString(2, username);
-			pt.setString(3, password);
+			pt.setString(2, this.getUsername());
+			pt.setString(3, this.getPassword());
 			if(pt.executeUpdate()==1) {
 				return true;
 			}else {
@@ -34,7 +51,7 @@ public class AutomobilistaDAO {
 	}
 	
 	
-	public double readContoAutomobilista(TransactionManager tm, String username, String password) throws SQLException {
+	public void readContoAutomobilista(TransactionManager tm, String username, String password) throws SQLException {
 		double saldo = 0;
 		
 		tm.assertInTransaction();
@@ -45,20 +62,18 @@ public class AutomobilistaDAO {
 			pt.setString(2, password);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					saldo = rs.getDouble("Credito");
+					this.setUsername(username);
+					this.setPassword(password);
+					this.setCredito(rs.getDouble("Credito"));
 				}
 			}
 
 			System.out.println("Saldo residuo:" + saldo);
 		}
 		
-		
-		return saldo;
-		
 	}
 	
-	public String readCFAutomobilista(TransactionManager tm, String username, String password) throws SQLException {
-	String CF="";
+	public void readCFAutomobilista(TransactionManager tm, String username, String password) throws SQLException {
 	tm.assertInTransaction();
 	try (PreparedStatement pt = tm.getConnection()
 			.prepareStatement("SELECT * FROM automobilisti WHERE ((Username=?) (Password=?))")) {
@@ -67,10 +82,11 @@ public class AutomobilistaDAO {
 		pt.setString(2, password);
 		try (ResultSet rs = pt.executeQuery()) {
 			if (rs.next() == true) {
-				CF = rs.getString("CF");
+				this.setCodiceFiscale(rs.getString("CF"));
+				this.setUsername(username);
+				this.setPassword(password);
 			}
 		}
-	return CF;
 }
 	}
 }

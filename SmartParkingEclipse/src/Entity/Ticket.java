@@ -23,6 +23,8 @@ public class Ticket {
 	private double Durata;
 	private String TargaAuto;
 	private String CodiceArea;
+	private String username;
+	private String ScadenzaTicket;
 	
 	public Ticket() {
 		
@@ -60,6 +62,14 @@ public class Ticket {
 		CodiceArea = codiceArea;
 	}
 	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public boolean AcquistaTicket(String Targa, String CodiceArea, double Durata,String username,String password,DataOutputStream out) {
 		String OraScadenza="";
 		//Qui devo mandare alla boundary il costo totale del ticket
@@ -125,12 +135,19 @@ public class Ticket {
 				/*
 				 * ATTIVAZIONE TIMER DI NOTIFICA
 				 */
+				this.setCodiceArea(CodiceArea);
+				this.setDurata(Durata);
+				this.setTargaAuto(Targa);
+				this.setUsername(username);
+				this.setScadenzaTicket(ScadenzaTicket);
+				
 				tm.beginTransaction();
-							int ID = ticket.readTicket(tm, Targa,ScadenzaTicket);
+							
+							this.setIDTicket(ticket.readTicket(tm, Targa,ScadenzaTicket));
 							tm.commitTransaction();
 							out.writeBoolean(true);
 							out.flush();
-							out.writeInt(ID);
+							out.writeInt(this.getIDTicket());
 							out.flush();
 							out.writeUTF(Targa);
 							out.flush();
@@ -165,8 +182,13 @@ public class Ticket {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			double durata= ticket.readTicket(tm, IDTicket);
-			return durata;
+			this.setDurata(ticket.readTicket(tm, IDTicket));
+			this.setCodiceArea(ticket.getCodiceArea());
+			this.setTargaAuto(ticket.getUsername());
+			this.setUsername(username);
+			this.setScadenzaTicket(ticket.getScadenzaTicket());
+			this.setIDTicket(IDTicket);
+			return this.getDurata();
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 			return -1;
@@ -237,7 +259,9 @@ public class Ticket {
 			tm.beginTransaction();
 			if(ticket.updateTicket(tm, IDTicket,ScadenzaTicket, durata)) {
 				tm.commitTransaction();
-					
+				this.setDurata(durata);
+				this.setUsername(username);
+				this.setScadenzaTicket(ScadenzaTicket);
 							out.writeBoolean(true);
 							out.flush();
 							out.writeInt(IDTicket);
@@ -270,6 +294,14 @@ public class Ticket {
 				tm.rollbackTransaction();
 				return false;
 			}
+	}
+
+	public String getScadenzaTicket() {
+		return ScadenzaTicket;
+	}
+
+	public void setScadenzaTicket(String scadenzaTicket) {
+		ScadenzaTicket = scadenzaTicket;
 	}
 }
 	
