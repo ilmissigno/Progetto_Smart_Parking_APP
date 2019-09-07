@@ -21,13 +21,9 @@ public class GestoreTicketImpl implements GestoreTicket{
 	}
 
 	@Override
-	public boolean ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket, String username,String password ,DataOutputStream out) {
+	public Ticket ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket, String username,String password) {
 		Ticket ticket = new Ticket();
-			if(ticket.AcquistaTicket(Targa,CodiceArea,Durata,username,password,out)) {
-				return true;
-			}else {
-				return false;
-			}
+		return ticket.AcquistaTicket(Targa,CodiceArea,Durata,username,password);
 	}
 
 	@Override
@@ -49,17 +45,10 @@ public class GestoreTicketImpl implements GestoreTicket{
 	}
 
 	@Override
-	public boolean RinnovaTicket(int IDTicket, double durata, double costoTotale, String username, String password,
-			DataOutputStream out) {
+	public Ticket RinnovaTicket(int IDTicket, double durata, double costoTotale, String username, String password) {
 		// TODO Auto-generated method stub
-		
 		Ticket ticket = new Ticket();
-		if(ticket.RinnovaTicket(IDTicket,durata,username,password,out)) {
-			return true;
-		}else {
-			return false;
-		}
-	
+		return ticket.RinnovaTicket(IDTicket,durata,username,password);
 	}
 
 	@Override

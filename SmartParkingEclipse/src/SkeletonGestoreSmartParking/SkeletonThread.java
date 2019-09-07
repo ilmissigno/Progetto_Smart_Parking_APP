@@ -9,9 +9,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import Controller.IGestoreSmartParking;
+import Entity.Ticket;
 
 public class SkeletonThread extends Thread{
 	IGestoreSmartParking iserver;
@@ -32,7 +34,13 @@ public class SkeletonThread extends Thread{
 					String username = in.readUTF();
 					String password = in.readUTF();
 					System.out.println("\nSkeletonThread : username = "+username+" password = "+password);
-					iserver.Login(username, password , out);
+					if(iserver.Login(username, password)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
 					break;
 				}
 				case "registrazionesend":{
@@ -44,13 +52,21 @@ public class SkeletonThread extends Thread{
 					String email = in.readUTF();
 					System.out.println("\nSkeletonThread : codicefiscale = "+codicefiscale+" cognome="+cognome+
 							" nome="+nome+" username="+username+" password="+password+" email="+email);
-					iserver.RegistraUtente(codicefiscale, cognome, nome, username, password, email, out);
+					if(iserver.RegistraUtente(codicefiscale, cognome, nome, username, password, email)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
 					break;
 				}
 				case "costoticketsend":{
 					String codicearea = in.readUTF();
 					double durata = in.readDouble();
-					iserver.GetCostoTicket(codicearea, durata, out);
+					double costoTotale = iserver.GetCostoTicket(codicearea, durata);
+					out.writeDouble(costoTotale);
+					out.flush();
 					break;
 				}
 				case "acquistasend":{
@@ -60,7 +76,19 @@ public class SkeletonThread extends Thread{
 					double CostoTotale = in.readDouble();
 					String username = in.readUTF();
 					String password = in.readUTF();
-					iserver.AcquistaTicket(targa, codicearea, Durata, username, password, CostoTotale, out);
+					Ticket t = iserver.AcquistaTicket(targa, codicearea, Durata, username, password, CostoTotale);
+					out.writeBoolean(true);
+					out.flush();
+					out.writeInt(t.getIDTicket());
+					out.flush();
+					out.writeUTF(t.getTargaAuto());
+					out.flush();
+					out.writeUTF(t.getCodiceArea());
+					out.flush();
+					out.writeUTF(t.getScadenzaTicket());
+					out.flush();
+					out.writeBoolean(true);
+					out.flush();
 					break;
 				}
 				case "addautosend":{
@@ -68,14 +96,28 @@ public class SkeletonThread extends Thread{
 					String CFProprietario=in.readUTF();
 					String username = in.readUTF();
 					System.out.println("\nSkeletonThread : username = "+username+" targa = "+targa+" CF= "+CFProprietario);
-					iserver.AggiungiAuto(targa,CFProprietario, username, out);
+					if(iserver.AggiungiAuto(targa,CFProprietario, username)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
 					break;
 				}
 				
 				case "caricaautosend":{
 					String username = in.readUTF();
 					System.out.println("\nSkeletonThread : username = "+username);
-					iserver.OttieniListaAuto(username, out);
+					ArrayList<String> listaAuto = iserver.OttieniListaAuto(username);
+					out.writeBoolean(true);
+					out.flush();
+					out.writeInt(listaAuto.size());
+					out.flush();
+					for(int i=0;i<listaAuto.size();i++) {
+						out.writeUTF(listaAuto.get(i));
+						out.flush();
+					}
 					break;
 				}
 				case "dataorariosend":{
@@ -102,7 +144,13 @@ public class SkeletonThread extends Thread{
 					String username=in.readUTF();
 					String pass=in.readUTF();
 					double costoTotale=in.readDouble();
-					iserver.RinnovaTicket(IDTicket,durata,username,pass,costoTotale,out);
+					Ticket t = iserver.RinnovaTicket(IDTicket,durata,username,pass,costoTotale);
+					out.writeBoolean(true);
+					out.flush();
+					out.writeInt(t.getIDTicket());
+					out.flush();
+					out.writeUTF(t.getScadenzaTicket());
+					out.flush();
 					break;
 				}
 				
@@ -110,28 +158,47 @@ public class SkeletonThread extends Thread{
 					String username=in.readUTF();
 					double quantita=in.readDouble();
 					String password=in.readUTF();
-					iserver.CaricaConto(username,password,quantita,out);
-					
+					if(iserver.CaricaConto(username,password,quantita)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
 					break;
 				}
 				
 				case "getcreditosend":{
 					String username=in.readUTF();
 					String password=in.readUTF();
-					iserver.LeggiCredito(username,password,out);
+					double Credito = iserver.LeggiCredito(username,password);
+					out.writeBoolean(true);
+					out.flush();
+					out.writeDouble(Credito);
+					out.flush();
 				}
 				case "eliminaticketsend":{ 
 					int IDTicket=in.readInt();
-					iserver.EliminaTicket(IDTicket,out);
-					
+					if(iserver.EliminaTicket(IDTicket)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
 					break;
 				}
 				
 				case "deleteautosend":{ 
 					String Targa=in.readUTF();
 					String username=in.readUTF();
-					iserver.EliminaAuto(Targa,username,out);
-					
+					if(iserver.EliminaAuto(Targa,username)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
 					break;
 				}
 				

@@ -47,33 +47,23 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	}
 	
 	@Override
-	public void Login(String username, String password, DataOutputStream out) {
+	public boolean Login(String username, String password) {
 		// TODO Auto-generated method stub
 		if(account.Login(username,password)) {
-			try {
-				out.writeBoolean(true);;
-				out.flush();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
+			return true;
 		}else {
-			return;
+			return false;
 		}
 	}
 
 	@Override
-	public void GetCostoTicket(String codiceArea, double Durata, DataOutputStream out) {
+	public double GetCostoTicket(String codiceArea, double Durata) {
 		double costoTotale = ticket.OttieniCostoTicket(Integer.parseInt(codiceArea),Durata);
 		//double costoTotale = Durata*costoSingolo;
-		try {
-			out.writeDouble(costoTotale);
-			out.flush();
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
+		return costoTotale;
 	}
 	
-	public void AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,double costoTotale,DataOutputStream out) {
+	public Ticket AcquistaTicket(String targa, String codiceArea, double Durata,String username,String password,double costoTotale) {
 		//Qui devo mandare alla boundary il costo totale del ticket
 		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
 		//Non lo so, oppure dovrei solo leggere con lo stream?
@@ -90,27 +80,17 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		//orarioattuale+durata%24 resto mod 24
 		//}
 		//verifico il conto
-		try {
-			double conto = account.getConto(username, password);
-			if(conto>=costoTotale) {
-				if(ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password,out)) {
-					if(account.AggiornaConto(username,password,costoTotale)) {
-						out.writeBoolean(true);
-						out.flush();
-					}else {
-						out.writeBoolean(false);
-						out.flush();
-					}
-				}else {
-					out.writeBoolean(false);
-					out.flush();
-				}
+		Ticket t = new Ticket();
+		double conto = account.getConto(username, password);
+		if(conto>=costoTotale) {
+			t = ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password);
+			if(account.AggiornaConto(username,password,costoTotale)) {
+				return t;
 			}else {
-				out.writeBoolean(false);
-				out.flush();
+				return null;
 			}
-		}catch(IOException e) {
-			e.printStackTrace();
+		}else {
+			return null;
 		}
 	}
 
@@ -154,37 +134,27 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	
 
 	@Override
-	public void RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password,
-			String email,DataOutputStream out) {
+	public boolean RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password,
+			String email) {
 		// TODO Auto-generated method stub
 		if(account.RegistraUtente(CodiceFiscale, Cognome, Nome, username, password, email)) {
-			try {
-				out.writeBoolean(true);
-				out.flush();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
+			return true;
 		}else {
-			return;
+			return false;
 		}
 	}
 	
-	public void AggiungiAuto(String Targa, String CFProprietario, String username, DataOutputStream out){
+	public boolean AggiungiAuto(String Targa, String CFProprietario, String username){
 		if(account.AggiungiAuto(Targa,CFProprietario,username)) {
-			try {
-				out.writeBoolean(true);
-				out.flush();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
+			return true;
 		}else {
-			return;
+			return false;
 		}
 			
 		}
 
 	
-	public void  OttieniListaAuto(String username, DataOutputStream out) throws SQLException {
+	public ArrayList<String> OttieniListaAuto(String username) throws SQLException {
 		ArrayList<String> listaAuto;
 		try {
 			listaAuto = new ArrayList<String>();
@@ -193,19 +163,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 			e1.printStackTrace();
 		}
 		listaAuto=account.OttieniLista(username);
-		try {
-			out.writeBoolean(true);
-			out.flush();
-			out.writeInt(listaAuto.size());
-			out.flush();
-			for(int i=0;i<listaAuto.size();i++) {
-				out.writeUTF(listaAuto.get(i));
-				out.flush();
-			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		
+		return listaAuto;
 	}
 		
 	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
@@ -215,93 +173,54 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	}
 
 	@Override
-	public void RinnovaTicket(int IDTicket, double durata, String username, String password,double costoTotale, DataOutputStream out) {
+	public Ticket RinnovaTicket(int IDTicket, double durata, String username, String password,double costoTotale) {
 		// TODO Auto-generated method stub
-		
-		try {
 			double conto = account.getConto(username, password);
 			if(conto>=costoTotale) {
-				if(ticket.RinnovaTicket(IDTicket, durata, costoTotale, username,password,out)) {
+				Ticket t = ticket.RinnovaTicket(IDTicket, durata, costoTotale, username,password);
 					if(account.AggiornaConto(username,password,costoTotale)) {
-						out.writeBoolean(true);
-						out.flush();
+						return t;
 					}else {
-						out.writeBoolean(false);
-						out.flush();
+						return null;
 					}
-				}else {
-					out.writeBoolean(false);
-					out.flush();
-				}
 			}else {
-				out.writeBoolean(false);
-				out.flush();
+				return null;
 			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
-	public void CaricaConto(String username,String password ,double Importo, DataOutputStream out) {
-		try {
+	public boolean CaricaConto(String username,String password ,double Importo) {
 			if(account.CaricaConto(username, password,Importo)) {
-				out.writeBoolean(true);
-				out.flush();
+				return true;
 			}else {
-				out.writeBoolean(false);
-				out.flush();
+				return false;
 			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
-	public void EliminaTicket(int IDTicket, DataOutputStream out) {
+	public boolean EliminaTicket(int IDTicket) {
 		// TODO Auto-generated method stub
-		try {
 			if(ticket.EliminaTicket(IDTicket)) {
-				out.writeBoolean(true);
-				out.flush();
+				return true;
 			}else {
-				out.writeBoolean(false);
-				out.flush();
+				return false;
 			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
-	public void EliminaAuto(String targa,String username, DataOutputStream out) {
+	public boolean EliminaAuto(String targa,String username) {
 		// TODO Auto-generated method stub
-		
-		try {
 			if(account.EliminaAuto(targa,username)) {
-				out.writeBoolean(true);
-				out.flush();
+				return true;
 			}else {
-				out.writeBoolean(false);
-				out.flush();
+				return false;
 			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
-	public void LeggiCredito(String username, String password,DataOutputStream out) {
+	public double LeggiCredito(String username, String password) {
 			double Credito=account.getConto(username,password);
-			try {
-				out.writeBoolean(true);
-				out.flush();
-				out.writeDouble(Credito);
-				out.flush();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
-			
+			return Credito;
 		}
 
 }

@@ -70,7 +70,7 @@ public class Ticket {
 		this.username = username;
 	}
 
-	public boolean AcquistaTicket(String Targa, String CodiceArea, double Durata,String username,String password,DataOutputStream out) {
+	public Ticket AcquistaTicket(String Targa, String CodiceArea, double Durata,String username,String password) {
 		String OraScadenza="";
 		//Qui devo mandare alla boundary il costo totale del ticket
 		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
@@ -142,26 +142,23 @@ public class Ticket {
 				this.setScadenzaTicket(ScadenzaTicket);
 				tm.beginTransaction();
 				ticket.readTicket(tm, Targa, ScadenzaTicket);
-							tm.commitTransaction();
-							this.setIDTicket(ticket.getIDTicket());
-							System.out.println(this.getIDTicket());
-							out.writeBoolean(true);
-							out.flush();
-							out.writeInt(this.getIDTicket());
-							out.flush();
-							out.writeUTF(Targa);
-							out.flush();
-							out.writeUTF(CodiceArea);
-							out.flush();
-							out.writeUTF(ScadenzaTicket);
-							out.flush();
-				return true;
+				tm.commitTransaction();
+				this.setIDTicket(ticket.getIDTicket());
+				System.out.println(this.getIDTicket());
+				Ticket outTicket = new Ticket();
+				outTicket.setIDTicket(this.getIDTicket());
+				outTicket.setCodiceArea(CodiceArea);
+				outTicket.setDurata(Durata);
+				outTicket.setTargaAuto(Targa);
+				outTicket.setUsername(username);
+				outTicket.setScadenzaTicket(ScadenzaTicket);
+				return outTicket;
 			}else {
-				return false;
+				return null;
 			}
 		}catch(Exception e) {
 			tm.rollbackTransaction();
-			return false;
+			return null;
 		}
 	}
 	
@@ -200,8 +197,7 @@ public class Ticket {
 		
 	}
 
-	public boolean RinnovaTicket(int IDTicket, double durata, String username, String password,
-			DataOutputStream out) {
+	public Ticket RinnovaTicket(int IDTicket, double durata, String username, String password) {
 		String OraScadenza="";
 		//Qui devo mandare alla boundary il costo totale del ticket
 		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
@@ -266,19 +262,16 @@ public class Ticket {
 				this.setDurata(durata);
 				this.setUsername(username);
 				this.setScadenzaTicket(ScadenzaTicket);
-							out.writeBoolean(true);
-							out.flush();
-							out.writeInt(IDTicket);
-							out.flush();
-							out.writeUTF(ScadenzaTicket);
-							out.flush();
-				return true;
+				Ticket outTicket = new Ticket();
+				outTicket.setIDTicket(IDTicket);
+				outTicket.setScadenzaTicket(ScadenzaTicket);
+				return outTicket;
 			}else {
-				return false;
+				return null;
 			}
 		}catch(Exception e) {
 			tm.rollbackTransaction();
-			return false;
+			return null;
 		}
 	}
 
