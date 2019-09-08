@@ -80,13 +80,18 @@ public class UtenteDAO {
 		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT CF FROM AUTOMOBILISTI WHERE ((USERNAME=?)AND(PASSWORD=?))")) {
-
+				.prepareStatement("SELECT * FROM AUTOMOBILISTI WHERE ((USERNAME=?)AND(PASSWORD=?))")) {
+			
 			pt.setString(1, username);
 			pt.setString(2, password);
 			try (ResultSet rs = pt.executeQuery()) {
 				if (rs.next() == true) {
-					
+					this.setCodiceFiscale(rs.getString("CF"));
+					this.setCognome(rs.getString("Cognome"));
+					this.setEmail(rs.getString("email"));
+					this.setNome(rs.getString("nome"));
+					this.setPassword(rs.getString("password"));
+					this.setUsername(rs.getString("username"));
 					return true;
 				}
 			}

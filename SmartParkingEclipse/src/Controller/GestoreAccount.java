@@ -14,4 +14,5 @@ public interface GestoreAccount {
 	boolean AggiungiAuto(String Targa,String CFProprietario, String username);
 	ArrayList<String> OttieniLista(String username) throws SQLException;
 	boolean EliminaAuto(String targa, String username);
+	boolean ControllaConto(String username, String password, double CostoTotale);
 }

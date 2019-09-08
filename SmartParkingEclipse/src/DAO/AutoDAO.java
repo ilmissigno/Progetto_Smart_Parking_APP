@@ -94,13 +94,14 @@ public class AutoDAO {
 		
 	}
 	
-	public boolean readAuto(TransactionManager tm,String Targa,String Proprietario) throws SQLException{
+	public boolean readAuto(TransactionManager tm,String Targa) throws SQLException{
 		tm.assertInTransaction();
-		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT * FROM auto WHERE Targa=? AND CFProprietario=?")){
+		try(PreparedStatement pt = tm.getConnection().prepareStatement("SELECT * FROM auto WHERE Targa=?")){
 			pt.setString(1, Targa);
-			pt.setString(2, Proprietario);
 			try(ResultSet rs = pt.executeQuery()){
 				if(rs.next()==true) {
+					this.setTarga(rs.getString("Targa"));
+					this.setProprietario(rs.getString("CFProprietario"));
 					return true;
 				}else {
 					return false;

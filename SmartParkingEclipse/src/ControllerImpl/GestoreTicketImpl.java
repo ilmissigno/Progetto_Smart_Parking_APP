@@ -2,6 +2,8 @@ package ControllerImpl;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,16 +16,23 @@ public class GestoreTicketImpl implements GestoreTicket{
 
 	@Override
 	public double OttieniCostoTicket(int CodiceArea, double Durata) {
-		AreaParcheggio area = new AreaParcheggio();
-		double costo =area.OttieniCostoTicket(CodiceArea);
+		// è una read che farò dopo, creo un costruttore area parcheggio dal codice area
+		// mi darà tutto l'oggetto è farò semplicemente getCosto per prendere il costo
+		AreaParcheggio area = new AreaParcheggio(CodiceArea);
+		double costo =area.getCostoTicket();
 		double costoTotale = costo*Durata;
 		return costoTotale;
 	}
 
 	@Override
 	public Ticket ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket, String username,String password) {
+		//Costruttore per la creazione di un ticket
+		//l'auto ed il codice Area devono esistere già prima del ticket
+		//penso che devo crearmi prima l'oggetto auto e quello areaParcheggio
+		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
+		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
 		Ticket ticket = new Ticket();
-		return ticket.AcquistaTicket(Targa,CodiceArea,Durata,username,password);
+		return ticket.AcquistaTicket(auto,area,Durata,username,password);
 	}
 
 	@Override
@@ -91,6 +100,76 @@ public class GestoreTicketImpl implements GestoreTicket{
         },20000);
 		return;
 	}
+	
+	public String LeggiTicket(int IDTicket, String username) {
+		Ticket ticket= new Ticket(IDTicket,username);
+		String DataScadenza=ticket.getScadenzaTicket();
+		Date date = new Date(); 
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String DataString=formatter.format(date).toString();
+	int oreDiRimborso=DifferenzaTraDate(DataScadenza,DataString);
+		
+		return "";
+		
+		
+	}
+	
+	public int DifferenzaTraDate(String DataScadenza, String DataAttuale) {
+		try {
+			//dataAttuale
+		 // String strDate1 = "2007/04/15 12:35:05";
+			//DataScadenza
+         // String strDate2 = "2009/08/02 20:45:07";
+			
+          SimpleDateFormat fmt = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+          fmt.setLenient(false);
+
+          // Parses the two strings.
+          Date d1 = fmt.parse(DataAttuale);
+          Date d2 = fmt.parse(DataScadenza);
+
+          // Calculates the difference in milliseconds.
+          long millisDiff = d2.getTime() - d1.getTime();
+
+          // Calculates days/hours/minutes/seconds.
+          int seconds = (int) (millisDiff / 1000 % 60);
+          int minutes = (int) (millisDiff / 60000 % 60);
+          int hours = (int) (millisDiff / 3600000 % 24);
+          int days = (int) (millisDiff / 86400000);
+
+          System.out.println("Between " + DataAttuale + " and " + DataScadenza + " there are:");
+          System.out.print(days + " days, ");
+          System.out.print(hours + " hours, ");
+          System.out.print(minutes + " minutes, ");
+          System.out.println(seconds + " seconds");
+          //la differenza è espressa in minuti
+          int differenza=0;
+          if(days>=1) {
+        	  //ci sono 1440 minuti in un giorno
+        	  differenza=differenza+(days*1440);
+        	  if(hours>=1) {
+        		  
+        		  differenza=differenza+(hours*60);
+        		  
+          }
+        	  if(minutes>=1) {
+        		 differenza=differenza+minutes;
+        		 //ho un anticipo di un valore pari a differenza
+        	  }
+        	  
+        	  
+          }
+          
+		} catch (Exception e) {
+            System.err.println(e);
+        }
+		return 0;
+		
+		
+		
+	}
+	
+	
 	
 }
 	

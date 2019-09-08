@@ -63,9 +63,11 @@ public class GestoreAccountImpl implements GestoreAccount {
 	
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username)  {
 		Auto a = new Auto();
-		Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
+		Automobilista aut= new Automobilista(username);
+		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
 		if(a.AggiungiAuto(Targa, CFProprietario)) {
 			//Significa che ho aggiunto l'auto
+			if(aut.addAutoAtList(a));
 			if(ListaAuto.InserisciCorrispondenza(Targa,username)) {
 				return true;
 			}
@@ -79,6 +81,7 @@ public class GestoreAccountImpl implements GestoreAccount {
 		
 	}
 	
+	//vedere...
 	public ArrayList<String> OttieniLista(String username) throws SQLException {
 		Corrispondenza c= new Corrispondenza(username);
 		return c.GetList(username);
@@ -107,9 +110,22 @@ public class GestoreAccountImpl implements GestoreAccount {
 		return u.getConto(username,password);
 		
 	}
+	
+	public boolean ControllaConto(String username, String password, double CostoTotale) {
+		Automobilista u = new Automobilista(username,password);
+		if(u.getCredito()>=CostoTotale) {
+			return true;
+		}
+		else { return false;
+		}
+		}
+		
+		
+		
+	}
 
 	
-	}
+	
 
 
 	

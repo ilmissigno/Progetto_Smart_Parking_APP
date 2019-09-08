@@ -10,8 +10,11 @@ public class Auto {
 	
 	private String Targa;
 	private String Proprietario;
+	//posso anche toglierli?
 	private ArrayList<Ticket> listaTicket;
 	private ArrayList<Multa> listaMulte;
+
+	
 	
 	public Auto() {
 		
@@ -20,6 +23,25 @@ public class Auto {
 	public Auto(String Targa,String Proprietario) {
 		this.setTarga(Targa);
 		this.setProprietario(Proprietario);
+	}
+
+	public Auto(String targa) {
+		// TODO Auto-generated constructor stub
+		//potrei pensare anche di accorpare tutto in una funzione
+		AutoDAO aut = new AutoDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			aut.readAuto(tm,Targa);
+				//ok significa che l'auto � gi� inserita, devo inserire o meno la corrispondenza
+				tm.commitTransaction();
+				this.setTarga(aut.getTarga());
+				this.setProprietario(aut.getProprietario());
+		}
+		catch(Exception e) {
+		tm.rollbackTransaction();
+		}
+				
 	}
 
 	public String getTarga() {
@@ -69,7 +91,7 @@ public class Auto {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(aut.readAuto(tm,Targa,proprietario)) {
+			if(aut.readAuto(tm,Targa)) {
 				//ok significa che l'auto � gi� inserita, devo inserire o meno la corrispondenza
 				tm.commitTransaction();
 				this.setTarga(aut.getTarga());

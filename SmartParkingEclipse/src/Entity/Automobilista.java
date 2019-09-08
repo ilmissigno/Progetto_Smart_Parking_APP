@@ -1,6 +1,7 @@
 package Entity;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import DAO.AutoDAO;
 import DAO.AutomobilistaDAO;
@@ -10,15 +11,52 @@ import DAO.TransactionManagerFactory;
 
 public class Automobilista extends Utente {
 private double Credito;
-	
+private ArrayList<Auto> ListaAuto;
+
 	public Automobilista() {
 		
 	}
 	
 	public Automobilista(String username, String Password) {
-		this.setUsername(username);
-		this.setPassword(Password);
+		AutomobilistaDAO autoDAO=new AutomobilistaDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+		autoDAO.readAutomobilista(tm,username,Password);
+		tm.commitTransaction();
+		this.CodiceFiscale=autoDAO.getCodiceFiscale();
+		this.Cognome=autoDAO.getCognome();
+		this.Email=autoDAO.getEmail();
+		this.Nome=autoDAO.getNome();
+		this.password=autoDAO.getPassword();
+		this.username=autoDAO.getUsername();
+		this.Credito=autoDAO.getCredito();
+	}catch(Exception e) {
+		tm.rollbackTransaction();
+		
 	}
+	}
+	
+	public Automobilista(String username) {
+		AutomobilistaDAO autoDAO=new AutomobilistaDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+		autoDAO.readAutomobilista(tm,username);
+		tm.commitTransaction();
+		this.CodiceFiscale=autoDAO.getCodiceFiscale();
+		this.Cognome=autoDAO.getCognome();
+		this.Email=autoDAO.getEmail();
+		this.Nome=autoDAO.getNome();
+		this.password=autoDAO.getPassword();
+		this.username=autoDAO.getUsername();
+		this.Credito=autoDAO.getCredito();
+	}catch(Exception e) {
+		tm.rollbackTransaction();
+		
+	}
+	}
+	
 	
 	public double getCredito() {
 		return Credito;
@@ -26,6 +64,14 @@ private double Credito;
 
 	public void setCredito(double credito) {
 		Credito = credito;
+	}
+	
+	public ArrayList<Auto> getListaAuto() {
+		return ListaAuto;
+	}
+
+	public void setListaAuto(ArrayList<Auto> listaAuto) {
+		ListaAuto = listaAuto;
 	}
 	
 	public double getConto(String username,String password) {
@@ -85,6 +131,17 @@ private double Credito;
 			return false;
 		}
 	}
+	
+	public boolean addAutoAtList(Auto a) {
+		//Aggiunta l'auto alla lista dell'utente
+		this.ListaAuto.add(a);
+		//Cosa fare?
+		return true;
+	}
+
+
+
+	
 	
 }
 		

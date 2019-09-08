@@ -144,6 +144,7 @@ public class TicketDAO {
 
 		return -1;
 	}
+	//questa la toglierei metterei una funzione più generale, per ora la lascio
 		public double readTicket(TransactionManager tm, int IDTicket) throws SQLException {
 		
 		tm.assertInTransaction();
@@ -170,6 +171,29 @@ public class TicketDAO {
 		return -1;
 	}
 	
+		public void readsTicket(TransactionManager tm, int IDTicket) throws SQLException {
+			
+			tm.assertInTransaction();
+			try (PreparedStatement pt = tm.getConnection()
+					.prepareStatement("SELECT * FROM ticket WHERE (IDTicket=?)")) {
+				//ogni ID ï¿½ univoco
+				pt.setInt(1, IDTicket);
+				try (ResultSet rs = pt.executeQuery()) {
+					if (rs.next() == true) {
+						this.setCodiceArea(String.valueOf(rs.getInt("CodiceArea")));
+						this.setDurata(rs.getDouble("durata"));
+						this.setTargaAuto(rs.getString("Targa"));
+						this.setUsername(rs.getString("username"));
+						this.setScadenzaTicket(rs.getString("datafine"));
+						this.setIDTicket(rs.getInt("IDTicket"));
+					}else {
+						System.out.println("Errore1");
+					}
+				}
+
+			}
+
+		}
 	
 	
 	public boolean updateTicket(TransactionManager tm, int IDTicket ,String DataScadenza, double Durata) throws Exception {

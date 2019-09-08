@@ -45,7 +45,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 		public abstract GestoreSmartParking build();
 	}
-	
+	//
 	@Override
 	public boolean Login(String username, String password) {
 		// TODO Auto-generated method stub
@@ -80,10 +80,9 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		//orarioattuale+durata%24 resto mod 24
 		//}
 		//verifico il conto
-		Ticket t = new Ticket();
-		double conto = account.getConto(username, password);
-		if(conto>=costoTotale) {
-			t = ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password);
+		//Ticket t = new Ticket();
+		if(account.ControllaConto(username, password,costoTotale)) {
+		Ticket	t = ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password);
 			if(account.AggiornaConto(username,password,costoTotale)) {
 				return t;
 			}else {
@@ -92,6 +91,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}else {
 			return null;
 		}
+	
 	}
 
 	@Override
@@ -222,7 +222,16 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 			double Credito=account.getConto(username,password);
 			return Credito;
 		}
-
+	public boolean ArrestaSosta(int IDTicket, String username) {
+		
+		String DataScadenza=ticket.LeggiTicket(IDTicket,username);
+		
+		
+		return false;
+		
+		
+		
+	}
 }
 	
 		

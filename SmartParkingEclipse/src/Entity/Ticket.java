@@ -15,20 +15,52 @@ import java.util.TimerTask;
 import DAO.TicketDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
+import DAO.AutoDAO;
 import DAO.AutomobilistaDAO;
 
 public class Ticket {
 	//Il ticket non deve settarlo l'utente, va in automatico da DB
 	private int IDTicket;
 	private double Durata;
-	private String TargaAuto;
-	private String CodiceArea;
+	private Auto auto;
+	private AreaParcheggio AreaParcheggio;
+	//dovrei crearmi anche un istanza di automobilista?
 	private String username;
 	private String ScadenzaTicket;
-	
+	//Devo leggermi il ticket lo faccio con un costruttore avente solo l'ID
 	public Ticket() {
 		
 	}
+	
+public Ticket(int IDTicket, String username) {
+	this.IDTicket=IDTicket;
+	TicketDAO ticket = new TicketDAO();
+	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+	try {
+	tm.beginTransaction();
+	ticket.readsTicket(tm, this.IDTicket);
+	tm.commitTransaction();
+	this.setDurata(ticket.getDurata());
+	this.setUsername(username);
+	this.setScadenzaTicket(ticket.getScadenzaTicket());
+	AreaParcheggio area= new AreaParcheggio(Integer.parseInt(ticket.getCodiceArea()));
+	Auto auto=new Auto(ticket.getTargaAuto());
+	this.setAreaParcheggio(area);
+	this.setAuto(auto);
+	
+	
+	}catch(Exception e) {
+		tm.rollbackTransaction();
+	}
+	
+		
+	}
+	public Ticket( String  Targa, String CodiceArea) {
+		
+		
+		
+	}
+	
 
 	public int getIDTicket() {
 		return IDTicket;
@@ -45,22 +77,6 @@ public class Ticket {
 	public void setDurata(double durata) {
 		Durata = durata;
 	}
-
-	public String getTargaAuto() {
-		return TargaAuto;
-	}
-
-	public void setTargaAuto(String targaAuto) {
-		TargaAuto = targaAuto;
-	}
-
-	public String getCodiceArea() {
-		return CodiceArea;
-	}
-
-	public void setCodiceArea(String codiceArea) {
-		CodiceArea = codiceArea;
-	}
 	
 	public String getUsername() {
 		return username;
@@ -69,8 +85,33 @@ public class Ticket {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
+	public String getScadenzaTicket() {
+		return ScadenzaTicket;
+	}
 
-	public Ticket AcquistaTicket(String Targa, String CodiceArea, double Durata,String username,String password) {
+	public void setScadenzaTicket(String scadenzaTicket) {
+		ScadenzaTicket = scadenzaTicket;
+	}
+
+	public Auto getAuto() {
+		return auto;
+	}
+
+	public void setAuto(Auto auto) {
+		this.auto = auto;
+	}
+	
+	public AreaParcheggio getAreaParcheggio() {
+		return this.AreaParcheggio;
+	}
+
+	public void setAreaParcheggio(AreaParcheggio area) {
+		this.AreaParcheggio = area;
+	}
+
+
+	public Ticket AcquistaTicket(Auto auto, AreaParcheggio area, double Durata,String username,String password) {
 		String OraScadenza="";
 		//Qui devo mandare alla boundary il costo totale del ticket
 		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
@@ -83,7 +124,8 @@ public class Ticket {
 		boolean OrarioMattina=false;
 		Date date = new Date(); 
 		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String DataString=formatter.format(date).toString();
 		//Le cifre sono intese da sinistra verso destra
 		char Data1=DataString.charAt(8);
@@ -130,22 +172,23 @@ public class Ticket {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(ticket.createTicket(tm,ScadenzaTicket, Durata,Targa,username,CodiceArea)) {
+			if(ticket.createTicket(tm,ScadenzaTicket, Durata,auto.getTarga(),username,String.valueOf(area.getCodiceArea()))) {
 				tm.commitTransaction();
 				/*
 				 * ATTIVAZIONE TIMER DI NOTIFICA
 				 */
-				this.setCodiceArea(CodiceArea);
-				this.setDurata(Durata);
-				this.setTargaAuto(Targa);
+				//riempio l'oggetto ticket
+				this.setAreaParcheggio(area);
+				this.setDurata(ticket.getDurata());
+				this.setAuto(auto);
 				this.setUsername(username);
 				this.setScadenzaTicket(ScadenzaTicket);
 				tm.beginTransaction();
-				ticket.readTicket(tm, Targa, ScadenzaTicket);
+				ticket.readTicket(tm, auto.getTarga(), ScadenzaTicket);
 				tm.commitTransaction();
 				this.setIDTicket(ticket.getIDTicket());
 				System.out.println(this.getIDTicket());
-				Ticket outTicket = new Ticket();
+				/*Ticket outTicket = new Ticket();
 				outTicket.setIDTicket(this.getIDTicket());
 				outTicket.setCodiceArea(CodiceArea);
 				outTicket.setDurata(Durata);
@@ -153,6 +196,9 @@ public class Ticket {
 				outTicket.setUsername(username);
 				outTicket.setScadenzaTicket(ScadenzaTicket);
 				return outTicket;
+				*/
+				//ritorno l'oggetto che ho creato
+				return this;
 			}else {
 				return null;
 			}
@@ -210,7 +256,8 @@ public class Ticket {
 		boolean OrarioMattina=false;
 		Date date = new Date(); 
 		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String DataString=formatter.format(date).toString();
 		//Le cifre sono intese da sinistra verso destra
 		char Data1=DataString.charAt(8);
@@ -292,14 +339,10 @@ public class Ticket {
 				return false;
 			}
 	}
+	
 
-	public String getScadenzaTicket() {
-		return ScadenzaTicket;
-	}
 
-	public void setScadenzaTicket(String scadenzaTicket) {
-		ScadenzaTicket = scadenzaTicket;
-	}
+	
 }
 	
 	

@@ -6,12 +6,13 @@ import DAO.TransactionManagerFactory;
 import DAO.UtenteDAO;
 
 public class Utente {
-	private String CodiceFiscale;
-	private String Cognome;
-	private String Nome;
-	private String username;
-	private String password;
-	private String Email;
+	// li ho messi protected perchè sono membri che usa anche l'automobilista
+	protected String CodiceFiscale;
+	protected String Cognome;
+	protected String Nome;
+	protected String username;
+	protected String password;
+	protected String Email;
 	
 	public Utente() {
 		
@@ -81,6 +82,12 @@ public class Utente {
 			tm.beginTransaction();
 			if(u.readUtente(tm,username,password)) {
 				tm.commitTransaction();
+				this.CodiceFiscale=u.getCodiceFiscale();
+				this.Cognome=u.getCognome();
+				this.Email=u.getEmail();
+				this.Nome=u.getNome();
+				this.password=u.getPassword();
+				this.username=u.getUsername();
 				return true;
 			}else {
 				//errore

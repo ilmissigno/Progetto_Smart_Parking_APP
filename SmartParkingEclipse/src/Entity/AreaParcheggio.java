@@ -15,6 +15,13 @@ public class AreaParcheggio {
 		
 	}
 
+	public AreaParcheggio(int codiceArea) {
+		// TODO Auto-generated constructor stub
+		//potrei evitare una read ma usare direttamente il costruttore DAO -> sono scelte
+		PrelevaAreaParcheggio(codiceArea);
+		
+	}
+
 	public int getCodiceArea() {
 		return CodiceArea;
 	}
@@ -41,22 +48,22 @@ public class AreaParcheggio {
 	public void addTicket(Ticket t) {
 		this.listaTicket.add(t);
 	}
-	
-	public double OttieniCostoTicket(int codiceArea) {
+	//privata è usabile solo nell'ambito di questa classe-> nel costruttore
+	private void PrelevaAreaParcheggio(int codiceArea) {
 		AreaParcheggioDAO a = new AreaParcheggioDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
 			a.readAreaParcheggio(tm, codiceArea);
 			tm.commitTransaction();
-			this.setCodiceArea(codiceArea);
+			this.setCodiceArea(a.getCodiceArea());
 			this.setCostoTicket(a.getCostoTicket());
 			this.setListTicket(null);
-			return this.getCostoTicket();
+			
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 		}
-		return -1;
+		
 	}
 	
 }

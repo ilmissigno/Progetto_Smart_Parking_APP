@@ -81,9 +81,10 @@ public class SkeletonThread extends Thread{
 					out.flush();
 					out.writeInt(t.getIDTicket());
 					out.flush();
-					out.writeUTF(t.getTargaAuto());
+					out.writeUTF(t.getAuto().getTarga());
 					out.flush();
-					out.writeUTF(t.getCodiceArea());
+					// modificato qua perchè ora ho gli oggetti
+					out.writeUTF(String.valueOf(t.getAreaParcheggio().getCodiceArea()));
 					out.flush();
 					out.writeUTF(t.getScadenzaTicket());
 					out.flush();
@@ -202,6 +203,18 @@ public class SkeletonThread extends Thread{
 					break;
 				}
 				
+				case "FineSostadend":{ 
+					int IDTicket=in.readInt();
+					String username=in.readUTF();
+					if(iserver.ArrestaSosta(IDTicket,username)) {
+						out.writeBoolean(true);
+						out.flush();
+					}else {
+						out.writeBoolean(false);
+						out.flush();
+					}
+					break;
+				}
 			}
 		}catch(IOException e) {
 			e.printStackTrace();

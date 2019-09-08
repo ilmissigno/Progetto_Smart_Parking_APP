@@ -23,4 +23,5 @@ public interface IGestoreSmartParking {
 	boolean EliminaTicket(int iDTicket);
 	boolean EliminaAuto(String targa, String username);
 	double LeggiCredito(String username, String password);
+	boolean ArrestaSosta(int iDTicket, String username);
 }
