@@ -222,24 +222,8 @@ public Ticket(int IDTicket, String username) {
 		}
 	}
 	
-	public double TimerTicket(String username, int IDTicket) {
-		TicketDAO ticket = new TicketDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			double durata = ticket.readTicket(tm, IDTicket);
-			tm.commitTransaction();
-			this.setDurata(durata);
-			this.setCodiceArea(ticket.getCodiceArea());
-			this.setTargaAuto(ticket.getUsername());
-			this.setUsername(username);
-			this.setScadenzaTicket(ticket.getScadenzaTicket());
-			this.setIDTicket(IDTicket);
-			return durata;
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-			return -1;
-		}
+	public double TimerTicket() {
+		return this.getDurata();
 		
 	}
 

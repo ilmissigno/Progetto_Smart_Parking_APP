@@ -203,10 +203,11 @@ public class SkeletonThread extends Thread{
 					break;
 				}
 				
-				case "FineSostadend":{ 
+				case "finesostasend":{ 
 					int IDTicket=in.readInt();
 					String username=in.readUTF();
-					if(iserver.ArrestaSosta(IDTicket,username)) {
+					String password=in.readUTF();
+					if(iserver.ArrestaSosta(IDTicket,username,password)) {
 						out.writeBoolean(true);
 						out.flush();
 					}else {

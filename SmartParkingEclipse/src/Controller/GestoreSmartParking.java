@@ -222,15 +222,18 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 			double Credito=account.getConto(username,password);
 			return Credito;
 		}
-	public boolean ArrestaSosta(int IDTicket, String username) {
+	public boolean ArrestaSosta(int IDTicket, String username, String password) {
 		
 		double ImportoRimborso=ticket.TrovaRimborso(IDTicket,username);
-		
-		
-		return false;
-		
-		
-		
+		if(ticket.EliminaTicket(IDTicket)) {
+			if(account.AggiornaConto(username, password, ImportoRimborso)) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return false;
+		}
 	}
 }
 	

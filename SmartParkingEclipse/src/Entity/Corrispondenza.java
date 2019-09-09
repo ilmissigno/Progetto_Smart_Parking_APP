@@ -9,40 +9,56 @@ import DAO.CorrispondenzaDAO;
 
 public class Corrispondenza {
 	
-	private ArrayList<String> listaAuto;
-	private String username;
+	private Auto auto;
+	private Automobilista automobilista;
 	
-	public Corrispondenza(String username) {
-		this.setUsername(username);
-	}
-	
-	public Corrispondenza(String targa,String username) {
-		this.setListaAuto(new ArrayList<String>());
-		this.setUsername(username);
-		this.addAuto(targa);
+	public Corrispondenza(Automobilista auto) {
+		this.setAutomobilista(auto);
 	}
 	
-	public ArrayList<String> getListaAuto() {
-		return listaAuto;
+	public Corrispondenza(Auto auto, Automobilista automobilista) {
+		this.auto=auto;
+		this.automobilista=automobilista;
+		CorrispondenzaDAO corrispondenza=new CorrispondenzaDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			//devo mettere il comando che mi dice quando � arrivata una tupla
+			if(corrispondenza.readCorrispondenza( tm, this.getAuto().getTarga(),this.getAutomobilista().getUsername())) {
+				tm.commitTransaction();
+			}else {
+				//devo avvisare che l'associazione di quell'auto all'utente c'� gi�
+				//altrimenti devo creare la corrispondenza
+				if(corrispondenza.createCorrispondenza(tm,this.getAuto().getTarga(),this.getAutomobilista().getUsername())) {
+					//AutoAggiunta
+					tm.commitTransaction();
+		
+					
+				}
+			}
+		}catch(Exception e) {
+			
+		}
+		
 	}
 
-	public void setListaAuto(ArrayList<String> listaAuto) {
-		this.listaAuto = listaAuto;
+	public Auto getAuto() {
+		return auto;
+	}
+
+	public void setAuto(Auto auto) {
+		this.auto = auto;
+	}
+
+	public Automobilista getAutomobilista() {
+		return automobilista;
+	}
+
+	public void setAutomobilista(Automobilista automobilista) {
+		this.automobilista = automobilista;
 	}
 	
-	public void addAuto(String t) {
-		this.listaAuto.add(t);
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public boolean InserisciCorrispondenza(String Targa,String username)  {
+	/*public boolean InserisciCorrispondenza(String Targa,String username)  {
 
 
 		CorrispondenzaDAO ListaAuto=new CorrispondenzaDAO();
@@ -73,18 +89,19 @@ public class Corrispondenza {
 			tm.rollbackTransaction();
 			return false;
 		}
-	}
+	}*/
 
 
 
 
-	public ArrayList<String> GetList(String Username) throws SQLException {
+	public ArrayList<String> GetList() throws SQLException {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		CorrispondenzaDAO corrispondenza = new CorrispondenzaDAO();
+		ArrayList<String> listaAuto = new ArrayList<String>();
 		try {
 			tm.beginTransaction();
 
-			this.setListaAuto(corrispondenza.readList(tm, Username));
+			listaAuto = corrispondenza.readList(tm, this.getAutomobilista().getUsername());
 			tm.commitTransaction();
 		}
 
@@ -93,15 +110,15 @@ public class Corrispondenza {
 			throw new SQLException("Impossibile ottenere Lista.");
 		}
 
-		return this.getListaAuto();
+		return listaAuto;
 	}
-	public boolean EliminaCorrispondenza(String targa, String username) {
+	public boolean EliminaCorrispondenza() {
 		// TODO Auto-generated method stub
 					CorrispondenzaDAO corrispondenza = new CorrispondenzaDAO();
 					TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 					try {
 						tm.beginTransaction();
-						if(corrispondenza.deleteCorrispondenza(tm,targa,username));
+						if(corrispondenza.deleteCorrispondenza(tm,this.getAuto().getTarga(),this.getAutomobilista().getUsername()));
 						tm.commitTransaction();
 						return true;
 					}catch(Exception e) {
@@ -114,10 +131,7 @@ public class Corrispondenza {
 		
 		
 	}
-
-
-
-
+	
 }
 
 

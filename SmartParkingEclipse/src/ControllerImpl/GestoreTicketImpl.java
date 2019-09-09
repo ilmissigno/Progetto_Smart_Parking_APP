@@ -2,6 +2,7 @@ package ControllerImpl;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -48,9 +49,11 @@ public class GestoreTicketImpl implements GestoreTicket{
 	}
 	
 	public void TimerTicket(String username, int IDTicket,DataOutputStream out) {
-		Ticket t=new Ticket();
-		 double durata = t.TimerTicket(username,IDTicket);
+		Ticket t=new Ticket(IDTicket,username);
+		
+		 double durata = t.TimerTicket();
 		 InizializzaTimer(durata,out);
+		 
 	}
 
 	@Override
@@ -112,16 +115,16 @@ public class GestoreTicketImpl implements GestoreTicket{
 		double importoalMin=(ticket.getAreaParcheggio().getCostoTicket())/ 60;
 		double ImportoRimborso= MinDiRimborso*importoalMin;
 		//devo adesso verifivare se l'importo è minore di 1 centesimo
-		if(ImportoRimborso>=0.01) {
-			
-			
+		DecimalFormat format = new DecimalFormat();
+		format.setMaximumFractionDigits(2);
+		format.format(ImportoRimborso);
+		if(ImportoRimborso>=0.01D) {
+			return ImportoRimborso;
 		}
-		return "";
-		
-		
+		return -1;
 	}
 	
-	public int DifferenzaTraDate(String DataScadenza, String DataAttuale) {
+	private int DifferenzaTraDate(String DataScadenza, String DataAttuale) {
 		try {
 			//dataAttuale
 		 // String strDate1 = "2007/04/15 12:35:05";
@@ -154,19 +157,15 @@ public class GestoreTicketImpl implements GestoreTicket{
           if(days>=1) {
         	  //ci sono 1440 minuti in un giorno
         	  differenza=differenza+(days*1440);
-        	  if(hours>=1) {
-        		  
-        		  differenza=differenza+(hours*60);
-        		  
           }
-        	  if(minutes>=1) {
-        		 differenza=differenza+minutes;
-        		 //ho un anticipo di un valore pari a differenza
-        	  }
-        	  
-        	  
+          if(hours>=1) {
+        	  differenza=differenza+(hours*60);  
           }
-          
+          if(minutes>=1) {
+        	  differenza=differenza+minutes;
+        	//ho un anticipo di un valore pari a differenza
+          }
+          return differenza;
 		} catch (Exception e) {
             System.err.println(e);
         }

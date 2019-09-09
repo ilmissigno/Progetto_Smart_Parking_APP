@@ -67,8 +67,12 @@ public class GestoreAccountImpl implements GestoreAccount {
 		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
 		if(a.AggiungiAuto(Targa, CFProprietario)) {
 			//Significa che ho aggiunto l'auto
-			if(aut.addAutoAtList(a));
-			if(ListaAuto.InserisciCorrispondenza(Targa,username)) {
+			if(aut.addAutoAtList(a)) {
+			//ListaAuto.InserisciCorrispondenza(Targa,username)) {
+				//costruttore di scrittura che crea tupla in DB
+			Corrispondenza c =new Corrispondenza(a,aut);
+			
+					
 				return true;
 			}
 			else { return false;
@@ -83,16 +87,19 @@ public class GestoreAccountImpl implements GestoreAccount {
 	
 	//vedere...
 	public ArrayList<String> OttieniLista(String username) throws SQLException {
-		Corrispondenza c= new Corrispondenza(username);
-		return c.GetList(username);
+		Automobilista autom = new Automobilista(username);
+		Corrispondenza c= new Corrispondenza(autom);
+		return c.GetList();
 		
 		
 	}
 
 	public boolean EliminaAuto(String targa,String username) {
 		// TODO Auto-generated method stub
-			Corrispondenza ListaAuto=new Corrispondenza(username);
-				if(ListaAuto.EliminaCorrispondenza(targa,username)) {
+		Automobilista autom = new Automobilista(username);
+		Auto auto = new Auto(targa);
+			Corrispondenza c=new Corrispondenza(auto,autom);
+				if(c.EliminaCorrispondenza()) {
 					return true;
 				}
 				else { return false;

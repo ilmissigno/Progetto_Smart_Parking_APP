@@ -20,10 +20,7 @@ public class Auto {
 		
 	}
 	
-	public Auto(String Targa,String Proprietario) {
-		this.setTarga(Targa);
-		this.setProprietario(Proprietario);
-	}
+	
 
 	public Auto(String targa) {
 		// TODO Auto-generated constructor stub

@@ -12,30 +12,23 @@ import Entity.Corrispondenza;
 public class CorrispondenzaDAO {
 	//dopo penso alla lista ora penso ad una generica read
 	
-	private ArrayList<String> listaAuto;
+	private String Targa;
 	private String username;
 	
 	public CorrispondenzaDAO() {
-		this.setListaAuto(new ArrayList<String>());
+		
 	}
 	
-	public CorrispondenzaDAO(String Targa,String Username) {
-		this.setListaAuto(new ArrayList<String>());
-		this.addAuto(Targa);
-		this.setUsername(Username);
-	}
 	
-	public ArrayList<String> getListaAuto() {
-		return listaAuto;
+	public String getTarga() {
+		return Targa;
 	}
 
-	public void setListaAuto(ArrayList<String> listaAuto) {
-		this.listaAuto = listaAuto;
+
+	public void setTarga(String targa) {
+		Targa = targa;
 	}
-	
-	public void addAuto(String t) {
-		this.listaAuto.add(t);
-	}
+
 
 	public String getUsername() {
 		return username;
@@ -55,7 +48,7 @@ public class CorrispondenzaDAO {
 			ps.setString(2, username);
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next() == true) {
-					this.addAuto(rs.getString("TARGA"));
+					this.setTarga(rs.getString("TARGA"));
 					this.setUsername(rs.getString("USERNAME"));
 					return true;
 				}
@@ -68,16 +61,17 @@ public class CorrispondenzaDAO {
 	
 	//@SuppressWarnings("finally")
 	public ArrayList<String> readList(TransactionManager tm, String username) {
+		ArrayList<String> listaAuto=new ArrayList<String>();
 		tm.assertInTransaction();
 		try (PreparedStatement ps = tm.getConnection().prepareStatement("SELECT * FROM Corrispondenza WHERE Username=?")) {
 			ps.setString(1,username);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next() == true) {
 					String Targa = rs.getString("Targa");
-					this.addAuto(Targa);
+					listaAuto.add(Targa);
 
 				}
-				return this.getListaAuto();
+				return listaAuto;
 			}
 			
 		} catch (SQLException e) {
@@ -86,7 +80,7 @@ public class CorrispondenzaDAO {
 		} //finally {
 			//return CorrispondenzaUtente;
 		//}
-		return this.getListaAuto();
+		return listaAuto;
 		
 		
 		
