@@ -101,14 +101,21 @@ public class GestoreTicketImpl implements GestoreTicket{
 		return;
 	}
 	
-	public String LeggiTicket(int IDTicket, String username) {
+	public double TrovaRimborso(int IDTicket, String username) {
 		Ticket ticket= new Ticket(IDTicket,username);
 		String DataScadenza=ticket.getScadenzaTicket();
 		Date date = new Date(); 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String DataString=formatter.format(date).toString();
-	int oreDiRimborso=DifferenzaTraDate(DataScadenza,DataString);
-		
+	int MinDiRimborso=DifferenzaTraDate(DataScadenza,DataString);
+	//il costo ticket è un double quindi la divisione dovrebbe venirmi precisa!
+		double importoalMin=(ticket.getAreaParcheggio().getCostoTicket())/ 60;
+		double ImportoRimborso= MinDiRimborso*importoalMin;
+		//devo adesso verifivare se l'importo è minore di 1 centesimo
+		if(ImportoRimborso>=0.01) {
+			
+			
+		}
 		return "";
 		
 		

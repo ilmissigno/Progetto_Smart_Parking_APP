@@ -224,7 +224,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 	public boolean ArrestaSosta(int IDTicket, String username) {
 		
-		String DataScadenza=ticket.LeggiTicket(IDTicket,username);
+		double ImportoRimborso=ticket.TrovaRimborso(IDTicket,username);
 		
 		
 		return false;

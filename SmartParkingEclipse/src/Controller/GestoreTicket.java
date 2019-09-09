@@ -12,5 +12,5 @@ public interface GestoreTicket {
 	void TimerTicket(String username, int iDTicket,DataOutputStream out);
 	Ticket RinnovaTicket(int iDTicket, double durata, double costoTotale, String username, String password);
 	boolean EliminaTicket(int iDTicket);
-	String LeggiTicket(int IDTicket,String username);
+	double TrovaRimborso(int IDTicket,String username);
 }
