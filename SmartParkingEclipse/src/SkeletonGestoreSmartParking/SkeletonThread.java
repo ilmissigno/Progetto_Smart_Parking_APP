@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Controller.IGestoreSmartParking;
 import Entity.Ticket;
@@ -18,10 +20,17 @@ import Entity.Ticket;
 public class SkeletonThread extends Thread{
 	IGestoreSmartParking iserver;
 	Socket client;
+	private Timer timer;
 	
 	public SkeletonThread(IGestoreSmartParking iserver, Socket client) {
 		this.iserver = iserver;
 		this.client = client;
+	}
+	public Timer getTimer() {
+		return timer;
+	}
+	public void setTimer(Timer timer) {
+		this.timer = timer;
 	}
 	//
 	public void run() {
@@ -135,7 +144,8 @@ public class SkeletonThread extends Thread{
 				case "Notificasend":{ 
 					String username = in.readUTF();
 					int IDTicket=in.readInt();
-					iserver.TimerTicket(username,IDTicket,out);
+					double durata = iserver.TimerTicket(username,IDTicket);
+					InizializzaTimer(durata,out);
 					break;
 				}
 				
@@ -208,6 +218,7 @@ public class SkeletonThread extends Thread{
 					String username=in.readUTF();
 					String password=in.readUTF();
 					if(iserver.ArrestaSosta(IDTicket,username,password)) {
+						this.getTimer().purge();
 						out.writeBoolean(true);
 						out.flush();
 					}else {
@@ -223,6 +234,35 @@ public class SkeletonThread extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	protected void InizializzaTimer(double durata, DataOutputStream out) {
+		int durataInt=(int)durata;
+		//forse posso modularizzare di piu il codice , per ora lo metto qua
+		//calcolo il tempo dopo il quale deve scattare la notifica
+		int ScattoTimer_secondi=durataInt*3600;
+		//A meno di 10 minuti
+		ScattoTimer_secondi = ScattoTimer_secondi-(600*1000);
+		int ScattoTimer_millisecondi = ScattoTimer_secondi*1000;
+	    this.setTimer(new Timer());
+		this.getTimer().schedule(new TimerTask() {
+			//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
+			//sideve provare
+            @Override
+            public void run() {
+                //System.out.println("CIAO!");
+            	try {
+					out.writeBoolean(true);
+					out.flush();
+					return;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+            	//significa che � scattato
+            }
+            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
+        },20000);
+		return;
 	}
 	
 }

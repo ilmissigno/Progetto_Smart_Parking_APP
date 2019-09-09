@@ -7,9 +7,12 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,7 @@ public class TicketInfoActivity extends AppCompatActivity {
         final String CodiceArea = getIntent().getExtras().getString("CodiceArea");
         final String DataScadenza = getIntent().getExtras().getString("DataScadenza");
         TextView ticketinfo = findViewById(R.id.textViewTicket);
+        Button btnTerminaSosta = findViewById(R.id.terminaSosta);
         ticketinfo.setText("Info Ticket: ID: "+idticket+"\nTarga:"+Targa+"\nCodiceArea: "+CodiceArea+"\nData Scadenza: "+DataScadenza);
 
 
@@ -53,6 +57,21 @@ public class TicketInfoActivity extends AppCompatActivity {
             serviceIntent.putExtras(bundle);
             ContextCompat.startForegroundService(this, serviceIntent);
         }
+
+        btnTerminaSosta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Handler handler = new Handler();
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                        proxyAutomobilista.EffettuaRimborso(idticket,Username,Password,handler,TicketInfoActivity.this);
+                    }
+                });
+                t.start();
+            }
+        });
 
     }
 }

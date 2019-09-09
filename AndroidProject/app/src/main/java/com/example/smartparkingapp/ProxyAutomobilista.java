@@ -520,4 +520,38 @@ public class ProxyAutomobilista implements IAutomobilista{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void EffettuaRimborso(final int idTicket, final String Username, final String Password, Handler handler, final Context context) {
+        SocketHandler socketHandler = new SocketHandler();
+        Socket s = socketHandler.getSocket();
+        DataInputStream in = socketHandler.getInputStream();
+        DataOutputStream out = socketHandler.getOutputStream();
+        try{
+            out.writeUTF("finesostasend");
+            out.flush();
+            out.writeInt(idTicket);
+            out.flush();
+            out.writeUTF(Username);
+            out.flush();
+            out.writeUTF(Password);
+            out.flush();
+            final boolean command = in.readBoolean();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(command){
+                        Intent intent1 = new Intent(context,HomePageActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("Username", Username);
+                        bundle.putString("Password",Password);
+                        intent1.putExtras(bundle);
+                        context.startActivity(intent1);
+                    }
+                }
+            });
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }

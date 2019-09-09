@@ -48,11 +48,12 @@ public class GestoreTicketImpl implements GestoreTicket{
 		return t.OttieniTicket(CodiceArea,targa);
 	}
 	
-	public void TimerTicket(String username, int IDTicket,DataOutputStream out) {
+	public double TimerTicket(String username, int IDTicket) {
 		Ticket t=new Ticket(IDTicket,username);
 		
 		 double durata = t.TimerTicket();
-		 InizializzaTimer(durata,out);
+		 return durata;
+		 //InizializzaTimer(durata,out);
 		 
 	}
 
@@ -74,44 +75,14 @@ public class GestoreTicketImpl implements GestoreTicket{
 		}
 	}
 	
-	protected void InizializzaTimer(double durata, DataOutputStream out) {
-		int durataInt=(int)durata;
-		//forse posso modularizzare di piu il codice , per ora lo metto qua
-		//calcolo il tempo dopo il quale deve scattare la notifica
-		int ScattoTimer_secondi=durataInt*3600;
-		//A meno di 10 minuti
-		ScattoTimer_secondi = ScattoTimer_secondi-(600*1000);
-		int ScattoTimer_millisecondi = ScattoTimer_secondi*1000;
-	    Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
-			//sideve provare
-            @Override
-            public void run() {
-                //System.out.println("CIAO!");
-            	try {
-					out.writeBoolean(true);
-					out.flush();
-					return;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
-            	//significa che ï¿½ scattato
-            }
-            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
-        },20000);
-		return;
-	}
-	
 	public double TrovaRimborso(int IDTicket, String username) {
 		Ticket ticket= new Ticket(IDTicket,username);
 		String DataScadenza=ticket.getScadenzaTicket();
 		Date date = new Date(); 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String DataString=formatter.format(date).toString();
-	int MinDiRimborso=DifferenzaTraDate(DataScadenza,DataString);
-	//il costo ticket è un double quindi la divisione dovrebbe venirmi precisa!
+		int MinDiRimborso=DifferenzaTraDate(DataScadenza,DataString);
+		//il costo ticket è un double quindi la divisione dovrebbe venirmi precisa!
 		double importoalMin=(ticket.getAreaParcheggio().getCostoTicket())/ 60;
 		double ImportoRimborso= MinDiRimborso*importoalMin;
 		//devo adesso verifivare se l'importo è minore di 1 centesimo

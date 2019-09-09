@@ -166,8 +166,8 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		return listaAuto;
 	}
 		
-	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
-		ticket.TimerTicket(username,IDTicket,out);
+	public double TimerTicket(String username, int IDTicket) {
+		return ticket.TimerTicket(username,IDTicket);
 			
 		
 	}
@@ -175,8 +175,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	@Override
 	public Ticket RinnovaTicket(int IDTicket, double durata, String username, String password,double costoTotale) {
 		// TODO Auto-generated method stub
-			double conto = account.getConto(username, password);
-			if(conto>=costoTotale) {
+			if(account.ControllaConto(username, password, costoTotale)) {
 				Ticket t = ticket.RinnovaTicket(IDTicket, durata, costoTotale, username,password);
 					if(account.AggiornaConto(username,password,costoTotale)) {
 						return t;
@@ -221,9 +220,10 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	public double LeggiCredito(String username, String password) {
 			double Credito=account.getConto(username,password);
 			return Credito;
-		}
-	public boolean ArrestaSosta(int IDTicket, String username, String password) {
-		
+	}
+	
+	@Override
+	public boolean ArrestaSosta(int IDTicket, String username, String password) {	
 		double ImportoRimborso=ticket.TrovaRimborso(IDTicket,username);
 		if(ticket.EliminaTicket(IDTicket)) {
 			if(account.AggiornaConto(username, password, ImportoRimborso)) {

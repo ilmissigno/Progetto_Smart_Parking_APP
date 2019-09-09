@@ -32,33 +32,28 @@ public class Ticket {
 		
 	}
 	
-public Ticket(int IDTicket, String username) {
-	this.IDTicket=IDTicket;
-	TicketDAO ticket = new TicketDAO();
-	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-	try {
-	tm.beginTransaction();
-	ticket.readsTicket(tm, this.IDTicket);
-	tm.commitTransaction();
-	this.setDurata(ticket.getDurata());
-	this.setUsername(username);
-	this.setScadenzaTicket(ticket.getScadenzaTicket());
-	AreaParcheggio area= new AreaParcheggio(Integer.parseInt(ticket.getCodiceArea()));
-	Auto auto=new Auto(ticket.getTargaAuto());
-	this.setAreaParcheggio(area);
-	this.setAuto(auto);
-	
-	
-	}catch(Exception e) {
-		tm.rollbackTransaction();
+	public Ticket(int IDTicket, String username) {
+		this.IDTicket=IDTicket;
+		TicketDAO ticket = new TicketDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			ticket.readsTicket(tm, this.IDTicket);
+			tm.commitTransaction();
+			this.setDurata(ticket.getDurata());
+			this.setUsername(username);
+			this.setScadenzaTicket(ticket.getScadenzaTicket());
+			AreaParcheggio area= new AreaParcheggio(Integer.parseInt(ticket.getCodiceArea()));
+			Auto auto=new Auto(ticket.getTargaAuto());
+			this.setAreaParcheggio(area);
+			this.setAuto(auto);
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+		}
 	}
 	
-		
-	}
 	public Ticket( String  Targa, String CodiceArea) {
-		
-		
-		
+			
 	}
 	
 

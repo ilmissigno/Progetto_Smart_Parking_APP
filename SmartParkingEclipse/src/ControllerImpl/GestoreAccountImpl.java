@@ -70,19 +70,14 @@ public class GestoreAccountImpl implements GestoreAccount {
 			if(aut.addAutoAtList(a)) {
 			//ListaAuto.InserisciCorrispondenza(Targa,username)) {
 				//costruttore di scrittura che crea tupla in DB
-			Corrispondenza c =new Corrispondenza(a,aut);
-			
-					
+				Corrispondenza c =new Corrispondenza(a,aut);	
 				return true;
 			}
-			else { return false;
-				
+			else { 
+				return false;
 			}
 		}
 		return false;
-			
-			
-		
 	}
 	
 	//vedere...
