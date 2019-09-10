@@ -242,11 +242,13 @@ public class Ticket {
 		 */
 		//Funzionalità orario ecc...
 		boolean OrarioMattina=false;
+		/*
 		Date date = new Date(); 
 		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
 		//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		String DataString=formatter.format(date).toString();
+		*/
+		String DataString=this.getScadenzaTicket();
 		//Le cifre sono intese da sinistra verso destra
 		char Data1=DataString.charAt(8);
 		char Data2=DataString.charAt(9);

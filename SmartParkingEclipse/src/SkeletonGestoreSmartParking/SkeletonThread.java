@@ -86,7 +86,7 @@ public class SkeletonThread extends Thread{
 					out.flush();
 					out.writeUTF(t.getAuto().getTarga());
 					out.flush();
-					// modificato qua perchè ora ho gli oggetti
+					// modificato qua perchï¿½ ora ho gli oggetti
 					out.writeUTF(String.valueOf(t.getAreaParcheggio().getCodiceArea()));
 					out.flush();
 					out.writeUTF(t.getScadenzaTicket());
@@ -155,6 +155,8 @@ public class SkeletonThread extends Thread{
 					out.writeInt(t.getIDTicket());
 					out.flush();
 					out.writeUTF(t.getScadenzaTicket());
+					out.flush();
+					out.writeBoolean(true);
 					out.flush();
 					break;
 				}
