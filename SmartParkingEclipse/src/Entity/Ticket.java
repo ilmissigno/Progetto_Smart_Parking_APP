@@ -297,10 +297,8 @@ public class Ticket {
 				this.setDurata(durata);
 				this.setUsername(username);
 				this.setScadenzaTicket(ScadenzaTicket);
-				Ticket outTicket = new Ticket();
-				outTicket.setIDTicket(IDTicket);
-				outTicket.setScadenzaTicket(ScadenzaTicket);
-				return outTicket;
+				this.setIDTicket(IDTicket);
+				return this;
 			}else {
 				return null;
 			}

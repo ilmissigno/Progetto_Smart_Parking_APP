@@ -75,8 +75,15 @@ public class GestoreTicketImpl implements GestoreTicket{
 	@Override
 	public Ticket RinnovaTicket(int IDTicket, double durata, double costoTotale, String username, String password) {
 		// TODO Auto-generated method stub
-		Ticket ticket = new Ticket();
-		return ticket.RinnovaTicket(IDTicket,durata,username,password);
+		int i=0;
+		for( i=0;i<listaTicket.size();i++) {
+			
+			if(listaTicket.get(i).getIDTicket()==IDTicket) {
+				break;
+			}
+				
+		}
+		return listaTicket.get(i).RinnovaTicket(IDTicket,durata,username,password);
 	}
 
 	@Override
