@@ -17,7 +17,7 @@ public interface IGestoreSmartParking {
 	boolean RegistraUtente(String CodiceFiscale, String Cognome, String Nome, String username, String password, String email);
 	boolean AggiungiAuto(String Targa,String CFProprietario,String username);
 	ArrayList<String>  OttieniListaAuto(String username) throws SQLException;
-	double TimerTicket(String username,int IDTicket);
+	void TimerTicket(String username,int IDTicket, DataOutputStream out);
 	Ticket RinnovaTicket(int iDTicket, double durata, String username,String password, double costoTotale);
 	boolean CaricaConto(String username,String password, double importo);
 	boolean EliminaTicket(int iDTicket);

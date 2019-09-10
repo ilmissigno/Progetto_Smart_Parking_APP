@@ -166,8 +166,8 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		return listaAuto;
 	}
 		
-	public double TimerTicket(String username, int IDTicket) {
-		return ticket.TimerTicket(username,IDTicket);
+	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
+		 ticket.TimerTicket(username,IDTicket,out);
 			
 		
 	}

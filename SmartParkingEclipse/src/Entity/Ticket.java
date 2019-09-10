@@ -27,6 +27,7 @@ public class Ticket {
 	//dovrei crearmi anche un istanza di automobilista?
 	private String username;
 	private String ScadenzaTicket;
+	private Timer Timer;
 	//Devo leggermi il ticket lo faccio con un costruttore avente solo l'ID
 	public Ticket() {
 		
@@ -105,6 +106,14 @@ public class Ticket {
 		this.AreaParcheggio = area;
 	}
 
+
+	public Timer getTimer() {
+		return Timer;
+	}
+
+	public void setTimer(Timer timer) {
+		Timer = timer;
+	}
 
 	public Ticket AcquistaTicket(Auto auto, AreaParcheggio area, double Durata,String username,String password) {
 		String OraScadenza="";

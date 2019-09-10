@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,7 +15,8 @@ import Entity.Auto;
 import Entity.Ticket;
 
 public class GestoreTicketImpl implements GestoreTicket{
-
+	//lista condivisa
+ private ArrayList<Ticket> listaTicket;
 	@Override
 	public double OttieniCostoTicket(int CodiceArea, double Durata) {
 		// è una read che farò dopo, creo un costruttore area parcheggio dal codice area
@@ -33,7 +35,10 @@ public class GestoreTicketImpl implements GestoreTicket{
 		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
 		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
 		Ticket ticket = new Ticket();
-		return ticket.AcquistaTicket(auto,area,Durata,username,password);
+		 ticket.AcquistaTicket(auto,area,Durata,username,password);
+		 listaTicket.add(ticket);
+		 return ticket;
+		 
 	}
 
 	@Override
@@ -48,12 +53,21 @@ public class GestoreTicketImpl implements GestoreTicket{
 		return t.OttieniTicket(CodiceArea,targa);
 	}
 	
-	public double TimerTicket(String username, int IDTicket) {
-		Ticket t=new Ticket(IDTicket,username);
+	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
+	//	Ticket t=new Ticket(IDTicket,username);
+		//il ticket ce l' ho già creato , è un elemento della lista
+		double durata=0;
+		int i=0;
+		for( i=0;i<listaTicket.size();i++) {
+			
+			if(listaTicket.get(i).getIDTicket()==IDTicket) {
+				durata= listaTicket.get(i).TimerTicket();
+				break;
+			}
+				
+		}
 		
-		 double durata = t.TimerTicket();
-		 return durata;
-		 //InizializzaTimer(durata,out);
+		InizializzaTimer(durata,listaTicket.get(i),out);
 		 
 	}
 
@@ -67,8 +81,18 @@ public class GestoreTicketImpl implements GestoreTicket{
 	@Override
 	public boolean EliminaTicket(int IDTicket) {
 		// TODO Auto-generated method stub
-		Ticket ticket = new Ticket();
-		if(ticket.EliminaTicket(IDTicket)) {
+	//	Ticket ticket = new Ticket();
+		int i=0;
+		for( i=0;i<listaTicket.size();i++) {
+			
+			if(listaTicket.get(i).getIDTicket()==IDTicket) {
+				break;
+			}
+				
+		}
+		if(listaTicket.get(i).EliminaTicket(IDTicket)) {
+			listaTicket.get(i).getTimer().purge();
+			listaTicket.remove(i);
 			return true;
 		}else {
 			return false;
@@ -145,6 +169,38 @@ public class GestoreTicketImpl implements GestoreTicket{
 		
 		
 	}
+	
+	protected void InizializzaTimer(double durata, Ticket ticket, DataOutputStream out) {
+		int durataInt=(int)durata;
+		//forse posso modularizzare di piu il codice , per ora lo metto qua
+		//calcolo il tempo dopo il quale deve scattare la notifica
+		int ScattoTimer_secondi=durataInt*3600;
+		//A meno di 10 minuti
+		ScattoTimer_secondi = ScattoTimer_secondi-(600*1000);
+		int ScattoTimer_millisecondi = ScattoTimer_secondi*1000;
+		Timer t= new Timer();
+		ticket.setTimer(t);
+		ticket.getTimer().schedule(new TimerTask() {
+			//questa funzione run vuole void e mi obbliga a scrivere qua e non nello skeleton
+			//sideve provare
+            @Override
+            public void run() {
+                //System.out.println("CIAO!");
+            	try {
+					out.writeBoolean(true);
+					out.flush();
+					return;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+            	//significa che ï¿½ scattato
+            }
+            //Alla scadenza del timer parte la notifica e si ripete ogni 100 secondi
+        },20000);
+		return;
+	}
+	
 	
 	
 	
