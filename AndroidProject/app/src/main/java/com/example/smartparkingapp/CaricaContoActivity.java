@@ -18,6 +18,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.DecimalFormat;
 
 public class CaricaContoActivity extends AppCompatActivity {
 
@@ -54,7 +55,10 @@ public class CaricaContoActivity extends AppCompatActivity {
             @Override
             public void run() {
                ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
-               Credito.setText(proxyAutomobilista.getVecchioCredito(username,password,handler)+" \u20ac");
+               double vecchioCredito = proxyAutomobilista.getVecchioCredito(username,password,handler);
+                DecimalFormat formato = new DecimalFormat("##.##");
+                String credits = formato.format(vecchioCredito);
+               Credito.setText(credits+" \u20ac");
             }
         });
         t.start();

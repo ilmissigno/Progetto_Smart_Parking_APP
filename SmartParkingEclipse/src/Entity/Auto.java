@@ -29,7 +29,7 @@ public class Auto {
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			aut.readAuto(tm,Targa);
+			aut.readAuto(tm,targa);
 				//ok significa che l'auto � gi� inserita, devo inserire o meno la corrispondenza
 				tm.commitTransaction();
 				this.setTarga(aut.getTarga());

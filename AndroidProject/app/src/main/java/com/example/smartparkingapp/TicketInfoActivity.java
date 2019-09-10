@@ -46,7 +46,7 @@ public class TicketInfoActivity extends AppCompatActivity {
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
-            Intent serviceIntent = new Intent(this, ServiceNotify.class);
+            final Intent serviceIntent = new Intent(this, ServiceNotify.class);
             Bundle bundle = new Bundle();
             bundle.putString("Username",Username);
             bundle.putString("Password",Password);
@@ -56,22 +56,23 @@ public class TicketInfoActivity extends AppCompatActivity {
             bundle.putString("DataScadenza",DataScadenza);
             serviceIntent.putExtras(bundle);
             ContextCompat.startForegroundService(this, serviceIntent);
+            btnTerminaSosta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Handler handler = new Handler();
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(stopService(serviceIntent)){
+                                ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
+                                proxyAutomobilista.EffettuaRimborso(idticket,Username,Password,handler,TicketInfoActivity.this);
+                            }
+                        }
+                    });
+                    t.start();
+                }
+            });
         }
-
-        btnTerminaSosta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Handler handler = new Handler();
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
-                        proxyAutomobilista.EffettuaRimborso(idticket,Username,Password,handler,TicketInfoActivity.this);
-                    }
-                });
-                t.start();
-            }
-        });
 
     }
 }

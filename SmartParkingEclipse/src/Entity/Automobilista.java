@@ -1,6 +1,7 @@
 package Entity;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import DAO.AutoDAO;
@@ -18,6 +19,7 @@ private ArrayList<Auto> ListaAuto;
 	}
 	
 	public Automobilista(String username, String Password) {
+		this.ListaAuto = new ArrayList<Auto>();
 		AutomobilistaDAO autoDAO=new AutomobilistaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
@@ -38,6 +40,8 @@ private ArrayList<Auto> ListaAuto;
 	}
 	
 	public Automobilista(String username) {
+		/*1 aggiusto*/
+		this.ListaAuto = new ArrayList<Auto>();
 		AutomobilistaDAO autoDAO=new AutomobilistaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
@@ -49,8 +53,9 @@ private ArrayList<Auto> ListaAuto;
 		this.Email=autoDAO.getEmail();
 		this.Nome=autoDAO.getNome();
 		this.password=autoDAO.getPassword();
-		this.username=autoDAO.getUsername();
+		this.username=username;
 		this.Credito=autoDAO.getCredito();
+		System.out.println(this.password);
 	}catch(Exception e) {
 		tm.rollbackTransaction();
 		

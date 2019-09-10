@@ -19,8 +19,8 @@ public class GestoreTicketImpl implements GestoreTicket{
  private ArrayList<Ticket> listaTicket;
 	@Override
 	public double OttieniCostoTicket(int CodiceArea, double Durata) {
-		// è una read che farò dopo, creo un costruttore area parcheggio dal codice area
-		// mi darà tutto l'oggetto è farò semplicemente getCosto per prendere il costo
+		// ï¿½ una read che farï¿½ dopo, creo un costruttore area parcheggio dal codice area
+		// mi darï¿½ tutto l'oggetto ï¿½ farï¿½ semplicemente getCosto per prendere il costo
 		AreaParcheggio area = new AreaParcheggio(CodiceArea);
 		double costo =area.getCostoTicket();
 		double costoTotale = costo*Durata;
@@ -30,8 +30,9 @@ public class GestoreTicketImpl implements GestoreTicket{
 	@Override
 	public Ticket ConfermaTicket(String Targa, String CodiceArea, double Durata, double CostoTicket, String username,String password) {
 		//Costruttore per la creazione di un ticket
-		//l'auto ed il codice Area devono esistere già prima del ticket
+		//l'auto ed il codice Area devono esistere giï¿½ prima del ticket
 		//penso che devo crearmi prima l'oggetto auto e quello areaParcheggio
+		this.listaTicket = new ArrayList<Ticket>();
 		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
 		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
 		Ticket ticket = new Ticket();
@@ -55,7 +56,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 	
 	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
 	//	Ticket t=new Ticket(IDTicket,username);
-		//il ticket ce l' ho già creato , è un elemento della lista
+		//il ticket ce l' ho giï¿½ creato , ï¿½ un elemento della lista
 		double durata=0;
 		int i=0;
 		for( i=0;i<listaTicket.size();i++) {
@@ -91,6 +92,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 				
 		}
 		if(listaTicket.get(i).EliminaTicket(IDTicket)) {
+			listaTicket.get(i).getTimer().cancel();
 			listaTicket.get(i).getTimer().purge();
 			listaTicket.remove(i);
 			return true;
@@ -106,10 +108,10 @@ public class GestoreTicketImpl implements GestoreTicket{
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String DataString=formatter.format(date).toString();
 		int MinDiRimborso=DifferenzaTraDate(DataScadenza,DataString);
-		//il costo ticket è un double quindi la divisione dovrebbe venirmi precisa!
+		//il costo ticket ï¿½ un double quindi la divisione dovrebbe venirmi precisa!
 		double importoalMin=(ticket.getAreaParcheggio().getCostoTicket())/ 60;
 		double ImportoRimborso= MinDiRimborso*importoalMin;
-		//devo adesso verifivare se l'importo è minore di 1 centesimo
+		//devo adesso verifivare se l'importo ï¿½ minore di 1 centesimo
 		DecimalFormat format = new DecimalFormat();
 		format.setMaximumFractionDigits(2);
 		format.format(ImportoRimborso);
@@ -147,7 +149,7 @@ public class GestoreTicketImpl implements GestoreTicket{
           System.out.print(hours + " hours, ");
           System.out.print(minutes + " minutes, ");
           System.out.println(seconds + " seconds");
-          //la differenza è espressa in minuti
+          //la differenza ï¿½ espressa in minuti
           int differenza=0;
           if(days>=1) {
         	  //ci sono 1440 minuti in un giorno

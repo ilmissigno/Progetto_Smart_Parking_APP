@@ -543,8 +543,8 @@ public class ProxyAutomobilista implements IAutomobilista{
                     if(command){
                         Intent intent1 = new Intent(context,HomePageActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("Username", Username);
-                        bundle.putString("Password",Password);
+                        bundle.putString("username", Username);
+                        bundle.putString("password",Password);
                         intent1.putExtras(bundle);
                         context.startActivity(intent1);
                     }

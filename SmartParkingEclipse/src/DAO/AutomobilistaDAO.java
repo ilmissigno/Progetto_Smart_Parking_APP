@@ -93,7 +93,7 @@ public class AutomobilistaDAO extends UtenteDAO{
 		// TODO Auto-generated method stub
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT * FROM automobilisti WHERE ((Username=?) (Password=?))")) {
+				.prepareStatement("SELECT * FROM automobilisti WHERE ((Username=?) AND (Password=?))")) {
 
 			pt.setString(1, username);
 			pt.setString(2, password);
@@ -101,32 +101,31 @@ public class AutomobilistaDAO extends UtenteDAO{
 				if (rs.next() == true) {
 					this.setCodiceFiscale(rs.getString("CF"));
 					this.setCognome(rs.getString("Cognome"));
-					this.setEmail(rs.getString("email"));
-					this.setNome(rs.getString("nome"));
-					this.setPassword(rs.getString("password"));
-					this.setUsername(rs.getString("username"));
+					this.setEmail(rs.getString("Email"));
+					this.setNome(rs.getString("Nome"));
+					this.setPassword(rs.getString("Password"));
+					this.setUsername(rs.getString("Username"));
 					this.setCredito(rs.getDouble("Credito"));
 					
 				}
 			}
 	}
 	}
-		
 		public void readAutomobilista(TransactionManager tm,String username) throws SQLException  {
 			// TODO Auto-generated method stub
 			tm.assertInTransaction();
 			try (PreparedStatement pt = tm.getConnection()
-					.prepareStatement("SELECT * FROM automobilisti WHERE ((Username=?) (Password=?))")) {
+					.prepareStatement("SELECT * FROM automobilisti WHERE Username=?")) {
 
 				pt.setString(1, username);
 				try (ResultSet rs = pt.executeQuery()) {
 					if (rs.next() == true) {
 						this.setCodiceFiscale(rs.getString("CF"));
 						this.setCognome(rs.getString("Cognome"));
-						this.setEmail(rs.getString("email"));
-						this.setNome(rs.getString("nome"));
-						this.setPassword(rs.getString("password"));
-						this.setUsername(rs.getString("username"));
+						this.setEmail(rs.getString("Email"));
+						this.setNome(rs.getString("Nome"));
+						this.setPassword(rs.getString("Password"));
+						this.setUsername(username);
 						this.setCredito(rs.getDouble("Credito"));
 						
 					}

@@ -12,13 +12,13 @@ public class Corrispondenza {
 	private Auto auto;
 	private Automobilista automobilista;
 	
-	public Corrispondenza(Automobilista auto) {
-		this.setAutomobilista(auto);
+	public Corrispondenza(Automobilista autom) {
+		this.setAutomobilista(autom);
 	}
 	
 	public Corrispondenza(Auto auto, Automobilista automobilista) {
-		this.auto=auto;
-		this.automobilista=automobilista;
+		this.setAuto(auto);
+		this.setAutomobilista(automobilista);
 		CorrispondenzaDAO corrispondenza=new CorrispondenzaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
@@ -103,6 +103,7 @@ public class Corrispondenza {
 
 			listaAuto = corrispondenza.readList(tm, this.getAutomobilista().getUsername());
 			tm.commitTransaction();
+			return listaAuto;
 		}
 
 		catch (Exception e) {
@@ -110,7 +111,6 @@ public class Corrispondenza {
 			throw new SQLException("Impossibile ottenere Lista.");
 		}
 
-		return listaAuto;
 	}
 	public boolean EliminaCorrispondenza() {
 		// TODO Auto-generated method stub

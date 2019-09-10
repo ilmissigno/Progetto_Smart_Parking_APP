@@ -63,7 +63,7 @@ public class CorrispondenzaDAO {
 	public ArrayList<String> readList(TransactionManager tm, String username) {
 		ArrayList<String> listaAuto=new ArrayList<String>();
 		tm.assertInTransaction();
-		try (PreparedStatement ps = tm.getConnection().prepareStatement("SELECT * FROM Corrispondenza WHERE Username=?")) {
+		try (PreparedStatement ps = tm.getConnection().prepareStatement("SELECT * FROM corrispondenza WHERE Username=?")) {
 			ps.setString(1,username);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next() == true) {
