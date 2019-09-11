@@ -226,7 +226,7 @@ public class Ticket {
 		}
 	}
 	
-	public double TimerTicket() {
+	public double AvviaTimer() {
 		return this.getDurata();
 		
 	}

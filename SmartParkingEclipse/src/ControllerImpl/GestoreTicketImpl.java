@@ -54,7 +54,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 		return t.OttieniTicket(CodiceArea,targa);
 	}
 	
-	public void TimerTicket(String username, int IDTicket, DataOutputStream out) {
+	public void AvviaTimer(String username, int IDTicket, DataOutputStream out) {
 	//	Ticket t=new Ticket(IDTicket,username);
 		//il ticket ce l' ho gi� creato , � un elemento della lista
 		double durata=0;
@@ -62,7 +62,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 		for( i=0;i<listaTicket.size();i++) {
 			
 			if(listaTicket.get(i).getIDTicket()==IDTicket) {
-				durata= listaTicket.get(i).TimerTicket();
+				durata= listaTicket.get(i).AvviaTimer();
 				break;
 			}
 				

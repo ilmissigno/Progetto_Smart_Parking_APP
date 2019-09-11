@@ -138,7 +138,7 @@ public class SkeletonThread extends Thread{
 				case "Notificasend":{ 
 					String username = in.readUTF();
 					int IDTicket=in.readInt();
-					iserver.TimerTicket(username,IDTicket,out);
+					iserver.AvviaTimer(username,IDTicket,out);
 					
 					break;
 				}
