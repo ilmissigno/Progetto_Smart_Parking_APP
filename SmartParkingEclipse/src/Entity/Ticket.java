@@ -175,7 +175,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	}
 
 	public void setAutomobilista(Automobilista automobilista) {
-		automobilista=automobilista;
+		this.automobilista=automobilista;
 	}
 
 	

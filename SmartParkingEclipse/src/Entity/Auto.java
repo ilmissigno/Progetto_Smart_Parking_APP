@@ -20,7 +20,7 @@ public class Auto {
 		
 	}
 	
-	public Auto(String targa, String CFProprietario) {
+	public Auto(String Targa, String CFProprietario) {
 		AutoDAO aut = new AutoDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {

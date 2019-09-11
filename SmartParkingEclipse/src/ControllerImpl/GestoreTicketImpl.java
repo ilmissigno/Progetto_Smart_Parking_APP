@@ -18,6 +18,11 @@ import Entity.Ticket;
 public class GestoreTicketImpl implements GestoreTicket{
 	//lista condivisa
  private ArrayList<Ticket> listaTicket;
+ 
+ 	public GestoreTicketImpl() {
+ 		this.listaTicket = new ArrayList<Ticket>();
+ 	}
+ 	
 	@Override
 	public double OttieniCostoTicket(int CodiceArea, double Durata) {
 		// � una read che far� dopo, creo un costruttore area parcheggio dal codice area
@@ -34,13 +39,13 @@ public class GestoreTicketImpl implements GestoreTicket{
 		//l'auto ed il codice Area devono esistere gi� prima del ticket
 		//penso che devo crearmi prima l'oggetto auto e quello areaParcheggio
 		Automobilista automobilista= new Automobilista(username);
-		this.listaTicket = new ArrayList<Ticket>();
 		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
 		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
 		
 		//Ticket ticket = new Ticket();
 		 //ticket.AcquistaTicket(auto,area,Durata,username,password);
 	Ticket ticket=	automobilista.AcquistaTicket(auto,area,Durata);
+		System.out.println(ticket.getAutomobilista().getUsername());
 		 listaTicket.add(ticket);
 		 return ticket;
 		 
@@ -87,8 +92,8 @@ public class GestoreTicketImpl implements GestoreTicket{
 			}
 				
 		}
-		
-		return listaTicket.get(i).getAutomobilista().RinnovaTicket(listaTicket.get(i),durata);
+		System.out.println(listaTicket.get(i).getIDTicket());
+		return listaTicket.get(i).getAutomobilista().RinnovaTicket(IDTicket, durata);
 	}
 
 	@Override

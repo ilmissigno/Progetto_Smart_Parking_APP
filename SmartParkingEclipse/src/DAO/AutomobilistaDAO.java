@@ -145,9 +145,6 @@ public class AutomobilistaDAO extends UtenteDAO{
 				.prepareStatement("INSERT INTO corrispondenza(username,Targa) VALUES(?,?)")) {
 			pt.setString(1, this.getUsername());
 			pt.setString(2, auto.getTarga());
-			
-			pt.setDouble(7,0);
-			pt.setInt(8, 0);
 			if(pt.executeUpdate()==1) {
 				return true;
 			}else {

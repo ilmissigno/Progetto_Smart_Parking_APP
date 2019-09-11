@@ -145,18 +145,11 @@ private ArrayList<Auto> ListaAuto;
 		// TODO Auto-generated method stub
 		Auto auto=new Auto(targa,CFProprietario);
 		//this.ListaAuto.add(auto);
-		AutomobilistaDAO automobilistaDao= new AutomobilistaDAO();
-		automobilistaDao.setCodiceFiscale(this.CodiceFiscale);
-		automobilistaDao.setUsername(this.username);
-		automobilistaDao.setCognome(this.Cognome);
-		automobilistaDao.setCredito(this.Credito);
-		automobilistaDao.setEmail(this.Email);
-		automobilistaDao.setNome(this.Nome);
-		automobilistaDao.setPassword(this.password);
+		AutomobilistaDAO automobilista = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(automobilistaDao.addAtList(tm,auto)) {
+			if(automobilista.addAtList(tm,auto)) {
 				tm.commitTransaction();
 				return true;
 			}
@@ -256,14 +249,14 @@ public Ticket AcquistaTicket(Auto auto, AreaParcheggio area, double Durata) {
 	Scadenza.setCharAt(12, Cifra2);
 	String ScadenzaTicket=Scadenza.toString();
 	System.out.println(ScadenzaTicket);
-	Ticket ticket= new Ticket(ScadenzaTicket,Durata,auto,area,this);
-	return ticket;
+	Ticket t= new Ticket(ScadenzaTicket,Durata,auto,area,this);
+	return t;
 	
 	
 }
 
 
-public Ticket RinnovaTicket(Ticket ticket, double durata) {
+public Ticket RinnovaTicket(int IDTicket, double durata) {
 	String OraScadenza="";
 	//Qui devo mandare alla boundary il costo totale del ticket
 	//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
@@ -280,7 +273,8 @@ public Ticket RinnovaTicket(Ticket ticket, double durata) {
 	//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
 	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	*/
-	String DataString=ticket.getScadenzaTicket();
+	Ticket t = new Ticket(IDTicket,this.getUsername());
+	String DataString=t.getScadenzaTicket();
 	//Le cifre sono intese da sinistra verso destra
 	char Data1=DataString.charAt(8);
 	char Data2=DataString.charAt(9);
@@ -321,8 +315,8 @@ public Ticket RinnovaTicket(Ticket ticket, double durata) {
 	Scadenza.setCharAt(12, Cifra2);
 	String ScadenzaTicket=Scadenza.toString();
 	System.out.println(ScadenzaTicket);
-	Ticket t= new Ticket(ticket.getIDTicket(),durata, this,ScadenzaTicket);
-	return t;
+	Ticket tick= new Ticket(t.getIDTicket(),durata, this,ScadenzaTicket);
+	return tick;
 }
 	
 }
