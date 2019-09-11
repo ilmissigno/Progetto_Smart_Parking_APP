@@ -20,6 +20,38 @@ public class Auto {
 		
 	}
 	
+	public Auto(String targa, String CFProprietario) {
+		AutoDAO aut = new AutoDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			if(aut.readAuto(tm,Targa)) {
+				//ok significa che l'auto � gi� inserita, devo inserire o meno la corrispondenza
+				tm.commitTransaction();
+				this.setTarga(aut.getTarga());
+				this.setProprietario(aut.getProprietario());
+				
+			}
+			else{
+			//Altrimenti Creo l'auto
+				if(aut.createAuto(tm,Targa,CFProprietario)) {
+					tm.commitTransaction();
+					this.setTarga(aut.getTarga());
+					this.setProprietario(aut.getProprietario());
+				}else {
+					
+				}
+			}
+			}
+			catch(Exception e) {
+			tm.rollbackTransaction();
+			
+		}
+		
+		
+		
+	}
+	
 	
 
 	public Auto(String targa) {
@@ -81,37 +113,7 @@ public class Auto {
 		this.listaMulte.add(m);
 	}
 	
-	public boolean AggiungiAuto(String Targa,String proprietario){
-		//boolean autopresente=false;
-		//boolean autoassociata=false;
-		AutoDAO aut = new AutoDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			if(aut.readAuto(tm,Targa)) {
-				//ok significa che l'auto � gi� inserita, devo inserire o meno la corrispondenza
-				tm.commitTransaction();
-				this.setTarga(aut.getTarga());
-				this.setProprietario(aut.getProprietario());
-				return true;
-			}
-			else{
-			//Altrimenti Creo l'auto
-				if(aut.createAuto(tm,Targa,proprietario)) {
-					tm.commitTransaction();
-					this.setTarga(aut.getTarga());
-					this.setProprietario(aut.getProprietario());
-					return true;
-				}else {
-					return false;
-				}
-			}
-			}
-			catch(Exception e) {
-			tm.rollbackTransaction();
-			return false;
-		}
-		}
+	
 	
 	}
 	

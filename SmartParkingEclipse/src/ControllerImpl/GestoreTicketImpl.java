@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import Controller.GestoreTicket;
 import Entity.AreaParcheggio;
 import Entity.Auto;
+import Entity.Automobilista;
 import Entity.Ticket;
 
 public class GestoreTicketImpl implements GestoreTicket{
@@ -32,11 +33,14 @@ public class GestoreTicketImpl implements GestoreTicket{
 		//Costruttore per la creazione di un ticket
 		//l'auto ed il codice Area devono esistere gi� prima del ticket
 		//penso che devo crearmi prima l'oggetto auto e quello areaParcheggio
+		Automobilista automobilista= new Automobilista(username);
 		this.listaTicket = new ArrayList<Ticket>();
 		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
 		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
-		Ticket ticket = new Ticket();
-		 ticket.AcquistaTicket(auto,area,Durata,username,password);
+		
+		//Ticket ticket = new Ticket();
+		 //ticket.AcquistaTicket(auto,area,Durata,username,password);
+	Ticket ticket=	automobilista.AcquistaTicket(auto,area,Durata);
 		 listaTicket.add(ticket);
 		 return ticket;
 		 
@@ -73,7 +77,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 	}
 
 	@Override
-	public Ticket RinnovaTicket(int IDTicket, double durata, double costoTotale, String username, String password) {
+	public Ticket RinnovaTicket(int IDTicket, double durata) {
 		// TODO Auto-generated method stub
 		int i=0;
 		for( i=0;i<listaTicket.size();i++) {
@@ -83,7 +87,8 @@ public class GestoreTicketImpl implements GestoreTicket{
 			}
 				
 		}
-		return listaTicket.get(i).RinnovaTicket(IDTicket,durata,username,password);
+		
+		return listaTicket.get(i).getAutomobilista().RinnovaTicket(listaTicket.get(i),durata);
 	}
 
 	@Override

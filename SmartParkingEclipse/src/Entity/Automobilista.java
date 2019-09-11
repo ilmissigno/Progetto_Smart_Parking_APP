@@ -2,11 +2,14 @@ package Entity;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import DAO.AutoDAO;
 import DAO.AutomobilistaDAO;
 import DAO.CorrispondenzaDAO;
+import DAO.TicketDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
 
@@ -137,20 +140,194 @@ private ArrayList<Auto> ListaAuto;
 		}
 	}
 	
-	public boolean addAutoAtList(Auto a) {
-		//Aggiunta l'auto alla lista dell'utente
-		this.ListaAuto.add(a);
-		//Cosa fare?
-		return true;
+
+	public boolean AggiungiAuto(String targa, String CFProprietario) {
+		// TODO Auto-generated method stub
+		Auto auto=new Auto(targa,CFProprietario);
+		//this.ListaAuto.add(auto);
+		AutomobilistaDAO automobilistaDao= new AutomobilistaDAO();
+		automobilistaDao.setCodiceFiscale(this.CodiceFiscale);
+		automobilistaDao.setUsername(this.username);
+		automobilistaDao.setCognome(this.Cognome);
+		automobilistaDao.setCredito(this.Credito);
+		automobilistaDao.setEmail(this.Email);
+		automobilistaDao.setNome(this.Nome);
+		automobilistaDao.setPassword(this.password);
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			if(automobilistaDao.addAtList(tm,auto)) {
+				tm.commitTransaction();
+				return true;
+			}
+			else {
+				return false;
+			}
+		
+			
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+			return false;
+		}
+		
 	}
 
+	public ArrayList<String> OttieniListaAuto() throws SQLException {
+		// TODO Auto-generated method stub
+		AutomobilistaDAO automobilistaDAO=new AutomobilistaDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		ArrayList<String> listaAuto = new ArrayList<String>();
+		try {
+			tm.beginTransaction();
 
+			listaAuto = automobilistaDAO.readList(tm, this.getUsername());
+			tm.commitTransaction();
+			for(int i=0;i<listaAuto.size();i++) {
+				Auto auto= new Auto(listaAuto.get(i));
+				this.ListaAuto.add(auto);
+		}
 
+		}catch (Exception e) {
+			tm.rollbackTransaction();
+			throw new SQLException("Impossibile ottenere Lista.");
+		}
+		return listaAuto;
+		
+
+	}
+		
+	
+		
+	
+
+public Ticket AcquistaTicket(Auto auto, AreaParcheggio area, double Durata) {
+	String OraScadenza="";
+	//Qui devo mandare alla boundary il costo totale del ticket
+	//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
+	//Non lo so, oppure dovrei solo leggere con lo stream?
+	/*
+	 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
+	 * di acquisto avviato
+	 */
+	//Funzionalità orario ecc...
+	boolean OrarioMattina=false;
+	Date date = new Date(); 
+	//utilizzo tale formattazione così da aver una piena corrispondeza con il db
+	//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	String DataString=formatter.format(date).toString();
+	//Le cifre sono intese da sinistra verso destra
+	char Data1=DataString.charAt(8);
+	char Data2=DataString.charAt(9);
+	String data=new StringBuilder().append(Data1).append(Data2).toString();
+	int  DataInt=Integer.parseInt(data);
+	char Cifra1= DataString.charAt(11);
+	char Cifra2=DataString.charAt(12);
+	String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
+	int  OrarioInt=Integer.parseInt(orario);
+	Durata=(int)Durata;
+	int OraScadenzaTicket=(int)Durata+OrarioInt;
+	OraScadenza=Integer.toString(OraScadenzaTicket);
+	if(OraScadenzaTicket<10)
+		OrarioMattina=true;
+	if(OraScadenzaTicket>=24) {
+		//passo al giorno successivo
+		DataInt=DataInt+1;
+		//la  mia base è 24, devo passare ad orario mattutino dopo le 24
+		OraScadenzaTicket=OraScadenzaTicket-24;
+		if(OraScadenzaTicket<10)
+			OrarioMattina=true;
+	}
+	if(OrarioMattina) {
+		OraScadenza=Integer.toString(OraScadenzaTicket);
+		OraScadenza="0"+OraScadenza;
+
+	}
+	Cifra1=OraScadenza.charAt(0);
+	Cifra2=OraScadenza.charAt(1);
+	String DataScadenza=Integer.toString(DataInt);
+	Data1=DataScadenza.charAt(0);
+	Data2=DataScadenza.charAt(1);
+	StringBuilder Scadenza=new StringBuilder();
+	Scadenza.append(DataString);
+	Scadenza.setCharAt(8, Data1);
+	Scadenza.setCharAt(9, Data2);
+	Scadenza.setCharAt(11, Cifra1);
+	Scadenza.setCharAt(12, Cifra2);
+	String ScadenzaTicket=Scadenza.toString();
+	System.out.println(ScadenzaTicket);
+	Ticket ticket= new Ticket(ScadenzaTicket,Durata,auto,area,this);
+	return ticket;
 	
 	
 }
-		
+
+
+public Ticket RinnovaTicket(Ticket ticket, double durata) {
+	String OraScadenza="";
+	//Qui devo mandare alla boundary il costo totale del ticket
+	//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
+	//Non lo so, oppure dovrei solo leggere con lo stream?
+	/*
+	 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
+	 * di acquisto avviato
+	 */
+	//Funzionalità orario ecc...
+	boolean OrarioMattina=false;
+	/*
+	Date date = new Date(); 
+	//utilizzo tale formattazione così da aver una piena corrispondeza con il db
+	//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	*/
+	String DataString=ticket.getScadenzaTicket();
+	//Le cifre sono intese da sinistra verso destra
+	char Data1=DataString.charAt(8);
+	char Data2=DataString.charAt(9);
+	String data=new StringBuilder().append(Data1).append(Data2).toString();
+	int  DataInt=Integer.parseInt(data);
+	char Cifra1= DataString.charAt(11);
+	char Cifra2=DataString.charAt(12);
+	String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
+	int  OrarioInt=Integer.parseInt(orario);
+	durata=(int)durata;
+	int OraScadenzaTicket=(int)durata+OrarioInt;
+	OraScadenza=Integer.toString(OraScadenzaTicket);
+	if(OraScadenzaTicket<10)
+		OrarioMattina=true;
+	if(OraScadenzaTicket>=24) {
+		//passo al giorno successivo
+		DataInt=DataInt+1;
+		//la  mia base è 24, devo passare ad orario mattutino dopo le 24
+		OraScadenzaTicket=OraScadenzaTicket-24;
+		if(OraScadenzaTicket<10)
+			OrarioMattina=true;
+	}
+	if(OrarioMattina) {
+		OraScadenza=Integer.toString(OraScadenzaTicket);
+		OraScadenza="0"+OraScadenza;
+
+	}
+	Cifra1=OraScadenza.charAt(0);
+	Cifra2=OraScadenza.charAt(1);
+	String DataScadenza=Integer.toString(DataInt);
+	Data1=DataScadenza.charAt(0);
+	Data2=DataScadenza.charAt(1);
+	StringBuilder Scadenza=new StringBuilder();
+	Scadenza.append(DataString);
+	Scadenza.setCharAt(8, Data1);
+	Scadenza.setCharAt(9, Data2);
+	Scadenza.setCharAt(11, Cifra1);
+	Scadenza.setCharAt(12, Cifra2);
+	String ScadenzaTicket=Scadenza.toString();
+	System.out.println(ScadenzaTicket);
+	Ticket t= new Ticket(ticket.getIDTicket(),durata, this,ScadenzaTicket);
+	return t;
+}
 	
+}
+		
+
 	
 	
 

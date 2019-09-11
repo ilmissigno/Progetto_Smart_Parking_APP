@@ -62,29 +62,24 @@ public class GestoreAccountImpl implements GestoreAccount {
 	}
 	
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username)  {
-		Auto a = new Auto();
 		Automobilista aut= new Automobilista(username);
 		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
-		if(a.AggiungiAuto(Targa, CFProprietario)) {
+		if(aut.AggiungiAuto(Targa, CFProprietario)) {
 			//Significa che ho aggiunto l'auto
-			if(aut.addAutoAtList(a)) {
-			//ListaAuto.InserisciCorrispondenza(Targa,username)) {
-				//costruttore di scrittura che crea tupla in DB
-				Corrispondenza c =new Corrispondenza(a,aut);	
 				return true;
 			}
 			else { 
 				return false;
 			}
-		}
-		return false;
+		
+		
 	}
 	
 	//vedere...
 	public ArrayList<String> OttieniLista(String username) throws SQLException {
 		Automobilista autom = new Automobilista(username);
-		Corrispondenza c= new Corrispondenza(autom);
-		return c.GetList();
+		return autom.OttieniListaAuto();
+		
 		
 		
 	}

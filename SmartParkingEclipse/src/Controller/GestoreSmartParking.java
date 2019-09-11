@@ -75,7 +75,6 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 
 
 
-
 		//giorno successivo
 		//orarioattuale+durata%24 resto mod 24
 		//}
@@ -176,7 +175,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	public Ticket RinnovaTicket(int IDTicket, double durata, String username, String password,double costoTotale) {
 		// TODO Auto-generated method stub
 			if(account.ControllaConto(username, password, costoTotale)) {
-				Ticket t = ticket.RinnovaTicket(IDTicket, durata, costoTotale, username,password);
+				Ticket t = ticket.RinnovaTicket(IDTicket, durata);
 					if(account.AggiornaConto(username,password,costoTotale)) {
 						return t;
 					}else {

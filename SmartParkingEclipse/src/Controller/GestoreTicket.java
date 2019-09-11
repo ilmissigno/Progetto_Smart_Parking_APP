@@ -10,7 +10,7 @@ public interface GestoreTicket {
 	boolean RinnovoTicket(String Targa,int Durata,int IDTicket,double CostoTicket);
 	int VerificaCopertura(String CodiceArea, String Targa);
 	void AvviaTimer(String username, int iDTicket,DataOutputStream out);
-	Ticket RinnovaTicket(int iDTicket, double durata, double costoTotale, String username, String password);
+	Ticket RinnovaTicket(int iDTicket, double durata);
 	boolean EliminaTicket(int iDTicket);
 	double TrovaRimborso(int IDTicket,String username);
 }
