@@ -372,6 +372,7 @@ public class ProxyAutomobilista implements IAutomobilista{
                 Bundle bundle = new Bundle();
                 bundle.putString("username",username);
                 bundle.putString("password",password);
+                bundle.putBoolean("cancellato",true);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

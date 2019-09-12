@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#54F4F136">
+    android:background="@drawable/parchimetro">
 
     <TextView
         android:id="@+id/textView8"
@@ -17,6 +17,9 @@
         android:text="SmartParkingApp"
         android:textSize="36sp"
         android:textStyle="bold"
+        android:textColorHint="#FFF"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +30,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textColorHint="#FFF"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +48,10 @@
         android:layout_marginBottom="105dp"
         android:gravity="center"
         android:text="Rinnova"
+        android:textAllCaps="false"
+        android:textColorHint="#FFF"
+        android:background="@drawable/button_states"
+        android:textColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

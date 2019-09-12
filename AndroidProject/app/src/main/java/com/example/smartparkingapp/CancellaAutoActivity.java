@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -25,6 +26,7 @@ public class CancellaAutoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_cancella_auto);
         final Spinner listaauto = findViewById(R.id.listaAuto2);
         Button btnCancAuto = findViewById(R.id.btnCancAuto);
@@ -40,7 +42,9 @@ public class CancellaAutoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //Set auto to Spinner
-                        listaauto.setAdapter(new ArrayAdapter<String>(CancellaAutoActivity.this, R.layout.support_simple_spinner_dropdown_item, auto));
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(CancellaAutoActivity.this,R.layout.spinner_item,auto);
+                        arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                        listaauto.setAdapter(arrayAdapter);
                     }
                 });
             }

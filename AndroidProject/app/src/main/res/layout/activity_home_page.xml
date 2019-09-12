@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#54F4F136"
+    android:background="@drawable/parchimetro"
     tools:context=".HomePageActivity">
 
     <TextView
@@ -21,6 +21,9 @@
         android:text="SmartParkingApp"
         android:textSize="36sp"
         android:textStyle="bold"
+        android:textColorHint="#FFF"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +37,9 @@
         android:text=""
         android:textSize="36sp"
         android:textStyle="italic"
+        android:textColorHint="#FFF"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -45,6 +51,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="Acquista Ticket"
+        android:textAllCaps="false"
+        android:textColorHint="#FFF"
+        android:background="@drawable/button_states"
+        android:textColor="#FFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewBenvenuto" />
 
@@ -56,6 +66,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="Aggiungi un Auto"
+        android:textAllCaps="false"
+        android:textColorHint="#FFF"
+        android:background="@drawable/button_states"
+        android:textColor="#FFF"
         app:layout_constraintStart_toEndOf="@+id/btnAcquistaView"
         app:layout_constraintTop_toBottomOf="@+id/textViewBenvenuto" />
 
@@ -64,10 +78,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="25dp"
+        android:background="@drawable/button_states"
         android:text="Carica Conto"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textColorHint="#FFF"
         app:layout_constraintEnd_toStartOf="@+id/btndeleteAuto"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAcquistaView" />
 
@@ -76,8 +95,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="95dp"
+        android:layout_marginEnd="172dp"
+        android:background="@drawable/button_states"
         android:text="Cancella un Auto"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textColorHint="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAggiungiAuto" />
 </android.support.constraint.ConstraintLayout>

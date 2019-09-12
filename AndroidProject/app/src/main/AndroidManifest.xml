@@ -9,26 +9,27 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icona"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/iconacerchio"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CancellaAutoActivity"></activity>
-        <activity android:name=".CaricaContoActivity" />
-        <activity android:name=".RinnovoActivity" />
-        <activity android:name=".TicketInfoActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".AggiungiAuto" />
-        <activity android:name=".HomePageActivity" />
-        <activity android:name=".RegistrazioneActivity" />
-        <activity android:name=".AcquistaTicket" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".CancellaAutoActivity" android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".CaricaContoActivity" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".RinnovoActivity" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".TicketInfoActivity"
+            android:launchMode="singleTop" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".AggiungiAuto" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".HomePageActivity" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".RegistrazioneActivity" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".AcquistaTicket" android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".MainActivity" android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
         <activity
             android:name=".PopupWindow"

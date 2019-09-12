@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AggiungiAuto"
-    android:background="#54F4F136">
+    android:background="@drawable/parchimetro">
 
     <TextView
         android:id="@+id/textView5"
@@ -19,6 +19,8 @@
         android:editable="false"
         android:gravity="center"
         android:text="SmartParkingApp"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +39,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:hint="Targa"
+        android:textColorHint="#FFF"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -51,6 +56,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:hint="Codice Fiscale del Proprietario"
+        android:textColorHint="#FFF"
+        android:background="#663F51B5"
+        android:textColor="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/targaAuto" />
@@ -64,6 +72,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Inserisci Auto"
+        android:textAllCaps="false"
+        android:textColorHint="#FFF"
+        android:background="@drawable/button_states"
+        android:textColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cfProprietario"

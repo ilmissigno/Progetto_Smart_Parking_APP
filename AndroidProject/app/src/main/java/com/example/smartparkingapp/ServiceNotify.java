@@ -52,7 +52,7 @@ public class ServiceNotify extends Service {
         Notification notification = new NotificationCompat.Builder(this, "SmartParkingNotifica")
                 .setContentTitle("Info Ticket")
                 .setContentText("Info Ticket: ID: "+IDTicket+"\n Targa:"+Targa+"\n CodiceArea: "+CodiceArea+"\n Data Scadenza: "+DataScadenza)
-                .setSmallIcon(R.drawable.ic_android)
+                .setSmallIcon(R.drawable.ic_stat_directions_car)
                 .setContentIntent(pendingIntent)
                 .build();
 
