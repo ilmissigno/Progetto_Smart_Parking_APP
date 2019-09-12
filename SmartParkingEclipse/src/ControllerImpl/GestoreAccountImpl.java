@@ -50,19 +50,19 @@ public class GestoreAccountImpl implements GestoreAccount {
 			return false;
 		}
 	}
-
+/*
 	@Override
 	public boolean CaricaConto(String username ,String password,double Importo) {
 		Automobilista a = new Automobilista(username,password);
-		if(a.CaricaConto(Importo)) {
+		if(a.AggiornaConto(-Importo)) {
 			return true;
 		}else {
 			return false;
 		}
-	}
+	}*/
 	
-	public boolean AggiungiAuto(String Targa,String CFProprietario,String username)  {
-		Automobilista aut= new Automobilista(username);
+	public boolean AggiungiAuto(String Targa,String CFProprietario,String username, String password)  {
+		Automobilista aut= new Automobilista(username, password);
 		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
 		if(aut.AggiungiAuto(Targa, CFProprietario)) {
 			//Significa che ho aggiunto l'auto
@@ -76,17 +76,17 @@ public class GestoreAccountImpl implements GestoreAccount {
 	}
 	
 	//vedere...
-	public ArrayList<String> OttieniLista(String username) throws SQLException {
-		Automobilista autom = new Automobilista(username);
+	public ArrayList<String> OttieniLista(String username, String password) throws SQLException {
+		Automobilista autom = new Automobilista(username,password);
 		return autom.OttieniListaAuto();
 		
 		
 		
 	}
 
-	public boolean EliminaAuto(String targa,String username) {
+	public boolean EliminaAuto(String targa,String username,String password) {
 		// TODO Auto-generated method stub
-		Automobilista autom = new Automobilista(username);
+		Automobilista autom = new Automobilista(username,password);
 		Auto auto = new Auto(targa);
 			Corrispondenza c=new Corrispondenza(auto,autom);
 				if(c.EliminaCorrispondenza()) {
@@ -99,12 +99,12 @@ public class GestoreAccountImpl implements GestoreAccount {
 	
 	}
 
-
+//RISOLTO
 	@Override
 	public double getConto(String username, String password) {
 		// TODO Auto-generated method stub
-		Automobilista u = new Automobilista();
-		return u.getConto(username,password);
+		Automobilista u = new Automobilista(username,password);
+		return u.getCredito();
 		
 	}
 	

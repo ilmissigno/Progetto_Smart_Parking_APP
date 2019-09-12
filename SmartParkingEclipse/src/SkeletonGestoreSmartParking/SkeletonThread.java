@@ -99,8 +99,9 @@ public class SkeletonThread extends Thread{
 					String targa = in.readUTF();
 					String CFProprietario=in.readUTF();
 					String username = in.readUTF();
+					String password = in.readUTF();
 					System.out.println("\nSkeletonThread : username = "+username+" targa = "+targa+" CF= "+CFProprietario);
-					if(iserver.AggiungiAuto(targa,CFProprietario, username)) {
+					if(iserver.AggiungiAuto(targa,CFProprietario, username, password)) {
 						out.writeBoolean(true);
 						out.flush();
 					}else {
@@ -112,8 +113,9 @@ public class SkeletonThread extends Thread{
 				
 				case "caricaautosend":{
 					String username = in.readUTF();
+					String password = in.readUTF();
 					System.out.println("\nSkeletonThread : username = "+username);
-					ArrayList<String> listaAuto = iserver.OttieniListaAuto(username);
+					ArrayList<String> listaAuto = iserver.OttieniListaAuto(username,password);
 					out.writeBoolean(true);
 					out.flush();
 					out.writeInt(listaAuto.size());
@@ -199,7 +201,8 @@ public class SkeletonThread extends Thread{
 				case "deleteautosend":{ 
 					String Targa=in.readUTF();
 					String username=in.readUTF();
-					if(iserver.EliminaAuto(Targa,username)) {
+					String password=in.readUTF();
+					if(iserver.EliminaAuto(Targa,username,password)) {
 						out.writeBoolean(true);
 						out.flush();
 					}else {

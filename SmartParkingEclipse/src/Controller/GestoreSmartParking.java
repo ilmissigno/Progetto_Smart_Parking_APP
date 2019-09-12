@@ -143,8 +143,8 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 	}
 	
-	public boolean AggiungiAuto(String Targa, String CFProprietario, String username){
-		if(account.AggiungiAuto(Targa,CFProprietario,username)) {
+	public boolean AggiungiAuto(String Targa, String CFProprietario, String username, String password){
+		if(account.AggiungiAuto(Targa,CFProprietario,username, password)) {
 			return true;
 		}else {
 			return false;
@@ -153,7 +153,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}
 
 	
-	public ArrayList<String> OttieniListaAuto(String username) throws SQLException {
+	public ArrayList<String> OttieniListaAuto(String username, String password) throws SQLException {
 		ArrayList<String> listaAuto;
 		try {
 			listaAuto = new ArrayList<String>();
@@ -161,7 +161,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		listaAuto=account.OttieniLista(username);
+		listaAuto=account.OttieniLista(username,password);
 		return listaAuto;
 	}
 		
@@ -188,7 +188,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 
 	@Override
 	public boolean CaricaConto(String username,String password ,double Importo) {
-			if(account.CaricaConto(username, password,Importo)) {
+			if(account.AggiornaConto(username, password,-Importo)) {
 				return true;
 			}else {
 				return false;
@@ -206,9 +206,9 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	}
 
 	@Override
-	public boolean EliminaAuto(String targa,String username) {
+	public boolean EliminaAuto(String targa,String username,String password) {
 		// TODO Auto-generated method stub
-			if(account.EliminaAuto(targa,username)) {
+			if(account.EliminaAuto(targa,username,password)) {
 				return true;
 			}else {
 				return false;
@@ -225,7 +225,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	public boolean ArrestaSosta(int IDTicket, String username, String password) {	
 		double ImportoRimborso=ticket.TrovaRimborso(IDTicket,username);
 		if(ticket.EliminaTicket(IDTicket)) {
-			if(account.CaricaConto(username, password, ImportoRimborso)) {
+			if(account.AggiornaConto(username, password, -ImportoRimborso)) {
 				return true;
 			}else {
 				return false;

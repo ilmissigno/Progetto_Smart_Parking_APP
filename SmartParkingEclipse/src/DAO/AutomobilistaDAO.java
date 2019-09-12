@@ -91,7 +91,7 @@ public class AutomobilistaDAO extends UtenteDAO{
 		}
 }
 	}
-
+	
 	public void readAutomobilista(TransactionManager tm,String username,String password) throws SQLException  {
 		// TODO Auto-generated method stub
 		tm.assertInTransaction();
@@ -114,8 +114,10 @@ public class AutomobilistaDAO extends UtenteDAO{
 			}
 	}
 	}
+	
+/*
 		public void readAutomobilista(TransactionManager tm,String username) throws SQLException  {
-			// TODO Auto-generated method stub
+	
 			tm.assertInTransaction();
 			try (PreparedStatement pt = tm.getConnection()
 					.prepareStatement("SELECT * FROM automobilisti WHERE Username=?")) {
@@ -136,7 +138,7 @@ public class AutomobilistaDAO extends UtenteDAO{
 		}
 		
 	}
-		
+		*/
 	public boolean addAtList(TransactionManager tm,Auto auto) throws SQLException{
 		
 		

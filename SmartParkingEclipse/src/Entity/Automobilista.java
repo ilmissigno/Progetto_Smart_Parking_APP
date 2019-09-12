@@ -20,7 +20,7 @@ private ArrayList<Auto> ListaAuto;
 	public Automobilista() {
 		
 	}
-	
+
 	public Automobilista(String username, String Password) {
 		this.ListaAuto = new ArrayList<Auto>();
 		AutomobilistaDAO autoDAO=new AutomobilistaDAO();
@@ -42,8 +42,9 @@ private ArrayList<Auto> ListaAuto;
 	}
 	}
 	
+	/*
 	public Automobilista(String username) {
-		/*1 aggiusto*/
+		
 		this.ListaAuto = new ArrayList<Auto>();
 		AutomobilistaDAO autoDAO=new AutomobilistaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -65,13 +66,13 @@ private ArrayList<Auto> ListaAuto;
 	}
 	}
 	
-	
+	*/
 	public double getCredito() {
 		return Credito;
 	}
 
 	public void setCredito(double credito) {
-		Credito = credito;
+		this.Credito = credito;
 	}
 	
 	public ArrayList<Auto> getListaAuto() {
@@ -79,9 +80,9 @@ private ArrayList<Auto> ListaAuto;
 	}
 
 	public void setListaAuto(ArrayList<Auto> listaAuto) {
-		ListaAuto = listaAuto;
+		this.ListaAuto = listaAuto;
 	}
-	
+	/*
 	public double getConto(String username,String password) {
 		AutomobilistaDAO auto = new AutomobilistaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -98,7 +99,7 @@ private ArrayList<Auto> ListaAuto;
 			return -1;
 		}
 	}
-	
+	*/
 	public boolean AggiornaConto(double CostoTotale) {
 		AutomobilistaDAO auto = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -118,7 +119,7 @@ private ArrayList<Auto> ListaAuto;
 			return false;
 		}
 	}
-	
+/*	
 	public boolean CaricaConto(double Importo) {
 		AutomobilistaDAO auto = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -139,7 +140,7 @@ private ArrayList<Auto> ListaAuto;
 			return false;
 		}
 	}
-	
+	*/
 
 	public boolean AggiungiAuto(String targa, String CFProprietario) {
 		// TODO Auto-generated method stub
