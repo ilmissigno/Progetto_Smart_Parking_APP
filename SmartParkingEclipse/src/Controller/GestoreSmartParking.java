@@ -208,11 +208,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 	@Override
 	public boolean EliminaAuto(String targa,String username,String password) {
 		// TODO Auto-generated method stub
-			if(account.EliminaAuto(targa,username,password)) {
-				return true;
-			}else {
-				return false;
-			}
+			
 	}
 
 	@Override

@@ -323,7 +323,29 @@ public void RinnovaTicket( Ticket t, double durata) {
 	t.setScadenzaTicket(ScadenzaTicket);
 	t.AggiornaTicket();
 }
-	
+
+
+public boolean EliminaTicket(int IDTicket) {
+	// TODO Auto-generated method stub
+		TicketDAO ticket = new TicketDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			if(ticket.deleteTicket(tm,IDTicket)) {
+				tm.commitTransaction();
+				return true;
+			}else {
+				return false;
+			}
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+			return false;
+		}
+}
+	public boolean EliminaAuto(String targa,String username,String password) {
+		return false;
+		
+	}
 }
 		
 

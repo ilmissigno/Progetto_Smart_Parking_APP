@@ -85,19 +85,14 @@ public class GestoreAccountImpl implements GestoreAccount {
 	}
 
 	public boolean EliminaAuto(String targa,String username,String password) {
+		return false;
 		// TODO Auto-generated method stub
-		Automobilista autom = new Automobilista(username,password);
-		Auto auto = new Auto(targa);
-			Corrispondenza c=new Corrispondenza(auto,autom);
-				if(c.EliminaCorrispondenza()) {
-					return true;
-				}
-				else { return false;
+		
 					
 				}
 			
 	
-	}
+	
 
 //RISOLTO
 	@Override

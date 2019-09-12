@@ -12,8 +12,6 @@ public class Auto {
 	private String Proprietario;
 	//posso anche toglierli?
 	private ArrayList<Ticket> listaTicket;
-	private ArrayList<Multa> listaMulte;
-
 	
 	
 	public Auto() {
@@ -101,17 +99,6 @@ public class Auto {
 		this.listaTicket.add(t);
 	}
 
-	public ArrayList<Multa> getListaMulte() {
-		return listaMulte;
-	}
-
-	public void setListaMulte(ArrayList<Multa> listaMulte) {
-		this.listaMulte = listaMulte;
-	}
-	
-	public void addMulta(Multa m) {
-		this.listaMulte.add(m);
-	}
 	
 	
 	

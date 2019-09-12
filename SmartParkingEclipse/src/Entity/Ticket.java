@@ -182,23 +182,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 
 	
 
-	public boolean EliminaTicket(int IDTicket) {
-		// TODO Auto-generated method stub
-			TicketDAO ticket = new TicketDAO();
-			TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-			try {
-				tm.beginTransaction();
-				if(ticket.deleteTicket(tm,IDTicket)) {
-					tm.commitTransaction();
-					return true;
-				}else {
-					return false;
-				}
-			}catch(Exception e) {
-				tm.rollbackTransaction();
-				return false;
-			}
-	}
+	
 	
 
 	public void AggiornaTicket () {

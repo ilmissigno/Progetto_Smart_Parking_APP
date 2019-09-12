@@ -110,7 +110,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 			}
 				
 		}
-		if(listaTicket.get(i).EliminaTicket(IDTicket)) {
+		if(listaTicket.get(i).getAutomobilista().EliminaTicket(IDTicket)) {
 			listaTicket.get(i).getTimer().cancel();
 			listaTicket.get(i).getTimer().purge();
 			listaTicket.remove(i);

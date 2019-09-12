@@ -13,6 +13,6 @@ public interface GestoreAccount {
 	//boolean CaricaConto(String username, String password ,double Importo);
 	boolean AggiungiAuto(String Targa,String CFProprietario, String username, String password);
 	ArrayList<String> OttieniLista(String username, String password) throws SQLException;
-	boolean EliminaAuto(String targa, String username, String password);
+	boolean EliminaAuto(String targa, String username, String password); 
 	boolean ControllaConto(String username, String password, double CostoTotale);
 }
