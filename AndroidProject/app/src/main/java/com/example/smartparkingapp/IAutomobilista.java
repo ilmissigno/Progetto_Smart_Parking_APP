@@ -8,7 +8,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public interface IAutomobilista {
-    ArrayList<String> getListaAuto(String username);
+    ArrayList<String> getListaAuto(String username, String password);
     double calcolaCosto(String codiceArea, double Durata);
     void acquistaTicket(Spinner listaAuto, String codiceArea, double Durata, double CostoTicket, final String Username, final String Password, Handler handler, Context acquistaActivity);
     void addAuto(String Targa, String CF , final String username,final String password, Handler handler, Context aggiungiAutoActivity);

@@ -1,5 +1,6 @@
 package com.example.smartparkingapp;
 
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;

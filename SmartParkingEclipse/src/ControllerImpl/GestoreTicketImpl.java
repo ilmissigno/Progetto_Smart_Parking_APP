@@ -38,7 +38,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 		//Costruttore per la creazione di un ticket
 		//l'auto ed il codice Area devono esistere gi� prima del ticket
 		//penso che devo crearmi prima l'oggetto auto e quello areaParcheggio
-		Automobilista automobilista= new Automobilista(username);
+		Automobilista automobilista= new Automobilista(username,password);
 		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
 		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
 		

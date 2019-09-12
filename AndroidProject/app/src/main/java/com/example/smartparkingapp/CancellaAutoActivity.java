@@ -35,7 +35,7 @@ public class CancellaAutoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 ProxyAutomobilista proxyAutomobilista = new ProxyAutomobilista();
-                final ArrayList<String> auto = proxyAutomobilista.getListaAuto(Username);
+                final ArrayList<String> auto = proxyAutomobilista.getListaAuto(Username,Password);
                 handler.post(new Runnable() {
                     @Override
                     public void run() {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class ProxyAutomobilista implements IAutomobilista{
 
     @Override
-    public ArrayList<String> getListaAuto(String username) {
+    public ArrayList<String> getListaAuto(String username,String password) {
         SocketHandler socketHandler = new SocketHandler();
         Socket s = socketHandler.getSocket();
         DataOutputStream out = socketHandler.getOutputStream();
@@ -34,6 +35,8 @@ public class ProxyAutomobilista implements IAutomobilista{
             out.writeUTF("caricaautosend");
             out.flush();
             out.writeUTF(username);
+            out.flush();
+            out.writeUTF(password);
             out.flush();
             final boolean ok = in.readBoolean();
             int listaAutosize = in.readInt();
@@ -158,6 +161,8 @@ public class ProxyAutomobilista implements IAutomobilista{
             out.flush();
             out.writeUTF(username);
             out.flush();
+            out.writeUTF(password);
+            out.flush();
             final boolean confirm = in.readBoolean();
             handler.post(new Runnable() {
                 @Override
@@ -200,6 +205,8 @@ public class ProxyAutomobilista implements IAutomobilista{
             out.writeUTF(listaAuto.getSelectedItem().toString().trim());
             out.flush();
             out.writeUTF(username);
+            out.flush();
+            out.writeUTF(password);
             out.flush();
             final boolean confirm = in.readBoolean();
             handler.post(new Runnable() {
