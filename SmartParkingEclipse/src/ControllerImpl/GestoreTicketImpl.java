@@ -71,7 +71,7 @@ public class GestoreTicketImpl implements GestoreTicket{
 		for( i=0;i<listaTicket.size();i++) {
 			
 			if(listaTicket.get(i).getIDTicket()==IDTicket) {
-				durata= listaTicket.get(i).AvviaTimer();
+				durata= listaTicket.get(i).getDurata();
 				break;
 			}
 				
@@ -93,7 +93,9 @@ public class GestoreTicketImpl implements GestoreTicket{
 				
 		}
 		System.out.println(listaTicket.get(i).getIDTicket());
-		return listaTicket.get(i).getAutomobilista().RinnovaTicket(IDTicket, durata);
+		
+		 listaTicket.get(i).getAutomobilista().RinnovaTicket(listaTicket.get(i), durata);
+		 return listaTicket.get(i);
 	}
 
 	@Override

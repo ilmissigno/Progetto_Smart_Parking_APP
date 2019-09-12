@@ -257,7 +257,7 @@ public Ticket AcquistaTicket(Auto auto, AreaParcheggio area, double Durata) {
 }
 
 
-public Ticket RinnovaTicket(int IDTicket, double durata) {
+public void RinnovaTicket( Ticket t, double durata) {
 	String OraScadenza="";
 	//Qui devo mandare alla boundary il costo totale del ticket
 	//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
@@ -274,7 +274,7 @@ public Ticket RinnovaTicket(int IDTicket, double durata) {
 	//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
 	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	*/
-	Ticket t = new Ticket(IDTicket,this.getUsername());
+	//Ticket t = new Ticket(IDTicket,this.getUsername());
 	String DataString=t.getScadenzaTicket();
 	//Le cifre sono intese da sinistra verso destra
 	char Data1=DataString.charAt(8);
@@ -316,8 +316,12 @@ public Ticket RinnovaTicket(int IDTicket, double durata) {
 	Scadenza.setCharAt(12, Cifra2);
 	String ScadenzaTicket=Scadenza.toString();
 	System.out.println(ScadenzaTicket);
-	Ticket tick= new Ticket(t.getIDTicket(),durata, this,ScadenzaTicket);
-	return tick;
+	//Ticket tick= new Ticket(t.getIDTicket(),durata, this,ScadenzaTicket);
+	//return tick;
+	t.setDurata(durata);
+	t.setIDTicket(t.getIDTicket());
+	t.setScadenzaTicket(ScadenzaTicket);
+	t.AggiornaTicket();
 }
 	
 }

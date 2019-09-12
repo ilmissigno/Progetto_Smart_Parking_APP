@@ -36,26 +36,7 @@ public Ticket() {
 		
 	}
 
-public Ticket (int IDTicket, double durata, Automobilista automobilista, String ScadenzaTicket) {
 
-	TicketDAO ticket = new TicketDAO();
-	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-	try {
-		tm.beginTransaction();
-		if(ticket.updateTicket(tm, IDTicket,ScadenzaTicket, durata)) {
-			tm.commitTransaction();
-			this.setDurata(durata);
-			this.setAutomobilista(automobilista);;
-			this.setScadenzaTicket(ScadenzaTicket);
-			this.setIDTicket(IDTicket);
-			
-		}else {
-			
-		}
-	}catch(Exception e) {
-		tm.rollbackTransaction();
-	}
-}
 public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area, Automobilista automobilista) {
 
 	TicketDAO ticket = new TicketDAO();
@@ -220,7 +201,26 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	}
 	
 
+	public void AggiornaTicket () {
 
+		TicketDAO ticket = new TicketDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			if(ticket.updateTicket(tm, this.IDTicket,this.ScadenzaTicket, this.Durata)) {
+				tm.commitTransaction();
+				this.setDurata(this.Durata);
+				this.setAutomobilista(automobilista);;
+				this.setScadenzaTicket(ScadenzaTicket);
+				this.setIDTicket(IDTicket);
+				
+			}else {
+				
+			}
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+		}
+	}
 	
 }
 	
