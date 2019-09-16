@@ -219,13 +219,24 @@ public class SkeletonThread extends Thread{
 					if(iserver.ArrestaSosta(IDTicket,username,password)) {
 						out.writeBoolean(true);
 						out.flush();
-					}else {
-						out.writeBoolean(false);
-						out.flush();
 					}
 					break;
 				}
+			
+			//fatta molto in fretta ->utilizzo un banale ciclo for
+				//nella lista memorizzata nel sys
+				//senza passare per il DB
+		case "DisponibilitaSend":{ 
+			int CodiceArea=in.readInt();
+			int PostiDisponibili =iserver.OttieniDisponibilita( CodiceArea);
+			out.writeBoolean(true);
+			out.flush();
+			out.writeInt(PostiDisponibili);
+				out.flush();
 			}
+			break;
+		}
+	
 		}catch(IOException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

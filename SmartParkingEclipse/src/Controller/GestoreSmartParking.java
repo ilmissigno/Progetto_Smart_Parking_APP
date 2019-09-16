@@ -81,9 +81,14 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		//verifico il conto
 		//Ticket t = new Ticket();
 		if(account.ControllaConto(username, password,costoTotale)) {
+			
 		Ticket	t = ticket.ConfermaTicket(targa, codiceArea, Durata, costoTotale, username,password);
 			if(account.AggiornaConto(username,password,costoTotale)) {
-				return t;
+				if(ticket.AggiornaDisponibilita(Integer.parseInt(codiceArea),"acquista")) {
+					return t;
+				}else {
+					return null;
+				}
 			}else {
 				return null;
 			}
@@ -149,6 +154,7 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}else {
 			return false;
 		}
+		
 			
 		}
 
@@ -229,6 +235,13 @@ public class GestoreSmartParking  extends SkeletonServer implements IGestoreSmar
 		}else {
 			return false;
 		}
+	}
+	  //Fittizia fatta velocemente
+	public int OttieniDisponibilita(int codiceArea){
+		return ticket.OttieniDisponibilita(codiceArea);
+		
+		
+		
 	}
 }
 	

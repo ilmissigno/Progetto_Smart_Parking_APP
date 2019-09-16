@@ -7,10 +7,11 @@ import Entity.Ticket;
 public interface GestoreTicket {
 	double OttieniCostoTicket(int CodiceArea, double Durata);
 	Ticket ConfermaTicket(String Targa,String CodiceArea,double Durata,double CostoTicket,String username,String password);
-	boolean RinnovoTicket(String Targa,int Durata,int IDTicket,double CostoTicket);
 	int VerificaCopertura(String CodiceArea, String Targa);
 	void AvviaTimer(String username, int iDTicket,DataOutputStream out);
 	Ticket RinnovaTicket(int iDTicket, double durata);
 	boolean EliminaTicket(int iDTicket);
 	double TrovaRimborso(int IDTicket,String username);
+	int OttieniDisponibilita(int codiceArea);
+	boolean AggiornaDisponibilita(int codiceArea,String tipo);
 }

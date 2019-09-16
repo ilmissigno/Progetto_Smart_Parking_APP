@@ -24,7 +24,7 @@ public class Auto {
 		try {
 			tm.beginTransaction();
 			if(aut.readAuto(tm,Targa)) {
-				//ok significa che l'auto ï¿½ giï¿½ inserita, devo inserire o meno la corrispondenza
+				//ok significa che l'auto è già inserita, devo inserire o meno la corrispondenza
 				tm.commitTransaction();
 				this.setTarga(aut.getTarga());
 				this.setProprietario(aut.getProprietario());

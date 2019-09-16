@@ -44,7 +44,7 @@ public class GestoreAccountImpl implements GestoreAccount {
 	@Override
 	public boolean AggiornaConto(String username, String password, double CostoTotale) {
 		Automobilista u = new Automobilista(username,password);
-		if(u.AggiornaConto(CostoTotale)) {
+		if(u.AggiornaContoInDB(CostoTotale)) {
 			return true;
 		}else {
 			return false;
@@ -60,11 +60,12 @@ public class GestoreAccountImpl implements GestoreAccount {
 			return false;
 		}
 	}*/
-	
+	//modificata
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username, String password)  {
 		Automobilista aut= new Automobilista(username, password);
+		Auto auto= new Auto(Targa,CFProprietario); //così l'auto è aggiunta a  DB
 		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
-		if(aut.AggiungiAuto(Targa, CFProprietario)) {
+		if(aut.AggiungiAutoAtList(Targa, CFProprietario,auto)) {
 			//Significa che ho aggiunto l'auto
 				return true;
 			}

@@ -11,6 +11,7 @@ public class AreaParcheggioDAO {
 
 	private ArrayList<Ticket> listaTicket;
 	private int CodiceArea;
+	private int Disponibilita;
 	private double CostoTicket;
 	
 	public AreaParcheggioDAO() {
@@ -23,6 +24,14 @@ public class AreaParcheggioDAO {
 
 	public void setCodiceArea(int codiceArea) {
 		CodiceArea = codiceArea;
+	}
+
+	public int getDisponibilita() {
+		return Disponibilita;
+	}
+
+	public void setDisponibilita(int disponibilita) {
+		Disponibilita = disponibilita;
 	}
 
 	public double getCostoTicket() {
@@ -53,9 +62,18 @@ public class AreaParcheggioDAO {
 		
 	}
 	
-	public static String updateAreaParcheggio() {
-		return null;
-		
+	public boolean updateAreaParcheggio(TransactionManager tm, int disponibilita) throws SQLException {
+		tm.assertInTransaction();
+		try(PreparedStatement pt = tm.getConnection().prepareStatement("UPDATE areaparcheggio SET disponibilita=? WHERE CodiceArea=?")){
+			pt.setInt(1, disponibilita);
+			pt.setInt(2, this.getCodiceArea());
+			if(pt.executeUpdate()==1) {
+				this.setDisponibilita(disponibilita);
+				return true;
+			}else {
+				return false;
+			}
+		}
 	}
 	
 	public void readAreaParcheggio(TransactionManager tm,int CodiceArea) throws SQLException{
@@ -65,6 +83,7 @@ public class AreaParcheggioDAO {
 			try(ResultSet rs = pt.executeQuery()){
 				if(rs.next()==true) {
 					this.setCodiceArea(CodiceArea);
+					this.setDisponibilita(rs.getInt("disponibilita"));
 					this.setCostoTicket(rs.getDouble("CostoOrario"));
 					this.setListTicket(null);
 				}

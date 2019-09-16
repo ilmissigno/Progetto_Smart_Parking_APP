@@ -100,7 +100,7 @@ private ArrayList<Auto> ListaAuto;
 		}
 	}
 	*/
-	public boolean AggiornaConto(double CostoTotale) {
+	public boolean AggiornaContoInDB(double CostoTotale) {
 		AutomobilistaDAO auto = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
@@ -142,9 +142,8 @@ private ArrayList<Auto> ListaAuto;
 	}
 	*/
 
-	public boolean AggiungiAuto(String targa, String CFProprietario) {
+	public boolean AggiungiAutoAtList(String targa, String CFProprietario, Auto auto) {
 		// TODO Auto-generated method stub
-		Auto auto=new Auto(targa,CFProprietario);
 		//this.ListaAuto.add(auto);
 		AutomobilistaDAO automobilista = new AutomobilistaDAO(this.getUsername(),this.getPassword());
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -189,159 +188,9 @@ private ArrayList<Auto> ListaAuto;
 		
 
 	}
-		
-	
-		
-	
-
-public Ticket AcquistaTicket(Auto auto, AreaParcheggio area, double Durata) {
-	String OraScadenza="";
-	//Qui devo mandare alla boundary il costo totale del ticket
-	//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
-	//Non lo so, oppure dovrei solo leggere con lo stream?
-	/*
-	 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
-	 * di acquisto avviato
-	 */
-	//Funzionalità orario ecc...
-	boolean OrarioMattina=false;
-	Date date = new Date(); 
-	//utilizzo tale formattazione così da aver una piena corrispondeza con il db
-	//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	String DataString=formatter.format(date).toString();
-	//Le cifre sono intese da sinistra verso destra
-	char Data1=DataString.charAt(8);
-	char Data2=DataString.charAt(9);
-	String data=new StringBuilder().append(Data1).append(Data2).toString();
-	int  DataInt=Integer.parseInt(data);
-	char Cifra1= DataString.charAt(11);
-	char Cifra2=DataString.charAt(12);
-	String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
-	int  OrarioInt=Integer.parseInt(orario);
-	Durata=(int)Durata;
-	int OraScadenzaTicket=(int)Durata+OrarioInt;
-	OraScadenza=Integer.toString(OraScadenzaTicket);
-	if(OraScadenzaTicket<10)
-		OrarioMattina=true;
-	if(OraScadenzaTicket>=24) {
-		//passo al giorno successivo
-		DataInt=DataInt+1;
-		//la  mia base è 24, devo passare ad orario mattutino dopo le 24
-		OraScadenzaTicket=OraScadenzaTicket-24;
-		if(OraScadenzaTicket<10)
-			OrarioMattina=true;
-	}
-	if(OrarioMattina) {
-		OraScadenza=Integer.toString(OraScadenzaTicket);
-		OraScadenza="0"+OraScadenza;
-
-	}
-	Cifra1=OraScadenza.charAt(0);
-	Cifra2=OraScadenza.charAt(1);
-	String DataScadenza=Integer.toString(DataInt);
-	Data1=DataScadenza.charAt(0);
-	Data2=DataScadenza.charAt(1);
-	StringBuilder Scadenza=new StringBuilder();
-	Scadenza.append(DataString);
-	Scadenza.setCharAt(8, Data1);
-	Scadenza.setCharAt(9, Data2);
-	Scadenza.setCharAt(11, Cifra1);
-	Scadenza.setCharAt(12, Cifra2);
-	String ScadenzaTicket=Scadenza.toString();
-	System.out.println(ScadenzaTicket);
-	Ticket t= new Ticket(ScadenzaTicket,Durata,auto,area,this);
-	return t;
-	
-	
-}
 
 
-public void RinnovaTicket( Ticket t, double durata) {
-	String OraScadenza="";
-	//Qui devo mandare alla boundary il costo totale del ticket
-	//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
-	//Non lo so, oppure dovrei solo leggere con lo stream?
-	/*
-	 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
-	 * di acquisto avviato
-	 */
-	//Funzionalità orario ecc...
-	boolean OrarioMattina=false;
-	/*
-	Date date = new Date(); 
-	//utilizzo tale formattazione così da aver una piena corrispondeza con il db
-	//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	*/
-	//Ticket t = new Ticket(IDTicket,this.getUsername());
-	String DataString=t.getScadenzaTicket();
-	//Le cifre sono intese da sinistra verso destra
-	char Data1=DataString.charAt(8);
-	char Data2=DataString.charAt(9);
-	String data=new StringBuilder().append(Data1).append(Data2).toString();
-	int  DataInt=Integer.parseInt(data);
-	char Cifra1= DataString.charAt(11);
-	char Cifra2=DataString.charAt(12);
-	String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
-	int  OrarioInt=Integer.parseInt(orario);
-	durata=(int)durata;
-	int OraScadenzaTicket=(int)durata+OrarioInt;
-	OraScadenza=Integer.toString(OraScadenzaTicket);
-	if(OraScadenzaTicket<10)
-		OrarioMattina=true;
-	if(OraScadenzaTicket>=24) {
-		//passo al giorno successivo
-		DataInt=DataInt+1;
-		//la  mia base è 24, devo passare ad orario mattutino dopo le 24
-		OraScadenzaTicket=OraScadenzaTicket-24;
-		if(OraScadenzaTicket<10)
-			OrarioMattina=true;
-	}
-	if(OrarioMattina) {
-		OraScadenza=Integer.toString(OraScadenzaTicket);
-		OraScadenza="0"+OraScadenza;
 
-	}
-	Cifra1=OraScadenza.charAt(0);
-	Cifra2=OraScadenza.charAt(1);
-	String DataScadenza=Integer.toString(DataInt);
-	Data1=DataScadenza.charAt(0);
-	Data2=DataScadenza.charAt(1);
-	StringBuilder Scadenza=new StringBuilder();
-	Scadenza.append(DataString);
-	Scadenza.setCharAt(8, Data1);
-	Scadenza.setCharAt(9, Data2);
-	Scadenza.setCharAt(11, Cifra1);
-	Scadenza.setCharAt(12, Cifra2);
-	String ScadenzaTicket=Scadenza.toString();
-	System.out.println(ScadenzaTicket);
-	//Ticket tick= new Ticket(t.getIDTicket(),durata, this,ScadenzaTicket);
-	//return tick;
-	t.setDurata(durata);
-	t.setIDTicket(t.getIDTicket());
-	t.setScadenzaTicket(ScadenzaTicket);
-	t.AggiornaTicket();
-}
-
-
-public boolean EliminaTicket(int IDTicket) {
-	// TODO Auto-generated method stub
-		TicketDAO ticket = new TicketDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			if(ticket.deleteTicket(tm,IDTicket)) {
-				tm.commitTransaction();
-				return true;
-			}else {
-				return false;
-			}
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-			return false;
-		}
-}
 	public boolean EliminaAuto(String targa,String username,String password) {
 		return false;
 		

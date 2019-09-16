@@ -94,6 +94,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	}
 	
 
+
 	public int getIDTicket() {
 		return IDTicket;
 	}
@@ -185,7 +186,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	
 	
 
-	public void AggiornaTicket () {
+	public void SalvaTicketInDB () {
 
 		TicketDAO ticket = new TicketDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -204,6 +205,24 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 		}
+	}
+	
+	public boolean EliminaTicketdaDB(int IDTicket) {
+		// TODO Auto-generated method stub
+			TicketDAO ticket = new TicketDAO();
+			TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+			try {
+				tm.beginTransaction();
+				if(ticket.deleteTicket(tm,IDTicket)) {
+					tm.commitTransaction();
+					return true;
+				}else {
+					return false;
+				}
+			}catch(Exception e) {
+				tm.rollbackTransaction();
+				return false;
+			}
 	}
 	
 }

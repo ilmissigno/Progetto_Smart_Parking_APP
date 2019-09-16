@@ -42,20 +42,18 @@ public class GestoreTicketImpl implements GestoreTicket{
 		Auto auto=new Auto(Targa); //in questo costruttore leggo l' auto
 		AreaParcheggio area = new AreaParcheggio(Integer.parseInt(CodiceArea));
 		
-		//Ticket ticket = new Ticket();
+		
 		 //ticket.AcquistaTicket(auto,area,Durata,username,password);
-	Ticket ticket=	automobilista.AcquistaTicket(auto,area,Durata);
+		String ScadenzaTicket=OttieniDataScadenzaTicket(auto,area,Durata);
+				Ticket ticket = new Ticket(ScadenzaTicket,Durata,auto,area,automobilista);
 		System.out.println(ticket.getAutomobilista().getUsername());
 		 listaTicket.add(ticket);
 		 return ticket;
 		 
 	}
 
-	@Override
-	public boolean RinnovoTicket(String Targa, int Durata, int IDTicket, double CostoTicket) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
+	
 
 	@Override
 	public int VerificaCopertura(String CodiceArea, String targa) {
@@ -94,7 +92,8 @@ public class GestoreTicketImpl implements GestoreTicket{
 		}
 		System.out.println(listaTicket.get(i).getIDTicket());
 		
-		 listaTicket.get(i).getAutomobilista().RinnovaTicket(listaTicket.get(i), durata);
+		DeterminaNuovaDataScadenza(listaTicket.get(i), durata);
+		listaTicket.get(i).SalvaTicketInDB();
 		 return listaTicket.get(i);
 	}
 
@@ -110,11 +109,15 @@ public class GestoreTicketImpl implements GestoreTicket{
 			}
 				
 		}
-		if(listaTicket.get(i).getAutomobilista().EliminaTicket(IDTicket)) {
-			listaTicket.get(i).getTimer().cancel();
-			listaTicket.get(i).getTimer().purge();
-			listaTicket.remove(i);
-			return true;
+		if(listaTicket.get(i).EliminaTicketdaDB(IDTicket)) {
+			if(AggiornaDisponibilita(listaTicket.get(i).getAreaParcheggio().getCodiceArea(),"elimina")) {
+				listaTicket.get(i).getTimer().cancel();
+				listaTicket.get(i).getTimer().purge();
+				listaTicket.remove(i);
+				return true;
+			}else {
+				return false;
+			}
 		}else {
 			return false;
 		}
@@ -224,9 +227,168 @@ public class GestoreTicketImpl implements GestoreTicket{
 	
 	
 	
+	private  String OttieniDataScadenzaTicket(Auto auto, AreaParcheggio area, double Durata) {
+		String OraScadenza="";
+		//Qui devo mandare alla boundary il costo totale del ticket
+		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
+		//Non lo so, oppure dovrei solo leggere con lo stream?
+		/*
+		 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
+		 * di acquisto avviato
+		 */
+		//Funzionalità orario ecc...
+		boolean OrarioMattina=false;
+		Date date = new Date(); 
+		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
+		//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String DataString=formatter.format(date).toString();
+		//Le cifre sono intese da sinistra verso destra
+		char Data1=DataString.charAt(8);
+		char Data2=DataString.charAt(9);
+		String data=new StringBuilder().append(Data1).append(Data2).toString();
+		int  DataInt=Integer.parseInt(data);
+		char Cifra1= DataString.charAt(11);
+		char Cifra2=DataString.charAt(12);
+		String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
+		int  OrarioInt=Integer.parseInt(orario);
+		Durata=(int)Durata;
+		int OraScadenzaTicket=(int)Durata+OrarioInt;
+		OraScadenza=Integer.toString(OraScadenzaTicket);
+		if(OraScadenzaTicket<10)
+			OrarioMattina=true;
+		if(OraScadenzaTicket>=24) {
+			//passo al giorno successivo
+			DataInt=DataInt+1;
+			//la  mia base è 24, devo passare ad orario mattutino dopo le 24
+			OraScadenzaTicket=OraScadenzaTicket-24;
+			if(OraScadenzaTicket<10)
+				OrarioMattina=true;
+		}
+		if(OrarioMattina) {
+			OraScadenza=Integer.toString(OraScadenzaTicket);
+			OraScadenza="0"+OraScadenza;
+
+		}
+		Cifra1=OraScadenza.charAt(0);
+		Cifra2=OraScadenza.charAt(1);
+		String DataScadenza=Integer.toString(DataInt);
+		Data1=DataScadenza.charAt(0);
+		Data2=DataScadenza.charAt(1);
+		StringBuilder Scadenza=new StringBuilder();
+		Scadenza.append(DataString);
+		Scadenza.setCharAt(8, Data1);
+		Scadenza.setCharAt(9, Data2);
+		Scadenza.setCharAt(11, Cifra1);
+		Scadenza.setCharAt(12, Cifra2);
+		String ScadenzaTicket=Scadenza.toString();
+		System.out.println(ScadenzaTicket);
+		//Ticket t= new Ticket(ScadenzaTicket,Durata,auto,area,this);
+		return ScadenzaTicket;
+		
 	
 }
 	
+	private void DeterminaNuovaDataScadenza(Ticket t,double durata) {
+		String OraScadenza="";
+		//Qui devo mandare alla boundary il costo totale del ticket
+		//Pero una volta cliccato su acquista (bottone nella boundary) dovrebbe richiamare un altro metodo?
+		//Non lo so, oppure dovrei solo leggere con lo stream?
+		/*
+		 * Cioe acquista ticket dovrebbe avere un outputstream e un input stream stesso che mi legge il comando
+		 * di acquisto avviato
+		 */
+		//Funzionalità orario ecc...
+		boolean OrarioMattina=false;
+		/*
+		Date date = new Date(); 
+		//utilizzo tale formattazione così da aver una piena corrispondeza con il db
+		//faccio una modifica qui al formato data->necessaria ad ottenere il rimborso
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		*/
+		//Ticket t = new Ticket(IDTicket,this.getUsername());
+		String DataString=t.getScadenzaTicket();
+		//Le cifre sono intese da sinistra verso destra
+		char Data1=DataString.charAt(8);
+		char Data2=DataString.charAt(9);
+		String data=new StringBuilder().append(Data1).append(Data2).toString();
+		int  DataInt=Integer.parseInt(data);
+		char Cifra1= DataString.charAt(11);
+		char Cifra2=DataString.charAt(12);
+		String orario=new StringBuilder().append(Cifra1).append(Cifra2).toString();
+		int  OrarioInt=Integer.parseInt(orario);
+		durata=(int)durata;
+		int OraScadenzaTicket=(int)durata+OrarioInt;
+		OraScadenza=Integer.toString(OraScadenzaTicket);
+		if(OraScadenzaTicket<10)
+			OrarioMattina=true;
+		if(OraScadenzaTicket>=24) {
+			//passo al giorno successivo
+			DataInt=DataInt+1;
+			//la  mia base è 24, devo passare ad orario mattutino dopo le 24
+			OraScadenzaTicket=OraScadenzaTicket-24;
+			if(OraScadenzaTicket<10)
+				OrarioMattina=true;
+		}
+		if(OrarioMattina) {
+			OraScadenza=Integer.toString(OraScadenzaTicket);
+			OraScadenza="0"+OraScadenza;
+
+		}
+		Cifra1=OraScadenza.charAt(0);
+		Cifra2=OraScadenza.charAt(1);
+		String DataScadenza=Integer.toString(DataInt);
+		Data1=DataScadenza.charAt(0);
+		Data2=DataScadenza.charAt(1);
+		StringBuilder Scadenza=new StringBuilder();
+		Scadenza.append(DataString);
+		Scadenza.setCharAt(8, Data1);
+		Scadenza.setCharAt(9, Data2);
+		Scadenza.setCharAt(11, Cifra1);
+		Scadenza.setCharAt(12, Cifra2);
+		String ScadenzaTicket=Scadenza.toString();
+		System.out.println(ScadenzaTicket);
+		//Ticket tick= new Ticket(t.getIDTicket(),durata, this,ScadenzaTicket);
+		//return tick;
+		t.setDurata(durata);
+		t.setIDTicket(t.getIDTicket());
+		t.setScadenzaTicket(ScadenzaTicket);
+	}
+	
+	
+	public int OttieniDisponibilita(int codiceArea) {
+		int i=0;
+		int numeroPostiDisponibili=0;
+		
+		AreaParcheggio area = new AreaParcheggio(codiceArea);
+		
+		for( i=0;i<listaTicket.size();i++) {
+			
+			if(listaTicket.get(i).getAreaParcheggio().getCodiceArea()==codiceArea) {
+				numeroPostiDisponibili=numeroPostiDisponibili+1;
+			}
+		}
+		
+		return (area.getDisponibilita()-numeroPostiDisponibili);
+		
+		
+	}
+
+	@Override
+	public boolean AggiornaDisponibilita(int codiceArea, String tipo) {
+		AreaParcheggio area = new AreaParcheggio(codiceArea);
+		int disponibilita = area.getDisponibilita();
+		if(tipo.equals("acquista")) {
+			disponibilita = disponibilita - 1;
+		}else if(tipo.equals("elimina")) {
+			disponibilita = disponibilita + 1;
+		}else {
+			return false;
+		}
+		area.AggiornaDisponibilitaInDB(disponibilita);
+		return true;
+	}
+}
 	
 
 
