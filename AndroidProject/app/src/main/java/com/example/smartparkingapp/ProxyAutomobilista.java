@@ -562,4 +562,48 @@ public class ProxyAutomobilista implements IAutomobilista{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void getDisponibilita(final String codiceArea, final String username, final String password , Handler handler, final Context ottieniDispActivity) {
+        SocketHandler socketHandler = new SocketHandler();
+        Socket s = socketHandler.getSocket();
+        DataInputStream in = socketHandler.getInputStream();
+        DataOutputStream out = socketHandler.getOutputStream();
+        try{
+            out.writeUTF("DisponibilitaSend");
+            out.flush();
+            out.writeInt(Integer.parseInt(codiceArea));
+            out.flush();
+            final boolean command = in.readBoolean();
+            final int disponibilita = in.readInt();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(command){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ottieniDispActivity);
+                            builder.setCancelable(true);
+                            builder.setTitle("Posti Disponibili");
+                            builder.setMessage("L'Area Parcheggio di Codice : "+codiceArea+" ha "+String.valueOf(disponibilita)+" posti disponibili");
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(ottieniDispActivity,HomePageActivity.class);
+                                    Bundle bundle2 = new Bundle();
+                                    bundle2.putString("username",username);
+                                    bundle2.putString("password",password);
+                                    intent.putExtras(bundle2);
+                                    ottieniDispActivity.startActivity(intent);
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }else{
+                            Toast.makeText(ottieniDispActivity, "Impossibile ottenere i posti", Toast.LENGTH_LONG).show();
+                        }
+                    }
+            });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -21,4 +21,5 @@ public interface IAutomobilista {
     void rinnovoTicket(final String Targa, final String CodiceArea, final int IDTicket, double Durata, String Username, String Password, double CostoTicket, Handler handler, Context context);
     void sendNotify(final String username, final int IDTicket, final String Password , final String Targa, final String CodiceArea, final String DataScadenza, final Handler handler , final Context context);
     void EffettuaRimborso(final int idTicket, final String Username, final String Password, Handler handler, Context ticketinfoactivity);
+    void getDisponibilita(String codiceArea,String username , String password,Handler handler, Context ottieniDispActivity);
 }

@@ -26,12 +26,15 @@ public class HomePageActivity extends AppCompatActivity {
         Button addauto = findViewById(R.id.btnAggiungiAuto);
         Button btnCaricaConto = findViewById(R.id.btnCaricaConto);
         Button btndeleteAuto = findViewById(R.id.btndeleteAuto);
+        Button btnOttDisp = findViewById(R.id.btnDispView);
         final String username = getIntent().getExtras().getString("username");
         final String password = getIntent().getExtras().getString("password");
         final boolean deleted = getIntent().getExtras().getBoolean("cancellato");
         if(deleted) {
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-            manager.deleteNotificationChannel("SmartParkingNotifica");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                manager.deleteNotificationChannel("SmartParkingNotifica");
+            }
         }
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
@@ -73,6 +76,17 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomePageActivity.this,CancellaAutoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("username",username);
+                bundle.putString("password",password);
+                intent.putExtras(bundle);
+                HomePageActivity.this.startActivity(intent);
+            }
+        });
+        btnOttDisp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePageActivity.this,OttieniDisponibilita.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("username",username);
                 bundle.putString("password",password);
