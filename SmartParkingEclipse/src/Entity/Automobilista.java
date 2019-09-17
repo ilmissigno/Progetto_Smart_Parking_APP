@@ -142,14 +142,14 @@ private ArrayList<Auto> ListaAuto;
 	}
 	*/
 
-	public boolean AggiungiAutoAtList(String targa, String CFProprietario, Auto auto) {
+	public boolean AggiungiAutoAtList(String targa) {
 		// TODO Auto-generated method stub
 		//this.ListaAuto.add(auto);
-		AutomobilistaDAO automobilista = new AutomobilistaDAO(this.getUsername(),this.getPassword());
+		CorrispondenzaDAO corrispondenza = new CorrispondenzaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
 			tm.beginTransaction();
-			if(automobilista.addAtList(tm,auto)) {
+			if(corrispondenza.createCorrispondenza(tm, targa, this.getUsername())) {
 				tm.commitTransaction();
 				return true;
 			}
@@ -167,13 +167,13 @@ private ArrayList<Auto> ListaAuto;
 
 	public ArrayList<String> OttieniListaAuto() throws SQLException {
 		// TODO Auto-generated method stub
-		AutomobilistaDAO automobilistaDAO=new AutomobilistaDAO();
+		CorrispondenzaDAO corrispondenzaDAO=new CorrispondenzaDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		ArrayList<String> listaAuto = new ArrayList<String>();
 		try {
 			tm.beginTransaction();
 
-			listaAuto = automobilistaDAO.readList(tm, this.getUsername());
+			listaAuto = corrispondenzaDAO.readList(tm, this.getUsername());
 			tm.commitTransaction();
 			for(int i=0;i<listaAuto.size();i++) {
 				Auto auto= new Auto(listaAuto.get(i));

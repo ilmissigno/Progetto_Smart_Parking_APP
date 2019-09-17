@@ -65,7 +65,7 @@ public class GestoreAccountImpl implements GestoreAccount {
 		Automobilista aut= new Automobilista(username, password);
 		Auto auto= new Auto(Targa,CFProprietario); //così l'auto è aggiunta a  DB
 		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
-		if(aut.AggiungiAutoAtList(Targa, CFProprietario,auto)) {
+		if(aut.AggiungiAutoAtList(Targa)) {
 			//Significa che ho aggiunto l'auto
 				return true;
 			}

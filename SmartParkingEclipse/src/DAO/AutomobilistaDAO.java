@@ -139,51 +139,6 @@ public class AutomobilistaDAO extends UtenteDAO{
 		
 	}
 		*/
-	public boolean addAtList(TransactionManager tm,Auto auto) throws SQLException{
-		
-		
-		tm.assertInTransaction();
-		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("INSERT INTO corrispondenza(username,Targa) VALUES(?,?)")) {
-			pt.setString(1, this.getUsername());
-			pt.setString(2, auto.getTarga());
-			if(pt.executeUpdate()==1) {
-				return true;
-			}else {
-				return false;
-			}
-
-		}
-		
-		
-		
-	}
-	
-	public ArrayList<String> readList(TransactionManager tm, String username) {
-		ArrayList<String> listaAuto=new ArrayList<String>();
-		tm.assertInTransaction();
-		try (PreparedStatement ps = tm.getConnection().prepareStatement("SELECT * FROM corrispondenza WHERE Username=?")) {
-			ps.setString(1,username);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next() == true) {
-					String Targa = rs.getString("Targa");
-					listaAuto.add(Targa);
-
-				}
-				return listaAuto;
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} //finally {
-			//return CorrispondenzaUtente;
-		//}
-		return listaAuto;
-		
-		
-		
-		}
 	
 	
 	}
