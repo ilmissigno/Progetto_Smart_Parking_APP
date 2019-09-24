@@ -13,7 +13,7 @@ public class SocketHandler {
     private Socket socket;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
-    public static final String URL_SERVER = "10.0.2.2"; //Altro indirizzo = 47.53.90.210
+    public static final String URL_SERVER = "93.151.160.118"; //Altro indirizzo = 93.151.160.118
     public static final int PORTA_SERVER = 8001;
 
     public SocketHandler(){
