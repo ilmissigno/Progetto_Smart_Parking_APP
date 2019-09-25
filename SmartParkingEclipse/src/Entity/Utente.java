@@ -1,23 +1,22 @@
 package Entity;
 
-import DAO.AutomobilistaDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
 import DAO.UtenteDAO;
 
 public class Utente {
-	// li ho messi protected perchè sono membri che usa anche l'automobilista
+
 	protected String CodiceFiscale;
 	protected String Cognome;
 	protected String Nome;
 	protected String username;
 	protected String password;
 	protected String Email;
-	
+
 	public Utente() {
-		
+
 	}
-	
+
 	public Utente(String CodiceFiscale,String Cognome,String Nome,String username,String password,String email) {
 		this.setCodiceFiscale(CodiceFiscale);
 		this.setCognome(Cognome);
@@ -26,7 +25,7 @@ public class Utente {
 		this.setPassword(password);
 		this.setEmail(email);
 	}
-	
+
 	public String getCodiceFiscale() {
 		return CodiceFiscale;
 	}
@@ -90,7 +89,6 @@ public class Utente {
 				this.username=u.getUsername();
 				return true;
 			}else {
-				//errore
 				return false;
 			}
 		}catch(Exception e) {
@@ -106,11 +104,9 @@ public class Utente {
 		try {
 			tm.beginTransaction();
 			if(u.createUtente(tm,CodiceFiscale,Cognome,Nome,username,password,email)) {
-				//ok
 				tm.commitTransaction();
 				return true;
 			}else {
-				//errore
 				return false;
 			}
 		}catch(Exception e) {

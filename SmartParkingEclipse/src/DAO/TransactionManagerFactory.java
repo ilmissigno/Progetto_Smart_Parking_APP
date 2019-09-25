@@ -2,7 +2,6 @@ package DAO;
 
 
 public class TransactionManagerFactory {
-	//cambiare gli ingressi del db
 	private static String databasePath = "jdbc:mysql://localhost:3306/dbsmartparking?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	private static String databaseUsername = "root";
 	private static String databasePassword = "root1234";

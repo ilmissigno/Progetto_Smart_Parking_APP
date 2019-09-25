@@ -5,18 +5,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UtenteDAO {
-	
+
 	private String CodiceFiscale;
 	private String Cognome;
 	private String Nome;
 	private String username;
 	private String password;
 	private String Email;
-	
+
 	public UtenteDAO() {
-		
+
 	}
-	
+
 	public UtenteDAO(String CodiceFiscale,String Cognome,String Nome,String username,String password,String email) {
 		this.setCodiceFiscale(CodiceFiscale);
 		this.setCognome(Cognome);
@@ -25,7 +25,7 @@ public class UtenteDAO {
 		this.setPassword(password);
 		this.setEmail(email);
 	}
-	
+
 	public String getCodiceFiscale() {
 		return CodiceFiscale;
 	}
@@ -73,15 +73,11 @@ public class UtenteDAO {
 	public void setEmail(String email) {
 		Email = email;
 	}
-	
-	
-	//Chiamata readUtente al posto di Login
+
 	public boolean readUtente(TransactionManager tm, String username, String password) throws SQLException {
-		
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()
 				.prepareStatement("SELECT * FROM AUTOMOBILISTI WHERE ((USERNAME=?)AND(PASSWORD=?))")) {
-			
 			pt.setString(1, username);
 			pt.setString(2, password);
 			try (ResultSet rs = pt.executeQuery()) {
@@ -95,42 +91,16 @@ public class UtenteDAO {
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
-	
-	/*
-	public static String readUtente(TransactionManager tm, String username, String password) throws SQLException {
 
-		String Utente = new String();
-		Utente = "valorenullo";
-		tm.assertInTransaction();
-		try (PreparedStatement pt = tm.getConnection()
-				.prepareStatement("SELECT CF FROM UTENTI WHERE ((USERNAME=?)AND(PASSWORD=?))")) {
-
-			pt.setString(1, username);
-			pt.setString(2, password);
-			try (ResultSet rs = pt.executeQuery()) {
-				if (rs.next() == true) {
-					Utente = rs.getString("CF");
-				}
-			}
-
-			System.out.println("Utente:" + Utente);
-		}
-
-		return Utente;
-	}
-	*/
-	
 	public static String updateUtente() {
 		return null;
-		
-		
+
+
 	}
-	
-	
+
 	public boolean createUtente(TransactionManager tm,String CodiceFiscale, String Cognome, String Nome, String username, String password,
 			String email) throws SQLException{
 		tm.assertInTransaction();
@@ -149,13 +119,11 @@ public class UtenteDAO {
 			}else {
 				return false;
 			}
-
 		}
 	}
-	
+
 	public static String deleteUtente() {
 		return null;
-		
 	}
-	
+
 }

@@ -1,30 +1,21 @@
 package ControllerImpl;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Controller.GestoreAccount;
-import DAO.CorrispondenzaDAO;
-import DAO.TransactionManager;
-import DAO.TransactionManagerFactory;
 import Entity.Auto;
 import Entity.Automobilista;
-import Entity.Corrispondenza;
 import Entity.Utente;
 
 public class GestoreAccountImpl implements GestoreAccount {
 
 	@Override
 	public boolean Login(String username, String password) {
-		// TODO Auto-generated method stub
 		Utente u = new Utente();
 		if(u.Login(username,password)) {
-			//ok
 			return true;
 		}else {
-			//errore
 			return false;
 		}
 	}
@@ -40,7 +31,6 @@ public class GestoreAccountImpl implements GestoreAccount {
 		}
 	}
 
-
 	@Override
 	public boolean AggiornaConto(String username, String password, double CostoTotale) {
 		Automobilista u = new Automobilista(username,password);
@@ -50,60 +40,34 @@ public class GestoreAccountImpl implements GestoreAccount {
 			return false;
 		}
 	}
-/*
-	@Override
-	public boolean CaricaConto(String username ,String password,double Importo) {
-		Automobilista a = new Automobilista(username,password);
-		if(a.AggiornaConto(-Importo)) {
-			return true;
-		}else {
-			return false;
-		}
-	}*/
-	//modificata
+
 	public boolean AggiungiAuto(String Targa,String CFProprietario,String username, String password)  {
 		Automobilista aut= new Automobilista(username, password);
-		Auto auto= new Auto(Targa,CFProprietario); //così l'auto è aggiunta a  DB
-		//Corrispondenza ListaAuto=new Corrispondenza(Targa,username);
+		new Auto(Targa,CFProprietario);
 		if(aut.AggiungiAutoAtList(Targa)) {
-			//Significa che ho aggiunto l'auto
-				return true;
-			}
-			else { 
-				return false;
-			}
-		
-		
+			return true;
+		}
+		else { 
+			return false;
+		}
 	}
-	
-	//vedere...
+
 	public ArrayList<String> OttieniLista(String username, String password) throws SQLException {
 		Automobilista autom = new Automobilista(username,password);
-		return autom.OttieniListaAuto();
-		
-		
-		
+		return autom.OttieniListaAuto();	
 	}
 
 	public boolean EliminaAuto(String targa,String username,String password) {
+		//not implemented
 		return false;
-		// TODO Auto-generated method stub
-		
-					
-				}
-			
-	
-	
+	}
 
-//RISOLTO
 	@Override
 	public double getConto(String username, String password) {
-		// TODO Auto-generated method stub
 		Automobilista u = new Automobilista(username,password);
 		return u.getCredito();
-		
 	}
-	
+
 	public boolean ControllaConto(String username, String password, double CostoTotale) {
 		Automobilista u = new Automobilista(username,password);
 		if(u.getCredito()>=CostoTotale) {
@@ -111,17 +75,14 @@ public class GestoreAccountImpl implements GestoreAccount {
 		}
 		else { return false;
 		}
-		}
-		
-		
-		
 	}
-
-	
-	
+}
 
 
-	
-	
-	
+
+
+
+
+
+
 

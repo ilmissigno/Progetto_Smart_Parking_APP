@@ -11,16 +11,13 @@ public class AreaParcheggio {
 	private int CodiceArea;
 	private int Disponibilita;
 	private double CostoTicket;
-	
+
 	public AreaParcheggio() {
-		
+
 	}
 
 	public AreaParcheggio(int codiceArea) {
-		// TODO Auto-generated constructor stub
-		//potrei evitare una read ma usare direttamente il costruttore DAO -> sono scelte
 		PrelevaAreaParcheggio(codiceArea);
-		
 	}
 
 	public int getCodiceArea() {
@@ -53,29 +50,11 @@ public class AreaParcheggio {
 	public void setListTicket(ArrayList<Ticket> ticket) {
 		this.listaTicket = ticket;
 	}
-	
+
 	public void addTicket(Ticket t) {
 		this.listaTicket.add(t);
 	}
-	//privata � usabile solo nell'ambito di questa classe-> nel costruttore
-	private void PrelevaAreaParcheggio(int codiceArea) {
-		AreaParcheggioDAO a = new AreaParcheggioDAO();
-		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-		try {
-			tm.beginTransaction();
-			a.readAreaParcheggio(tm, codiceArea);
-			tm.commitTransaction();
-			this.setCodiceArea(a.getCodiceArea());
-			this.setDisponibilita(a.getDisponibilita());
-			this.setCostoTicket(a.getCostoTicket());
-			this.setListTicket(null);
-			
-		}catch(Exception e) {
-			tm.rollbackTransaction();
-		}
-		
-	}
-	
+
 	public boolean AggiornaDisponibilitaInDB(int disponibilita) {
 		AreaParcheggioDAO a = new AreaParcheggioDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -93,5 +72,22 @@ public class AreaParcheggio {
 		}
 		return false;
 	}
-	
+
+	private void PrelevaAreaParcheggio(int codiceArea) {
+		AreaParcheggioDAO a = new AreaParcheggioDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			a.readAreaParcheggio(tm, codiceArea);
+			tm.commitTransaction();
+			this.setCodiceArea(a.getCodiceArea());
+			this.setDisponibilita(a.getDisponibilita());
+			this.setCostoTicket(a.getCostoTicket());
+			this.setListTicket(null);
+
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+		}
+
+	}
 }

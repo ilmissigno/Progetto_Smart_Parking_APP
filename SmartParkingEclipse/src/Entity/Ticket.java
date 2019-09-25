@@ -1,74 +1,51 @@
 package Entity;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-
-import java.util.concurrent.TimeUnit;
-import java.util.Date;
 import java.util.Timer;
-import java.util.TimerTask;
-
 import DAO.TicketDAO;
 import DAO.TransactionManager;
 import DAO.TransactionManagerFactory;
-import DAO.AutoDAO;
-import DAO.AutomobilistaDAO;
 
 public class Ticket {
-	//Il ticket non deve settarlo l'utente, va in automatico da DB
+
 	private int IDTicket;
 	private double Durata;
 	private Auto auto;
 	private AreaParcheggio AreaParcheggio;
-	//dovrei crearmi anche un istanza di automobilista?
 	private String username;
 	private String ScadenzaTicket;
 	private Timer Timer;
 	private Automobilista automobilista;
-	//Devo leggermi il ticket lo faccio con un costruttore avente solo l'ID
 
 
-public Ticket() {
-		
+	public Ticket() {
+
 	}
 
+	public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area, Automobilista automobilista) {
 
-public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area, Automobilista automobilista) {
-
-	TicketDAO ticket = new TicketDAO();
-	TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-	try {
-		tm.beginTransaction();
-		if(ticket.createTicket(tm,ScadenzaTicket, Durata,auto.getTarga(),automobilista.getUsername(),String.valueOf(area.getCodiceArea()))) {
-			tm.commitTransaction();
-			/*
-			 * ATTIVAZIONE TIMER DI NOTIFICA
-			 */
-			//riempio l'oggetto ticket
-			this.setAutomobilista(automobilista);
-			this.setAreaParcheggio(area);
-			this.setDurata(ticket.getDurata());
-			this.setAuto(auto);
-			this.setScadenzaTicket(ScadenzaTicket);
+		TicketDAO ticket = new TicketDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
 			tm.beginTransaction();
-			ticket.readTicket(tm, auto.getTarga(), ScadenzaTicket);
-			tm.commitTransaction();
-			this.setIDTicket(ticket.getIDTicket());
-			System.out.println(this.getIDTicket());
-			
+			if(ticket.createTicket(tm,ScadenzaTicket, Durata,auto.getTarga(),automobilista.getUsername(),String.valueOf(area.getCodiceArea()))) {
+				tm.commitTransaction();
+				this.setAutomobilista(automobilista);
+				this.setAreaParcheggio(area);
+				this.setDurata(ticket.getDurata());
+				this.setAuto(auto);
+				this.setScadenzaTicket(ScadenzaTicket);
+				tm.beginTransaction();
+				ticket.readTicket(tm, auto.getTarga(), ScadenzaTicket);
+				tm.commitTransaction();
+				this.setIDTicket(ticket.getIDTicket());
+				System.out.println(this.getIDTicket());
+			}
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+
 		}
-	}catch(Exception e) {
-		tm.rollbackTransaction();
-		
 	}
-}
 
-
-	
 	public Ticket(int IDTicket, String username) {
 		this.IDTicket=IDTicket;
 		TicketDAO ticket = new TicketDAO();
@@ -88,12 +65,10 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 			tm.rollbackTransaction();
 		}
 	}
-	
-	public Ticket( String  Targa, String CodiceArea) {
-			
-	}
-	
 
+	public Ticket( String  Targa, String CodiceArea) {
+		//Not implemented
+	}
 
 	public int getIDTicket() {
 		return IDTicket;
@@ -110,7 +85,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	public void setDurata(double durata) {
 		Durata = durata;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -118,7 +93,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public String getScadenzaTicket() {
 		return ScadenzaTicket;
 	}
@@ -134,7 +109,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	public void setAuto(Auto auto) {
 		this.auto = auto;
 	}
-	
+
 	public AreaParcheggio getAreaParcheggio() {
 		return this.AreaParcheggio;
 	}
@@ -143,7 +118,6 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 		this.AreaParcheggio = area;
 	}
 
-
 	public Timer getTimer() {
 		return Timer;
 	}
@@ -151,7 +125,7 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 	public void setTimer(Timer timer) {
 		Timer = timer;
 	}
-	
+
 	public Automobilista getAutomobilista() {
 		return automobilista;
 	}
@@ -160,8 +134,6 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 		this.automobilista=automobilista;
 	}
 
-	
-	
 	public int OttieniTicket(String CodiceArea, String Targa) {
 		TicketDAO ticket = new TicketDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
@@ -175,19 +147,13 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 			return -1;
 		}
 	}
-	
+
 	public double AvviaTimer() {
 		return this.getDurata();
-		
+
 	}
 
-	
-
-	
-	
-
 	public void SalvaTicketInDB () {
-
 		TicketDAO ticket = new TicketDAO();
 		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
 		try {
@@ -197,35 +163,31 @@ public Ticket(String ScadenzaTicket,double Durata,Auto auto,AreaParcheggio area,
 				this.setDurata(this.Durata);
 				this.setAutomobilista(automobilista);;
 				this.setScadenzaTicket(ScadenzaTicket);
-				this.setIDTicket(IDTicket);
-				
-			}else {
-				
+				this.setIDTicket(IDTicket);	
 			}
 		}catch(Exception e) {
 			tm.rollbackTransaction();
 		}
 	}
-	
+
 	public boolean EliminaTicketdaDB(int IDTicket) {
-		// TODO Auto-generated method stub
-			TicketDAO ticket = new TicketDAO();
-			TransactionManager tm = TransactionManagerFactory.createTransactionManager();
-			try {
-				tm.beginTransaction();
-				if(ticket.deleteTicket(tm,IDTicket)) {
-					tm.commitTransaction();
-					return true;
-				}else {
-					return false;
-				}
-			}catch(Exception e) {
-				tm.rollbackTransaction();
+		TicketDAO ticket = new TicketDAO();
+		TransactionManager tm = TransactionManagerFactory.createTransactionManager();
+		try {
+			tm.beginTransaction();
+			if(ticket.deleteTicket(tm,IDTicket)) {
+				tm.commitTransaction();
+				return true;
+			}else {
 				return false;
 			}
+		}catch(Exception e) {
+			tm.rollbackTransaction();
+			return false;
+		}
 	}
-	
+
 }
-	
-	
+
+
 

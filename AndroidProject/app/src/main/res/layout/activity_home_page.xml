@@ -63,13 +63,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/button_states"
         android:text="Aggiungi un Auto"
         android:textAllCaps="false"
-        android:textColorHint="#FFF"
-        android:background="@drawable/button_states"
         android:textColor="#FFF"
+        android:textColorHint="#FFF"
         app:layout_constraintStart_toEndOf="@+id/btnAcquistaView"
         app:layout_constraintTop_toBottomOf="@+id/textViewBenvenuto" />
 
@@ -79,42 +78,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/button_states"
         android:text="Carica Conto"
         android:textAllCaps="false"
         android:textColor="#FFF"
         android:textColorHint="#FFF"
-        app:layout_constraintEnd_toStartOf="@+id/btndeleteAuto"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/btnDispView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAcquistaView" />
-
-    <Button
-        android:id="@+id/btndeleteAuto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="172dp"
-        android:background="@drawable/button_states"
-        android:text="Cancella un Auto"
-        android:textAllCaps="false"
-        android:textColor="#FFF"
-        android:textColorHint="#FFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAggiungiAuto" />
 
     <Button
         android:id="@+id/btnDispView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/button_states"
         android:text="Verifica Disponibilita"
         android:textAllCaps="false"
         android:textColor="#FFF"
         android:textColorHint="#FFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCaricaConto" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAggiungiAuto" />
 </android.support.constraint.ConstraintLayout>

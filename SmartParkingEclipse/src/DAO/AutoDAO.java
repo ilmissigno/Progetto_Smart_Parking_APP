@@ -65,7 +65,6 @@ public class AutoDAO {
 	}
 
 	public boolean createAuto(TransactionManager tm,String Targa,String proprietario) throws SQLException{
-		//da implementare
 		String query = "INSERT INTO AUTO(TARGA,CFPROPRIETARIO) VALUES(?,?)";
 		tm.assertInTransaction();
 		try (PreparedStatement pt = tm.getConnection()

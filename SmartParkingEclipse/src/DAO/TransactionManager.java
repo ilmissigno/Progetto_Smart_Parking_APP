@@ -1,11 +1,8 @@
 package DAO;
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
 
 public class TransactionManager {
 	private final String DATABASE_PATH;
@@ -22,6 +19,7 @@ public class TransactionManager {
 	}
 
 	public static class TransactionStateException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
 		public TransactionStateException(String message) {
 			super(message);
 		}
@@ -29,12 +27,10 @@ public class TransactionManager {
 
 	public void beginTransaction() throws TransactionStateException, ClassNotFoundException {
 		assertNotInTransaction();
-
 		try {
 			Class.forName(JDBC_DRIVER);
 			connection = DriverManager.getConnection(DATABASE_PATH, DATABASE_USERNAME, DATABASE_PASSWORD);
 			connection.setAutoCommit(false);
-
 			inTransaction = true;
 		} catch (SQLException e) {
 			throw new RuntimeException("Impossible to create a new connection!", e);
@@ -64,7 +60,6 @@ public class TransactionManager {
 	public void commitTransaction() throws TransactionStateException, SQLException {
 		try {
 			assertInTransaction();
-
 			connection.commit();
 			connection.close();
 			connection = null;
@@ -77,7 +72,6 @@ public class TransactionManager {
 	public void rollbackTransaction() throws TransactionStateException {
 		try {
 			assertInTransaction();
-
 			connection.rollback();
 			connection.close();
 			connection = null;
